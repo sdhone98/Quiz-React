@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-color-background: var(--color-background);
+  --color-color-text-1: var(--color-text-1); 
+  --color-color-text-1: var(--color-text-1);
+  --color-color-navbar: var(--color-navbar);
+  --color-color-primary: var(--color-primary);
+  --color-color-accent-1: var(--color-accent-1);
+  --color-color-accent-2: var(--color-accent-2);
+  --color-color-accent-3: var(--color-accent-3);
+  --color-color-button-1: var(--color-button-1);
+  --color-color-button-2: var(--color-button-2);
+}
+
+:root {
+  --color-background: #d4d4d4;
+  --color-text-1: #0e0e0e;
+  --color-text-2: #d4d4d4;
+  --color-navbar: #282828;
+  --color-primary: #e06014;
+  --color-accent-1: #e77332;
+  --color-accent-2: #f39664;
+  --color-accent-3: #fcb996;
+  --color-button-1: #ee854c;
+  --color-button-2: #8b8b8b;
+}
+
+.dark {
+  --color-background: #000000;
+  --color-text-1: #FFFFFF;
+  --color-text-2: #000000;
+  --color-navbar: #282828;
+  --color-primary: #e06014;
+  --color-accent-1: #e77332;
+  --color-accent-2: #f39664;
+  --color-accent-3: #fcb996;
+  --color-button-1: #ee854c;
+  --color-button-2: #8b8b8b;
+
+}
