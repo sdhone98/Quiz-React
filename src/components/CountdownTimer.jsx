@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-const CountdownTimer = ({ min }) => {
-  const [timeLeft, setTimeLeft] = useState(min * 60);
+const CountdownTimer = ({ min, onTimeOver }) => {
+  const [timeLeft, setTimeLeft] = useState(.1 * 60);
   useEffect(() => {
-    if (timeLeft <= 0) return;
+    if (timeLeft <= 0) return onTimeOver(true);
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
@@ -21,6 +21,7 @@ const CountdownTimer = ({ min }) => {
   };
 
   const getBgClass = () => {
+  if (timeLeft <= 0) return "bg-red-600 text-color-text-1 font-bold";
   if (timeLeft <= 60) return "bg-red-600 animate-pulse text-color-text-1 font-bold";
   if (timeLeft <= 300) return "bg-orange-500";
   return "bg-color-button-2";
