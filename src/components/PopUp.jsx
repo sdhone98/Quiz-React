@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 const PopUp = ({
   mainMsg,
   subMsg,
@@ -10,7 +8,7 @@ const PopUp = ({
   showCancel = false,
 }) => {
   return (
-    <div className="h-full w-full fixed flex justify-center items-center z-50 pb-60 bg-color-background">
+    <div className="h-full w-full fixed flex justify-center items-center z-50 pb-60 backdrop-blur-md">
       <div className="p-4 w-full max-w-lg">
         <div className="p-6 bg-color-navbar rounded-lg shadow">
           <div className="mb-4 text-sm font-light text-color-text-1">

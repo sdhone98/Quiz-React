@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const CountdownTimer = ({ min, onTimeOver }) => {
-  const [timeLeft, setTimeLeft] = useState(.1 * 60);
+  const [timeLeft, setTimeLeft] = useState(min * 60);
   useEffect(() => {
     if (timeLeft <= 0) return onTimeOver(true);
 

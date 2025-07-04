@@ -51,18 +51,24 @@ const StartQuiz = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isTimeOver, setIsTimeOver] = useState(false);
   const [isQuizEnd, setIsQuizEnd] = useState(false);
+  const [isQuizComplte, setIsQuizComplete] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
 
   const handleAnswerSelection = (answer) => {
     setSelectedAnswers((prev) => [...prev, answer]);
-    setQuestionIndex((prev) => prev + 1);
+
+    if (questionIndex + 1 < questionBank.length) {
+      setQuestionIndex((prev) => prev + 1);
+    } else {
+      setIsQuizComplete(true);
+    }
   };
 
   const closePopUpFn = () => {
     setIsQuizEnd(false);
   };
 
-  if (isTimeOver === true)
+  const timeOverFn = () => {
     return (
       <PopUp
         mainMsg={"Time's Up!"}
@@ -76,8 +82,9 @@ const StartQuiz = () => {
         onConfirm={() => navigate("/student/dashboard")}
       />
     );
+  };
 
-  if (isQuizEnd === true)
+  const quizEndFn = () => {
     return (
       <PopUp
         mainMsg={"Are you sure you want to end the quiz?"}
@@ -91,8 +98,9 @@ const StartQuiz = () => {
         onConfirm={() => navigate("/student/dashboard")}
       />
     );
+  };
 
-  if (questionIndex >= questionBank.length)
+  const quizCompletedFn = () => {
     return (
       <PopUp
         mainMsg={"All Done!"}
@@ -100,48 +108,57 @@ const StartQuiz = () => {
           "Great job! You've reached the end of the quiz. You can now view your results or return to the dashboard."
         }
         btn1Msg={"Submit"}
-        btn2Msg={"btn2"}
+        btn2Msg={null}
         showCancel={false}
         onCancel={closePopUpFn}
         onConfirm={() => navigate("/student/dashboard")}
       />
     );
+  };
 
   return (
-    <div className="w-screen h-full py-6 px-10 bg-color-background">
-      <div class="w-full mb-4">
-        <div className="w-full flex items-center justify-between">
-          <h2 class="mb-1 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-            Quiz Topic
-          </h2>
-          <div className="w-fit flex flex-row gap-2">
-            <button
-              type="button"
-              className="py-2 px-4 w-fit text-sm font-medium bg-color-button-1 text-color-text-2 rounded-lg hover:cursor-pointer"
-              onClick={() => setIsQuizEnd(true)}
-            >
-              End Test
-            </button>
-            <CountdownTimer min={30} onTimeOver={setIsTimeOver} />
+    <>
+      {isQuizComplte && quizCompletedFn()}
+      {isTimeOver && timeOverFn()}
+      {isQuizEnd && quizEndFn()}
+
+      <div className="w-screen h-full py-6 px-10 bg-color-background">
+        <div class="w-full mb-4">
+          <div className="w-full flex items-center justify-between">
+            <h2 class="mb-1 text-4xl tracking-tight font-extrabold text-color-text-1">
+              Quiz Topic
+            </h2>
+            <div className="w-fit flex flex-row gap-2">
+              <button
+                type="button"
+                className="py-2 px-4 w-fit text-sm font-medium bg-color-button-1 text-color-text-2 rounded-lg hover:cursor-pointer"
+                onClick={() => setIsQuizEnd(true)}
+              >
+                End Test
+              </button>
+              <CountdownTimer min={30} onTimeOver={setIsTimeOver} />
+            </div>
+          </div>
+          <div className="w-fit flex-row justify-center">
+            <span className="flex">
+              <p class="text-color-text-1 sm:text-l pr-1">
+                Difficaulty Level -{" "}
+              </p>
+              <p class="text-color-text-1 sm:text-l font-bold">Easy</p>
+            </span>
+            <span className="flex">
+              <p class="text-color-text-1 sm:text-l pr-1">Set - </p>
+              <p class="text-color-text-1 sm:text-l font-bold">A</p>
+            </span>
           </div>
         </div>
-        <div className="w-fit flex-row justify-center">
-          <span className="flex">
-            <p class="text-color-text-1 sm:text-l pr-1">Difficaulty Level - </p>
-            <p class="text-color-text-1 sm:text-l font-bold">Easy</p>
-          </span>
-          <span className="flex">
-            <p class="text-color-text-1 sm:text-l pr-1">Set - </p>
-            <p class="text-color-text-1 sm:text-l font-bold">A</p>
-          </span>
-        </div>
+        <QuizCard
+          questionIndex={questionIndex}
+          questionData={questionBank[questionIndex]}
+          onSelect={handleAnswerSelection}
+        />
       </div>
-      <QuizCard
-        questionIndex={questionIndex}
-        questionData={questionBank[questionIndex]}
-        onSelect={handleAnswerSelection}
-      />
-    </div>
+    </>
   );
 };
 
