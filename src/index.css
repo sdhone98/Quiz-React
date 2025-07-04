@@ -13,6 +13,7 @@
   --color-color-accent-3: var(--color-accent-3);
   --color-color-button-1: var(--color-button-1);
   --color-color-button-2: var(--color-button-2);
+  --color-color-button-3: var(--color-button-3);
 }
 
 :root {
@@ -26,6 +27,7 @@
   --color-accent-3: #fcb996;
   --color-button-1: #ee854c;
   --color-button-2: #8b8b8b;
+  --color-button-3: #888888;
 }
 
 .dark {
@@ -39,5 +41,6 @@
   --color-accent-3: #fcb996;
   --color-button-1: #ee854c;
   --color-button-2: #8b8b8b;
+  --color-button-3: #696969c9;
 
 }

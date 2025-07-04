@@ -8,10 +8,12 @@ import {
 import Login from "../components/Login";
 import Register from "../components/Register";
 import NavBar from "../components/NavBar";
+import StudentDashboard from "../pages/student/StudentDashboard";
+import StartQuiz from "../pages/student/StartQuiz";
 
 // Student Pages
-const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
-const StartQuiz = () => <div className="p-6">Start Quiz Page</div>;
+// const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
+// const StartQuiz = () => <div className="p-6">Start Quiz Page</div>;
 const AttemptQuiz = () => <div className="p-6">Attempt Quiz Page</div>;
 const ResultPage = () => <div className="p-6">Result Page</div>;
 

@@ -1,0 +1,86 @@
+import React, { useState } from "react";
+import ResultTable from "../../components/ResultTable";
+import DropDown from "../../components/DropDown";
+import { useNavigate } from "react-router-dom";
+
+const langList = [
+  "Python",
+  "C++",
+  "Java",
+  "JavaScript",
+  "C#",
+  "SQL",
+  "PHP",
+  "C",
+  "Ruby",
+  "Go",
+];
+const today = new Date();
+
+const StudentDashboard = () => {
+  const formattedDate = today.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+  const navigate = useNavigate();
+
+  const [selectedTopic, setSelectedTopic] = useState(null);
+
+  console.log("PARENT setSelectedTopic", selectedTopic);
+  const userName = "User Name";
+  const msgLine1 = "Ready to challenge yourself and grow your skills?";
+  const msgLine2 = "Pick a topic and show us what you’ve got!";
+  return (
+    <section class="max-w-screen h-full flex justify-center items-center bg-color-background">
+      <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+        <div class="mr-auto place-self-center lg:col-span-7">
+          <h1 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
+            Welcome, {userName}
+          </h1>
+          <p class="max-w-2xl font-light text-color-text-1 md:text-lg lg:text-xl">
+            {msgLine1}
+          </p>
+          <p class="max-w-2xl mb-6 font-light text-color-text-1 lg:mb-8 md:text-lg lg:text-xl">
+            {msgLine2}
+          </p>
+          <p className="max-w-2xl mb-6 font-light text-color-text-1 lg:mb-8 md:text-lg lg:text-xl">
+            {formattedDate}
+          </p>
+          <div className="w-full f-hull flex items-center bg-amber-300">
+            <DropDown
+              isDependent={false}
+              parentChoice={null}
+              setSelectedTopic={setSelectedTopic}
+              programingLanguage={langList}
+            />
+            <div>{selectedTopic}</div>
+            <a
+              onClick={() => navigate("/student/quiz/start")}
+              class="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
+            >
+              Get started
+              <svg
+                class="w-5 h-5 ml-2 -mr-1"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
+          <ResultTable />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default StudentDashboard;

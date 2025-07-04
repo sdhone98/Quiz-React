@@ -109,7 +109,7 @@ const NavBar = () => {
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border bg-color-navbar rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
             <li>
               <a
-                href="#"
+                onClick={() => navigate("student/dashboard")}
                 className="block py-2 px-3 md:p-0 text-color-accent-3 hover:text-color-accent-1 rounded-sm md:bg-transparent"
                 aria-current="page"
               >

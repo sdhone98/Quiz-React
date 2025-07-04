@@ -14,35 +14,37 @@ const Login = () => {
     console.log("CLICk", email, password);
     e.preventDefault();
     setErrorMsg("");
+    navigate("/student/dashboard");
 
-    try {
-      const res = await axios.post("http://localhost:8000/api/users/login", {
-        email,
-        password,
-        role,
-      });
 
-      const { token, user } = res.data.data;
+    // try {
+    //   const res = await axios.post("http://localhost:8000/api/users/login", {
+    //     email,
+    //     password,
+    //     role,
+    //   });
 
-      // Store user and token (localStorage/sessionStorage or context)
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+    //   const { token, user } = res.data.data;
 
-      localStorage.getItem("token");
+    //   // Store user and token (localStorage/sessionStorage or context)
+    //   localStorage.setItem("token", token);
+    //   localStorage.setItem("user", JSON.stringify(user));
 
-      navigate("/student/dashboard");
+    //   localStorage.getItem("token");
 
-    //   // Redirect based on role
-    //   if (user.role === "student") {
-    //     navigate("/student/dashboard");
-    //   } else {
-    //     navigate("/teacher/dashboard");
-    //   }
-    } catch (err) {
-      setErrorMsg(
-        err.response?.data?.message || "Login failed. Please try again."
-      );
-    }
+    //   navigate("/student/dashboard");
+
+    // //   // Redirect based on role
+    // //   if (user.role === "student") {
+    // //     navigate("/student/dashboard");
+    // //   } else {
+    // //     navigate("/teacher/dashboard");
+    // //   }
+    // } catch (err) {
+    //   setErrorMsg(
+    //     err.response?.data?.message || "Login failed. Please try again."
+    //   );
+    // }
   };
   return (
     <div className="h-screen max-h-full max-w mx-auto flex items-center justify-center bg-color-background">
