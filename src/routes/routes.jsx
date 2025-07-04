@@ -10,12 +10,13 @@ import Register from "../components/Register";
 import NavBar from "../components/NavBar";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import StartQuiz from "../pages/student/StartQuiz";
+import StudentResult from "../pages/student/StudentResult";
 
 // Student Pages
 // const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
 // const StartQuiz = () => <div className="p-6">Start Quiz Page</div>;
 const AttemptQuiz = () => <div className="p-6">Attempt Quiz Page</div>;
-const ResultPage = () => <div className="p-6">Result Page</div>;
+// const ResultPage = () => <div className="p-6">Result Page</div>;
 
 // Teacher Pages
 const TeacherDashboard = () => <div className="p-6">Teacher Dashboard</div>;
@@ -62,7 +63,7 @@ const AppRoutes = () => {
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/student/quiz/start" element={<StartQuiz />} />
           <Route path="/student/quiz/:quizId" element={<AttemptQuiz />} />
-          <Route path="/student/result/:quizId" element={<ResultPage />} />
+          <Route path="/student/result" element={<StudentResult />} />
 
           {/* Teacher Routes */}
           <Route path="/teacher/dashboard" element={<TeacherDashboard />} />

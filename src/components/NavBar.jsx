@@ -59,7 +59,9 @@ const NavBar = () => {
   return (
     <nav className="bg-color-navbar border-gray-20">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <span className="self-center text-2xl font-semibold whitespace-nowrap text-color-primary">
+        <span 
+        onClick={() => navigate("student/dashboard")}
+        className="self-center text-2xl font-semibold whitespace-nowrap text-color-primary hover:cursor-pointer">
           Quiz
         </span>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
@@ -118,10 +120,10 @@ const NavBar = () => {
             </li>
             <li>
               <a
-                href="#"
+                onClick={() => navigate("/student/result")}
                 className="block py-2 px-3 md:p-0 text-color-accent-3 hover:text-color-accent-1 rounded-sm md:bg-transparent"
               >
-                About
+                Result
               </a>
             </li>
             <li>

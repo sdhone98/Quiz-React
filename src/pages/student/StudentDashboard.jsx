@@ -1,36 +1,81 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ResultTable from "../../components/ResultTable";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
+import { apiRequest } from "../../utils/api";
 
-const langList = [
-  "Python",
-  "C++",
-  "Java",
-  "JavaScript",
-  "C#",
-  "SQL",
-  "PHP",
-  "C",
-  "Ruby",
-  "Go",
-];
+// const langList = [
+//   "Python",
+//   "C++",
+//   "Java",
+//   "JavaScript",
+//   "C#",
+//   "SQL",
+//   "PHP",
+//   "C",
+//   "Ruby",
+//   "Go",
+// ];
+// const difficultyType = ["A", "B", "C", "D"];
 const today = new Date();
 
 const StudentDashboard = () => {
-  const formattedDate = today.toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
   const navigate = useNavigate();
+  const formattedDate = today.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   const [selectedTopic, setSelectedTopic] = useState(null);
+  const [selectDifficulty, setSelectDifficulty] = useState(null);
+  const [langList, setLangList] = useState([]);
+  const [difficultyList, setDifficultyList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadLanguages = async () => {
+      const { success, data, error } = await apiRequest({
+        url: "http://localhost:8000/api/topic",
+        method: "GET",
+        params: {flat:true}
+      });
+
+      if (success) {
+        setLangList(data);
+      } else {
+        console.error("Error loading languages:", error);
+      }
+
+      setLoading(false);
+    };
+
+    const loadDifficulty = async () => {
+      const { success, data, error } = await apiRequest({
+        url: "http://localhost:8000/api/topic/difficulty",
+        method: "GET"
+      });
+
+      if (success) {
+        setDifficultyList(data);
+      } else {
+        console.error("Error loading languages:", error);
+      }
+
+      setLoading(false);
+    };
+
+    loadLanguages();
+    loadDifficulty();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
 
   console.log("PARENT setSelectedTopic", selectedTopic);
   const userName = "User Name";
   const msgLine1 = "Ready to challenge yourself and grow your skills?";
-  const msgLine2 = "Pick a topic and show us what you’ve got!";
+  const msgLine2 = "Pick a topic and show us what you've got!";
   return (
     <section class="max-w-screen h-full flex justify-center items-center bg-color-background">
       <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
@@ -47,19 +92,27 @@ const StudentDashboard = () => {
           <p className="max-w-2xl mb-6 font-light text-color-text-1 lg:mb-8 md:text-lg lg:text-xl">
             {formattedDate}
           </p>
-          <div className="w-full f-hull flex items-center bg-amber-300">
-            <DropDown
-              isDependent={false}
-              parentChoice={null}
-              setSelectedTopic={setSelectedTopic}
-              programingLanguage={langList}
-            />
-            <div>{selectedTopic}</div>
+          <div className="w-full f-hull flex items-center justify-between">
+            <div className="flex justify-center items-center gap-2">
+              <DropDown
+                label={"Topic"}
+                onSelect={setSelectedTopic}
+                optionsList={langList}
+                isDisable={false}
+              />
+              <DropDown
+                label={"Difficulty"}
+                onSelect={setSelectDifficulty}
+                optionsList={difficultyList}
+                isDisable={!selectedTopic}
+              />
+            </div>
+            {selectedTopic} |{selectDifficulty}
             <a
               onClick={() => navigate("/student/quiz/start")}
-              class="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
+              class="inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
             >
-              Get started
+              Start Quiz
               <svg
                 class="w-5 h-5 ml-2 -mr-1"
                 fill="currentColor"
