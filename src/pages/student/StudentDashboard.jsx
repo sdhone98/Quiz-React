@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ResultTable from "../../components/ResultTable";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
-import { apiRequest } from "../../utils/api";
 
-// const langList = [
-//   "Python",
-//   "C++",
-//   "Java",
-//   "JavaScript",
-//   "C#",
-//   "SQL",
-//   "PHP",
-//   "C",
-//   "Ruby",
-//   "Go",
-// ];
-// const difficultyType = ["A", "B", "C", "D"];
 const today = new Date();
+const topicList = JSON.parse(localStorage.getItem("topicList"));
+const difficultyList = JSON.parse(localStorage.getItem("difficultyList"));
+
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -29,64 +18,22 @@ const StudentDashboard = () => {
 
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectDifficulty, setSelectDifficulty] = useState(null);
-  const [langList, setLangList] = useState([]);
-  const [difficultyList, setDifficultyList] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const loadLanguages = async () => {
-      const { success, data, error } = await apiRequest({
-        url: "http://localhost:8000/api/topic",
-        method: "GET",
-        params: {flat:true}
-      });
+  console.log("DATA StudentDashboard ---------> ", topicList, difficultyList)
 
-      if (success) {
-        setLangList(data);
-      } else {
-        console.error("Error loading languages:", error);
-      }
-
-      setLoading(false);
-    };
-
-    const loadDifficulty = async () => {
-      const { success, data, error } = await apiRequest({
-        url: "http://localhost:8000/api/topic/difficulty",
-        method: "GET"
-      });
-
-      if (success) {
-        setDifficultyList(data);
-      } else {
-        console.error("Error loading languages:", error);
-      }
-
-      setLoading(false);
-    };
-
-    loadLanguages();
-    loadDifficulty();
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
-
-
-  console.log("PARENT setSelectedTopic", selectedTopic);
-  const userName = "User Name";
   const msgLine1 = "Ready to challenge yourself and grow your skills?";
   const msgLine2 = "Pick a topic and show us what you've got!";
   return (
-    <section class="max-w-screen h-full flex justify-center items-center bg-color-background">
-      <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-        <div class="mr-auto place-self-center lg:col-span-7">
-          <h1 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
-            Welcome, {userName}
+    <section className="max-w-screen h-full flex justify-center items-center bg-color-background">
+      <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+        <div className="mr-auto place-self-center lg:col-span-7">
+          <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
+            Welcome, {"userDetails.firstName"}
           </h1>
-          <p class="max-w-2xl font-light text-color-text-1 md:text-lg lg:text-xl">
+          <p className="max-w-2xl font-light text-color-text-1 md:text-lg lg:text-xl">
             {msgLine1}
           </p>
-          <p class="max-w-2xl mb-6 font-light text-color-text-1 lg:mb-8 md:text-lg lg:text-xl">
+          <p className="max-w-2xl mb-6 font-light text-color-text-1 lg:mb-8 md:text-lg lg:text-xl">
             {msgLine2}
           </p>
           <p className="max-w-2xl mb-6 font-light text-color-text-1 lg:mb-8 md:text-lg lg:text-xl">
@@ -97,7 +44,7 @@ const StudentDashboard = () => {
               <DropDown
                 label={"Topic"}
                 onSelect={setSelectedTopic}
-                optionsList={langList}
+                optionsList={topicList}
                 isDisable={false}
               />
               <DropDown
@@ -110,25 +57,25 @@ const StudentDashboard = () => {
             {selectedTopic} |{selectDifficulty}
             <a
               onClick={() => navigate("/student/quiz/start")}
-              class="inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
+              className="inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
             >
               Start Quiz
               <svg
-                class="w-5 h-5 ml-2 -mr-1"
+                className="w-5 h-5 ml-2 -mr-1"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 ></path>
               </svg>
             </a>
           </div>
         </div>
-        <div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
+        <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
           <ResultTable />
         </div>
       </div>

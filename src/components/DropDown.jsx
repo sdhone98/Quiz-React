@@ -5,8 +5,6 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
   const [userSelection, setUserSelection] = useState(label);
 
   const getClass  = () => {
-    console.log("==>", label, isDisable, isOpen, " : ", (!isDisable && isOpen))
-    // return ""
     if (!isDisable && isOpen) {
       return ""
     }
@@ -21,12 +19,12 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
         id="dropdownDefaultButton"
         data-dropdown-toggle="dropdown"
         onClick={() => !isDisable && setOpen(true)}
-        class={`${isDisable && "cursor-not-allowed"} py-3 text-color-text-2 bg-color-button-1 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 text-center inline-flex items-center`}
+        className={`${isDisable && "cursor-not-allowed"} py-3 text-color-text-2 bg-color-button-1 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 text-center inline-flex items-center`}
         type="button"
       >
         {userSelection}
         <svg
-          class="w-2.5 h-2.5 ms-3"
+          className="w-2.5 h-2.5 ms-3"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -34,9 +32,9 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
         >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="m1 1 4 4 4-4"
           />
         </svg>
@@ -49,7 +47,7 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
         } divide-y divide-gray-100 rounded-lg shadow-sm w-fit bg-color-button-1  absolute mt-2`}
       >
         <ul
-          class="py-2 text-sm text-color-text-2 h-fit overflow-y-auto"
+          className="py-2 text-sm text-color-text-2 h-fit overflow-y-auto"
           aria-labelledby="dropdownDefaultButton"
         >
           {optionsList.map((i) => (
@@ -57,7 +55,7 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
               <a
                 href="#"
                 onClick={() => (onSelect(i), setOpen(false), setUserSelection(i))}
-                class="block px-4 py-2 hover:bg-color-button-2"
+                className="block px-4 py-2 hover:bg-color-button-2"
               >
                 {i}
               </a>

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -32,12 +31,10 @@ const NotFound = () => (
 const AppLayout = ({ children }) => {
   const location = useLocation();
   const hideNavbar = [
-    "/login", 
-    "/register", 
+    "/login",
+    "/register",
     // "/"
-].includes(
-    location.pathname.toLowerCase()
-  );
+  ].includes(location.pathname.toLowerCase());
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
@@ -60,7 +57,12 @@ const AppRoutes = () => {
           <Route path="/register" element={<Register />} />
 
           {/* Student Routes */}
-          <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route
+            path="/student/dashboard"
+            element={
+              <StudentDashboard/>
+            }
+          />
           <Route path="/student/quiz/start" element={<StartQuiz />} />
           <Route path="/student/quiz/:quizId" element={<AttemptQuiz />} />
           <Route path="/student/result" element={<StudentResult />} />

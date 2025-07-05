@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { apiRequest } from "../utils/api";
 // import { Button, Label, TextInput, Select, Card } from 'flowbite-react';
 
 const Login = () => {
@@ -9,13 +10,55 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  
+  const user = JSON.parse(localStorage.getItem("user"));
+  
+  
+  
+  useEffect(() => {
+    const loadLanguages = async () => {
+      const { success, data, error } = await apiRequest({
+        url: "http://localhost:8000/api/topic",
+        method: "GET",
+        params: { flat: true },
+      });
+      
+      if (success) {
+      localStorage.setItem("topicList", JSON.stringify(data));
 
+      } else {
+        console.error("Error loading languages:", error);
+      }
+      
+      setLoading(false);
+    };
+    
+    const loadDifficulty = async () => {
+      const { success, data, error } = await apiRequest({
+        url: "http://localhost:8000/api/topic/difficulty",
+        method: "GET",
+      });
+      
+      if (success) {
+        localStorage.setItem("difficultyList", JSON.stringify(data));
+      } else {
+        console.error("-- Error loading languages:", error);
+      }
+      
+      setLoading(false);
+    };
+    
+    loadLanguages();
+    loadDifficulty();
+  }, []);  
+  
   const handleLogin = async (e) => {
     console.log("CLICk", email, password);
     e.preventDefault();
     setErrorMsg("");
     navigate("/student/dashboard");
-
+    
 
     // try {
     //   const res = await axios.post("http://localhost:8000/api/users/login", {
