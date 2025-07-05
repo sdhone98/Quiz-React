@@ -2,20 +2,21 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../utils/api";
-// import { Button, Label, TextInput, Select, Card } from 'flowbite-react';
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice";
+import { setTopics, setDifficulties } from "../redux/topicSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [role, setRole] = useState("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const user = JSON.parse(localStorage.getItem("user"));
-  
-  
-  
+
   useEffect(() => {
     const loadLanguages = async () => {
       const { success, data, error } = await apiRequest({
@@ -23,71 +24,56 @@ const Login = () => {
         method: "GET",
         params: { flat: true },
       });
-      
-      if (success) {
-      localStorage.setItem("topicList", JSON.stringify(data));
 
+      if (success) {
+        dispatch(setTopics({ data }));
       } else {
         console.error("Error loading languages:", error);
       }
-      
+
       setLoading(false);
     };
-    
+
     const loadDifficulty = async () => {
       const { success, data, error } = await apiRequest({
         url: "http://localhost:8000/api/topic/difficulty",
         method: "GET",
       });
-      
+
       if (success) {
-        localStorage.setItem("difficultyList", JSON.stringify(data));
+        dispatch(setDifficulties({ data }));
       } else {
         console.error("-- Error loading languages:", error);
       }
-      
+
       setLoading(false);
     };
-    
+
     loadLanguages();
     loadDifficulty();
-  }, []);  
-  
+  }, []);
+
   const handleLogin = async (e) => {
-    console.log("CLICk", email, password);
     e.preventDefault();
     setErrorMsg("");
     navigate("/student/dashboard");
-    
+    const user = {
+      userName: "sdhone98",
+      name: "Sagar Dhone",
+      firstName: "Sagar",
+      lastName: "Dhone",
+      role: "student",
+    };
 
-    // try {
-    //   const res = await axios.post("http://localhost:8000/api/users/login", {
-    //     email,
-    //     password,
-    //     role,
-    //   });
+    const token = {
+      id: "sdhone98",
+    };
 
-    //   const { token, user } = res.data.data;
+    dispatch(setUser({ user, token }));
 
-    //   // Store user and token (localStorage/sessionStorage or context)
-    //   localStorage.setItem("token", token);
-    //   localStorage.setItem("user", JSON.stringify(user));
-
-    //   localStorage.getItem("token");
-
-    //   navigate("/student/dashboard");
-
-    // //   // Redirect based on role
-    // //   if (user.role === "student") {
-    // //     navigate("/student/dashboard");
-    // //   } else {
-    // //     navigate("/teacher/dashboard");
-    // //   }
-    // } catch (err) {
-    //   setErrorMsg(
-    //     err.response?.data?.message || "Login failed. Please try again."
-    //   );
-    // }
+    if (user.role === "student") return navigate("/student/dashboard");
+    if (user.role === "teacher") return navigate("/teacher/dashboard");
+    navigate("/");
   };
   return (
     <div className="h-screen max-h-full max-w mx-auto flex items-center justify-center bg-color-background">

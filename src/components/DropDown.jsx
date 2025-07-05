@@ -1,25 +1,31 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setTopics } from "../redux/topicSlice";
+
+
 
 const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
+  const dispatch = useDispatch();
+
   const [isOpen, setOpen] = useState(false);
   const [userSelection, setUserSelection] = useState(label);
 
-  const getClass  = () => {
+  const getClass = () => {
     if (!isDisable && isOpen) {
-      return ""
+      return "";
+    } else {
+      return "hidden";
     }
-    else{
-
-      return "hidden"
-    }
-  }
+  };
   return (
     <div>
       <button
         id="dropdownDefaultButton"
         data-dropdown-toggle="dropdown"
         onClick={() => !isDisable && setOpen(true)}
-        className={`${isDisable && "cursor-not-allowed"} py-3 text-color-text-2 bg-color-button-1 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 text-center inline-flex items-center`}
+        className={`${
+          isDisable && "cursor-not-allowed"
+        } py-3 text-color-text-2 bg-color-button-1 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 text-center inline-flex items-center`}
         type="button"
       >
         {userSelection}
@@ -42,9 +48,7 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
 
       <div
         id="dropdown"
-        className={`z-10 ${
-          getClass()
-        } divide-y divide-gray-100 rounded-lg shadow-sm w-fit bg-color-button-1  absolute mt-2`}
+        className={`z-10 ${getClass()} divide-y divide-gray-100 rounded-lg shadow-sm w-fit bg-color-button-1  absolute mt-2`}
       >
         <ul
           className="py-2 text-sm text-color-text-2 h-fit overflow-y-auto"
@@ -54,7 +58,9 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
             <li key={i}>
               <a
                 href="#"
-                onClick={() => (onSelect(i), setOpen(false), setUserSelection(i))}
+                onClick={() => (
+                  onSelect(i), setOpen(false), setUserSelection(i)
+                )}
                 className="block px-4 py-2 hover:bg-color-button-2"
               >
                 {i}

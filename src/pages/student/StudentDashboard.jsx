@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import ResultTable from "../../components/ResultTable";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+
 
 const today = new Date();
-const topicList = JSON.parse(localStorage.getItem("topicList"));
-const difficultyList = JSON.parse(localStorage.getItem("difficultyList"));
 
 
 const StudentDashboard = () => {
@@ -15,11 +15,12 @@ const StudentDashboard = () => {
     month: "long",
     day: "numeric",
   });
-
+  
+  const user = useSelector((state) => state.user.user);
+  const topicsList = useSelector((state) => state.topic.topics);
+  const difficultiesList = useSelector((state) => state.topic.difficulties);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectDifficulty, setSelectDifficulty] = useState(null);
-
-  console.log("DATA StudentDashboard ---------> ", topicList, difficultyList)
 
   const msgLine1 = "Ready to challenge yourself and grow your skills?";
   const msgLine2 = "Pick a topic and show us what you've got!";
@@ -28,7 +29,7 @@ const StudentDashboard = () => {
       <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div className="mr-auto place-self-center lg:col-span-7">
           <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
-            Welcome, {"userDetails.firstName"}
+            Welcome, {user.name}
           </h1>
           <p className="max-w-2xl font-light text-color-text-1 md:text-lg lg:text-xl">
             {msgLine1}
@@ -44,22 +45,22 @@ const StudentDashboard = () => {
               <DropDown
                 label={"Topic"}
                 onSelect={setSelectedTopic}
-                optionsList={topicList}
+                optionsList={topicsList}
                 isDisable={false}
               />
               <DropDown
                 label={"Difficulty"}
                 onSelect={setSelectDifficulty}
-                optionsList={difficultyList}
+                optionsList={difficultiesList}
                 isDisable={!selectedTopic}
               />
             </div>
             {selectedTopic} |{selectDifficulty}
             <a
               onClick={() => navigate("/student/quiz/start")}
-              className="inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
+              className="w-2/6 inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
             >
-              Start Quiz
+              {(selectedTopic && selectDifficulty)? "Start Quiz" : "Select Options"}
               <svg
                 className="w-5 h-5 ml-2 -mr-1"
                 fill="currentColor"
