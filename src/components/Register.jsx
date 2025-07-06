@@ -1,31 +1,49 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiRequest } from "../utils/api";
+import { useToast } from "../context/ToastContext";
+import { setUser } from "../redux/userSlice";
+import { useLoading } from "../context/LoadingContext";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { showToast } = useToast();
+  const { setIsLoading } = useLoading();
+
   const [defaultUserRole, setDefaultUserRole] = useState("student");
   const handleRegister = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    console.log("REG", e.target.username.value);
-    // setErrorMsg("");
-    const userDetails = {
-      username: e.target.username.value,
-      password: e.target.password.value,
-      email: e.target.email.value,
-      role: defaultUserRole,
-      first_name: e.target.firstName.value,
-      last_name: e.target.lastName.value,
-    };
+    const { success, data, error } = await apiRequest({
+      url: "http://localhost:8000/api/users/",
+      method: "POST",
+      data: {
+        username: e.target.username.value,
+        password: e.target.password.value,
+        email: e.target.email.value,
+        role: defaultUserRole,
+        first_name: e.target.firstName.value,
+        last_name: e.target.lastName.value,
+      },
+    });
 
-    console.log("REGISTER DETASILS ======> ", userDetails);
+    setIsLoading(false);
+
+    if (success) {
+      showToast("Success", "Info", "User Register Sucessfully.!");
+      setUser(defaultUserRole);
+      navigate("/login");
+    } else {
+      showToast("Error", "Error", JSON.stringify(error.data));
+    }
   };
-  const navigate = useNavigate(null);
   return (
     <section className="bg-color-background">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-color-button-3">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-color-text-1">
               Create an account
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
@@ -49,7 +67,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="lastName"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-color-text-1"
                   >
                     Last name
                   </label>
@@ -66,7 +84,7 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-color-text-1"
                 >
                   Your email
                 </label>
@@ -82,7 +100,7 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="username"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-color-text-1"
                 >
                   Username
                 </label>
@@ -94,19 +112,11 @@ const Register = () => {
                   placeholder="Devid@01"
                   required=""
                 />
-                <p
-                  className={`${
-                    true ? "" : "hidden"
-                  } mt-2 text-sm text-red-600 dark:text-red-500`}
-                >
-                  <span class="font-medium">Oh, snapp!</span> username already
-                  used.!.
-                </p>
               </div>
               <div>
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-color-text-1"
                 >
                   Password
                 </label>
@@ -122,12 +132,12 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="confirm-password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-color-text-1"
                 >
                   Confirm password
                 </label>
                 <input
-                  type="confirm-password"
+                  type="password"
                   name="confirm-password"
                   id="confirm-password"
                   placeholder="••••••••"

@@ -11,7 +11,7 @@ const ErrorPopUp = ({ msgType, mainMsg, detailMsg, onClose }) => {
       setTimeout(() => {
         if (onClose) onClose();
       }, 500);
-    }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);

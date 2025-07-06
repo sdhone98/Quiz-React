@@ -1,8 +1,6 @@
-import React from "react";
-
 function Loading() {
   return (
-    <div className="fixed w-screen h-full flex justify-center items-center backdrop-blur-md">
+    <div className="fixed inset-0 w-screen h-full flex justify-center items-center backdrop-blur-md">
       <div className="flex items-center justify-center w-56 h-56">
         <div role="status">
           <svg

@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import ResultTable from "../../components/ResultTable";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { useToast } from "../../context/ToastContext";
 
-
 const today = new Date();
-
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -18,22 +16,19 @@ const StudentDashboard = () => {
     month: "long",
     day: "numeric",
   });
-  
-  
+
   const user = useSelector((state) => state.user.user);
-  const topicsList = useSelector((state) => state.topic.topics);
-  const difficultiesList = useSelector((state) => state.topic.difficulties);
+  const topicsList = useSelector((state) => state.topic.topics.data);
+  const difficultiesList = useSelector(
+    (state) => state.topic.difficulties.data
+  );
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectDifficulty, setSelectDifficulty] = useState(null);
 
   useEffect(() => {
-    showToast("Success", "Info", "Login sccessfully.!")
+    showToast("Success", "Info", "Login sccessfully.!");
+  }, []);
 
-  }, [])
-
-
-  console.log("topicsList", topicsList)
-  console.log("difficultiesList", difficultiesList)
 
   const msgLine1 = "Ready to challenge yourself and grow your skills?";
   const msgLine2 = "Pick a topic and show us what you've got!";
@@ -73,7 +68,9 @@ const StudentDashboard = () => {
               onClick={() => navigate("/student/quiz/start")}
               className="w-2/6 inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
             >
-              {(selectedTopic && selectDifficulty)? "Start Quiz" : "Select Options"}
+              {selectedTopic && selectDifficulty
+                ? "Start Quiz"
+                : "Select Options"}
               <svg
                 className="w-5 h-5 ml-2 -mr-1"
                 fill="currentColor"

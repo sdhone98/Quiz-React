@@ -4,100 +4,95 @@ import { apiRequest } from "../utils/api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
 import { setTopics, setDifficulties } from "../redux/topicSlice";
-import ErrorPopUp from "./ErrorPopUp";
+import { useLoading } from "../context/LoadingContext";
+import { useToast } from "../context/ToastContext";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { setIsLoading } = useLoading();
+  const { showToast } = useToast();
   const [userRole, setUserRole] = useState("student");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [showToast, setShowToast] = useState(false);
 
+  useEffect(() => {
+    const loadLanguages = async () => {
+      const { success, data, error } = await apiRequest({
+        url: "http://localhost:8000/api/topic",
+        method: "GET",
+        params: { flat: true },
+      });
 
-  // useEffect(() => {
-  //   const loadLanguages = async () => {
-  //     const { success, data, error } = await apiRequest({
-  //       url: "http://localhost:8000/api/topic",
-  //       method: "GET",
-  //       params: { flat: true },
-  //     });
-
-  //     if (success) {
-  //       dispatch(setTopics({ data }));
-  //     } else {
-  //       console.error("Error loading languages:", error);
-  //     }
-
-  //     setLoading(false);
-  //   };
-
-  //   const loadDifficulty = async () => {
-  //     const { success, data, error } = await apiRequest({
-  //       url: "http://localhost:8000/api/topic/difficulty",
-  //       method: "GET",
-  //     });
-
-  //     if (success) {
-  //       dispatch(setDifficulties({ data }));
-  //     } else {
-  //       console.error("-- Error loading languages:", error);
-  //     }
-
-  //     setLoading(false);
-  //   };
-
-  //   loadLanguages();
-  //   loadDifficulty();
-  // }, []);
-
-  const handleLogin = async (e) => {
-    console.log("RUN")
-    e.preventDefault();
-    setErrorMsg("");
-
-    // const { success, data, error } = await apiRequest({
-    //   url: "http://localhost:8000/api/users/login",
-    //   method: "POST",
-    //   data: {
-    //     username: username,
-    //     password: password
-    //   }
-    // });
-
-    // if (success) {
-    //   let user = {
-    //   userId:data.id,
-    //   userName: data.username,
-    //   name: data.name,
-    //   firstName: data.first_name,
-    //   lastName: data.last_name,
-    //   role: data.user_type,
-    // };
-    //   dispatch(setUser({ user }));
-    //   setUserRole(data.user_type);
-    // } else {
-    //   console.error("-- Error loading languages:", error);
-    // }
-
-    const user = {
-      userId: 1,
-      userName: "sdhone98",
-      name: "Sagar Dhone",
-      firstName: "Sagar",
-      lastName: "Dhone",
-      role: "student",
+      if (success) {
+        dispatch(setTopics({ data }));
+      } else {
+        showToast("Error", "Error", JSON.stringify(error.data));
+      }
     };
 
-    dispatch(setUser({ user }));
-    setUserRole(user.role);
+    const loadDifficulty = async () => {
+      const { success, data, error } = await apiRequest({
+        url: "http://localhost:8000/api/topic/difficulty",
+        method: "GET",
+      });
 
-    if (userRole === "student") return navigate("/student/dashboard");
-    if (userRole === "teacher") return navigate("/teacher/dashboard");
-    navigate("/");
-    
+      if (success) {
+        dispatch(setDifficulties({ data }));
+      } else {
+        showToast("Error", "Error", JSON.stringify(error.data));
+      }
+    };
+
+    loadLanguages();
+    loadDifficulty();
+  }, []);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const { success, data, error } = await apiRequest({
+      url: "http://localhost:8000/api/users/login",
+      method: "POST",
+      data: {
+        username: username,
+        password: password,
+      },
+    });
+    setIsLoading(false);
+    if (success) {
+      let user = {
+        userId: data.id,
+        userName: data.username,
+        name: data.name,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        role: data.user_type,
+      };
+      dispatch(setUser({ user }));
+      setUserRole(data.user_type);
+      if (userRole === "student") return navigate("/student/dashboard");
+      if (userRole === "teacher") return navigate("/teacher/dashboard");
+    } else {
+      showToast("Error", "Error", JSON.stringify(error.data));
+    }
+
+    // const user = {
+    //   userId: 1,
+    //   userName: "sdhone98",
+    //   name: "Sagar Dhone",
+    //   firstName: "Sagar",
+    //   lastName: "Dhone",
+    //   role: "student",
+    // };
+
+    // dispatch(setUser({ user }));
+    // setUserRole(user.role);
+
+    // if (userRole === "student") return navigate("/student/dashboard");
+    // if (userRole === "teacher") return navigate("/teacher/dashboard");
+    // navigate("/");
   };
   return (
     <div className="w-screen h-full px-12 py-8 flex flex-col items-center bg-color-background lg:pt-40">

@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext";
 
 const NavBar = () => {
+  const { showToast } = useToast();
   const [isDark, setIsDark] = useState(true);
   const navigate = useNavigate();
   const handleLogout = () => {
-    // Clear session
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    // Redirect to login page
+    showToast("Success", "Info", "Logout sccessfully.!");
     navigate("/login");
   };
 
@@ -58,9 +56,10 @@ const NavBar = () => {
   return (
     <nav className="bg-color-navbar border-gray-20">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <span 
-        onClick={() => navigate("student/dashboard")}
-        className="self-center text-2xl font-semibold whitespace-nowrap text-color-primary hover:cursor-pointer">
+        <span
+          onClick={() => navigate("student/dashboard")}
+          className="self-center text-2xl font-semibold whitespace-nowrap text-color-primary hover:cursor-pointer"
+        >
           Quiz
         </span>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">

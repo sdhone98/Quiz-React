@@ -9,7 +9,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      console.log("USER STOER ======> ", action.payload.user)
       state.user = action.payload.user; 
     },
     logout: (state) => {
