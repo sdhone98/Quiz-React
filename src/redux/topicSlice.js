@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  topics: ["Q"],
-  difficulties: ["awd"],
+  topics: ["A"],
+  difficulties: ["a", "b"],
   selectedTopic: null,
   selectedDifficulty: null,
 };

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ResultTable from "../../components/ResultTable";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { useToast } from "../../context/ToastContext";
 
 
 const today = new Date();
@@ -10,17 +11,29 @@ const today = new Date();
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
+
   const formattedDate = today.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
   
+  
   const user = useSelector((state) => state.user.user);
   const topicsList = useSelector((state) => state.topic.topics);
   const difficultiesList = useSelector((state) => state.topic.difficulties);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectDifficulty, setSelectDifficulty] = useState(null);
+
+  useEffect(() => {
+    showToast("Success", "Info", "Login sccessfully.!")
+
+  }, [])
+
+
+  console.log("topicsList", topicsList)
+  console.log("difficultiesList", difficultiesList)
 
   const msgLine1 = "Ready to challenge yourself and grow your skills?";
   const msgLine2 = "Pick a topic and show us what you've got!";

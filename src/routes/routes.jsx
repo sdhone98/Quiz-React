@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   useLocation,
+  useNavigate
 } from "react-router-dom";
 import Login from "../components/Login";
 import Register from "../components/Register";
@@ -10,6 +11,7 @@ import NavBar from "../components/NavBar";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import StartQuiz from "../pages/student/StartQuiz";
 import StudentResult from "../pages/student/StudentResult";
+import { useEffect } from "react";
 
 // Student Pages
 // const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
@@ -29,6 +31,12 @@ const NotFound = () => (
 );
 
 const AppLayout = ({ children }) => {
+  const navigate = useNavigate(null);
+
+    useEffect(() => {
+    navigate("/login");
+  }, []);
+
   const location = useLocation();
   const hideNavbar = [
     "/login",
