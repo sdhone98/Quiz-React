@@ -1,11 +1,11 @@
 const QuizCard = ({ questionIndex, questionData, onSelect }) => {
   return (
     <div className="w-2/3 p-4">
-      <p class="my-4 text-lg text-color-text-1">
+      <p className="my-4 text-lg text-color-text-1">
         Question No : {questionIndex + 1}
       </p>
 
-      <h2 class="text-2xl font-bold dark:text-white mb-5">
+      <h2 className="text-2xl font-bold dark:text-white mb-5">
         {questionData.question}
       </h2>
       <div className="w-2/3 flex-row">

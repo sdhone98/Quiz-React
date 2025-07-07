@@ -72,6 +72,7 @@ const Login = () => {
       };
       dispatch(setUser({ user }));
       setUserRole(data.user_type);
+      showToast("Success", "Info", "Login sccessfully.!");
       if (userRole === "student") return navigate("/student/dashboard");
       if (userRole === "teacher") return navigate("/teacher/dashboard");
     } else {

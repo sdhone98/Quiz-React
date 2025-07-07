@@ -123,9 +123,9 @@ const StartQuiz = () => {
       {isQuizEnd && quizEndFn()}
 
       <div className="w-screen h-full py-6 px-10 bg-color-background">
-        <div class="w-full mb-4">
+        <div className="w-full mb-4">
           <div className="w-full flex items-center justify-between">
-            <h2 class="mb-1 text-4xl tracking-tight font-extrabold text-color-text-1">
+            <h2 className="mb-1 text-4xl tracking-tight font-extrabold text-color-text-1">
               Quiz Topic
             </h2>
             <div className="w-fit flex flex-row gap-2">
@@ -141,14 +141,14 @@ const StartQuiz = () => {
           </div>
           <div className="w-fit flex-row justify-center">
             <span className="flex">
-              <p class="text-color-text-1 sm:text-l pr-1">
+              <p className="text-color-text-1 sm:text-l pr-1">
                 Difficaulty Level -{" "}
               </p>
-              <p class="text-color-text-1 sm:text-l font-bold">Easy</p>
+              <p className="text-color-text-1 sm:text-l font-bold">Easy</p>
             </span>
             <span className="flex">
-              <p class="text-color-text-1 sm:text-l pr-1">Set - </p>
-              <p class="text-color-text-1 sm:text-l font-bold">A</p>
+              <p className="text-color-text-1 sm:text-l pr-1">Set - </p>
+              <p className="text-color-text-1 sm:text-l font-bold">A</p>
             </span>
           </div>
         </div>
