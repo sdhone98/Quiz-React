@@ -3,12 +3,22 @@ import ResultTable from "../../components/ResultTable";
 import DropDown from "../../components/DropDown";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { setQuizData } from "../../redux/quizSlice";
+import { useDispatch } from "react-redux";
+import { apiRequest } from "../../utils/api";
 import { useToast } from "../../context/ToastContext";
+import {
+  setSelectedTopic,
+  setSelectedDifficulty,
+  setSelectedSet,
+} from "../../redux/topicSlice";
 
 const today = new Date();
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { showToast } = useToast();
 
   const formattedDate = today.toLocaleDateString("en-US", {
     year: "numeric",
@@ -21,11 +31,73 @@ const StudentDashboard = () => {
   const difficultiesList = useSelector(
     (state) => state.topic.difficulties.data
   );
-  const [selectedTopic, setSelectedTopic] = useState(null);
+  const setList = useSelector((state) => state.topic.quizSetsTypes.data);
+  const [selectedTopic, setSelectTopic] = useState(null);
   const [selectDifficulty, setSelectDifficulty] = useState(null);
+  const [selectSet, setSelectSet] = useState(null);
 
   const msgLine1 = "Ready to challenge yourself and grow your skills?";
   const msgLine2 = "Pick a topic and show us what you've got!";
+
+  const sendQuizStartDetails = async (quiz_set) => {
+    const reqBody = {
+      user_name: user.userName,
+      user: user.userId,
+      quiz_set: quiz_set,
+      start_at: today.toISOString(),
+    };
+
+    const { success, data, error } = await apiRequest({
+      url: "http://localhost:8000/api/exam/attempt/start",
+      method: "POST",
+      data: reqBody,
+    });
+
+    if (success) {
+      showToast("Info", "Info", "Quiz Started.!");
+      return true;
+    } else {
+      showToast("Error", "Error", JSON.stringify(error?.data || error));
+      return false;
+    }
+  };
+
+  const loadQuizQuestionBySelection = async () => {
+    if (!selectedTopic) {
+      return showToast("Warning", "Warning", "Please select Topic.!");
+    }
+    if (!selectDifficulty) {
+      return showToast("Warning", "Warning", "Please select Difficulty.!");
+    }
+    if (!selectSet) {
+      return showToast("Warning", "Warning", "Please select Set Type.!");
+    }
+
+    const { success, data, error } = await apiRequest({
+      url: "http://localhost:8000/api/exam/quiz-set",
+      method: "POST",
+      data: {
+        topic: selectedTopic.id,
+        difficulty: selectDifficulty.name,
+        set_type: selectSet.name,
+      },
+    });
+
+    if (success) {
+      console.log("HERE 1");
+      const started = await sendQuizStartDetails(data.quiz_set_id);
+      if (!started) return;
+      console.log("HERE 2", data.quiz_set_id, data);
+      dispatch(setQuizData({ data }));
+      dispatch(setSelectedTopic({ ...selectedTopic }));
+      dispatch(setSelectedDifficulty({ ...selectDifficulty }));
+      dispatch(setSelectedSet({ ...selectSet }));
+      navigate("/student/quiz/start");
+    } else {
+      return showToast("Error", "Error", JSON.stringify(error.data));
+    }
+  };
+
   return (
     <section className="max-w-screen h-full flex justify-center items-center bg-color-background">
       <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
@@ -46,7 +118,7 @@ const StudentDashboard = () => {
             <div className="flex justify-center items-center gap-2">
               <DropDown
                 label={"Topic"}
-                onSelect={setSelectedTopic}
+                onSelect={setSelectTopic}
                 optionsList={topicsList}
                 isDisable={false}
               />
@@ -56,13 +128,30 @@ const StudentDashboard = () => {
                 optionsList={difficultiesList}
                 isDisable={!selectedTopic}
               />
+              <DropDown
+                label={"Set"}
+                onSelect={setSelectSet}
+                optionsList={setList}
+                isDisable={!Boolean(selectedTopic && selectDifficulty)}
+              />
             </div>
-            {selectedTopic} |{selectDifficulty}
             <a
-              onClick={() => navigate("/student/quiz/start")}
-              className="w-2/6 inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
+              onClick={() => {
+                loadQuizQuestionBySelection();
+                console.log(
+                  "CHOICE ===> ",
+                  selectedTopic,
+                  selectDifficulty,
+                  selectSet
+                );
+              }}
+              className={`${
+                !Boolean(selectedTopic && selectDifficulty && setSelectSet)
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              } w-2/6 inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1`}
             >
-              {selectedTopic && selectDifficulty
+              {Boolean(selectedTopic) && Boolean(selectDifficulty)
                 ? "Start Quiz"
                 : "Select Options"}
               <svg

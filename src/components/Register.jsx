@@ -13,8 +13,13 @@ const Register = () => {
   const [defaultUserRole, setDefaultUserRole] = useState("student");
   const handleRegister = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
+    
+    // VALIDATION 
+    if (e.target.password.value != e.target.confirmPassword.value) return showToast("Warning", "Warning", "Password and confirm password do not match.");
+    console.log("HERE ====================")
+    // return showToast("Success", "Info", "111 User Register Sucessfully.!");
+    setIsLoading(true);
     const { success, data, error } = await apiRequest({
       url: "http://localhost:8000/api/users/",
       method: "POST",
@@ -131,15 +136,15 @@ const Register = () => {
               </div>
               <div>
                 <label
-                  htmlFor="confirm-password"
+                  htmlFor="confirmPassword"
                   className="block mb-2 text-sm font-medium text-color-text-1"
                 >
                   Confirm password
                 </label>
                 <input
                   type="password"
-                  name="confirm-password"
-                  id="confirm-password"
+                  name="confirmPassword"
+                  id="confirmPassword"
                   placeholder="••••••••"
                   className="text-color-text-1 text-sm rounded-lg block w-full p-2.5 bg-color-background"
                   required=""

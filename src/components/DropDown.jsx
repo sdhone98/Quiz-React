@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setTopics } from "../redux/topicSlice";
 
-
-
 const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
   const dispatch = useDispatch();
 
@@ -54,16 +52,19 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
           className="py-2 text-sm text-color-text-2 h-fit overflow-y-auto"
           aria-labelledby="dropdownDefaultButton"
         >
-          {optionsList.map((i) => (
-            <li key={i}>
+          {" "}
+          {optionsList.map(({ id, name }) => (
+            <li key={id}>
               <a
                 href="#"
                 onClick={() => (
-                  onSelect(i), setOpen(false), setUserSelection(i)
+                  onSelect({ id: id, name: name }),
+                  setOpen(false),
+                  setUserSelection(name)
                 )}
                 className="block px-4 py-2 hover:bg-color-button-2"
               >
-                {i}
+                {name}
               </a>
             </li>
           ))}

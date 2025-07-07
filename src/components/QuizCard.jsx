@@ -15,7 +15,7 @@ const QuizCard = ({ questionIndex, questionData, onSelect }) => {
               {String.fromCharCode(65 + index)}.
             </label>
             <button
-              onClick={() => onSelect({ questionIndex, selected: key })}
+              onClick={() => onSelect({ questionId: questionData.id, selectedOption: key })}
               className="max-w-full bg-color-button-1 px-4 py-2.5 mb-2 hover:bg-color-accent-1 box-border text-left rounded-2xl"
             >
               {value}

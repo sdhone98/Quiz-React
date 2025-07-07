@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../utils/api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
-import { setTopics, setDifficulties } from "../redux/topicSlice";
+import { setTopics, setDifficulties, setQuizSetsTypes} from "../redux/topicSlice";
 import { useLoading } from "../context/LoadingContext";
 import { useToast } from "../context/ToastContext";
 
@@ -16,12 +16,13 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {
+
+  const getQuizRelatedInfo = () => {
+
     const loadLanguages = async () => {
       const { success, data, error } = await apiRequest({
         url: "http://localhost:8000/api/topic",
         method: "GET",
-        params: { flat: true },
       });
 
       if (success) {
@@ -44,9 +45,74 @@ const Login = () => {
       }
     };
 
+    const loadSets = async () => {
+      const { success, data, error } = await apiRequest({
+        url: "http://localhost:8000/api/topic/difficulty/set",
+        method: "GET",
+      });
+
+      console.log("SET DATA ====>", success, data, error)
+      if (success) {
+        dispatch(setQuizSetsTypes({ data }));
+      } else {
+        showToast("Error", "Error", JSON.stringify(error.data));
+      }
+    };
+
     loadLanguages();
     loadDifficulty();
-  }, []);
+    loadSets();
+
+  }
+// loadSets();
+  // useEffect(() => {
+  //   const loadLanguages = async () => {
+  //     const { success, data, error } = await apiRequest({
+  //       url: "http://localhost:8000/api/topic",
+  //       method: "GET",
+  //     });
+
+  //     if (success) {
+  //       dispatch(setTopics({ data }));
+  //     } else {
+  //       showToast("Error", "Error", JSON.stringify(error.data));
+  //     }
+  //   };
+
+  //   const loadDifficulty = async () => {
+  //     const { success, data, error } = await apiRequest({
+  //       url: "http://localhost:8000/api/topic/difficulty",
+  //       method: "GET",
+  //     });
+
+  //     if (success) {
+  //       dispatch(setDifficulties({ data }));
+  //     } else {
+  //       showToast("Error", "Error", JSON.stringify(error.data));
+  //     }
+  //   };
+
+  //   const loadSets = async () => {
+  //     const { success, data, error } = await apiRequest({
+  //       url: "http://localhost:8000/api/topic/difficulty/set",
+  //       method: "POST",
+  //       data: {
+  //         topic: 1,
+  //         difficulty: "Easy",
+  //       },
+  //     });
+
+  //     if (success) {
+  //       dispatch(setSelectedSet({ data }));
+  //     } else {
+  //       showToast("Error", "Error", JSON.stringify(error.data));
+  //     }
+  //   };
+
+  //   loadLanguages();
+  //   loadDifficulty();
+  //   loadSets();
+  // }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -72,6 +138,7 @@ const Login = () => {
       };
       dispatch(setUser({ user }));
       setUserRole(data.user_type);
+      getQuizRelatedInfo();
       showToast("Success", "Info", "Login sccessfully.!");
       if (userRole === "student") return navigate("/student/dashboard");
       if (userRole === "teacher") return navigate("/teacher/dashboard");
