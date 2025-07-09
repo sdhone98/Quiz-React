@@ -6,13 +6,17 @@ import { setUser } from "../redux/userSlice";
 import { setTopics, setDifficulties, setQuizSetsTypes} from "../redux/topicSlice";
 import { useLoading } from "../context/LoadingContext";
 import { useToast } from "../context/ToastContext";
+import { CONSTANTS } from "../constants/configs"
+import { ROUTES } from "../constants/routes";
+import { BASE_URL_END_POINT, API_END_POINTS } from "../constants/apiEndPoints";
 
+const BASE_URL = BASE_URL_END_POINT.BASE_URL
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
   const { showToast } = useToast();
-  const [userRole, setUserRole] = useState("student");
+  const [userRole, setUserRole] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,7 +25,7 @@ const Login = () => {
 
     const loadLanguages = async () => {
       const { success, data, error } = await apiRequest({
-        url: "http://localhost:8000/api/topic",
+        url: BASE_URL + API_END_POINTS.GET_TOPIC,
         method: "GET",
       });
 
@@ -34,7 +38,7 @@ const Login = () => {
 
     const loadDifficulty = async () => {
       const { success, data, error } = await apiRequest({
-        url: "http://localhost:8000/api/topic/difficulty",
+        url: BASE_URL + API_END_POINTS.GET_TOPIC_DIFFICULTY,
         method: "GET",
       });
 
@@ -47,11 +51,10 @@ const Login = () => {
 
     const loadSets = async () => {
       const { success, data, error } = await apiRequest({
-        url: "http://localhost:8000/api/topic/difficulty/set",
+        url: BASE_URL + API_END_POINTS.GET_TOPIC_DIFFICULTY_WITH_SET,
         method: "GET",
       });
 
-      console.log("SET DATA ====>", success, data, error)
       if (success) {
         dispatch(setQuizSetsTypes({ data }));
       } else {
@@ -119,7 +122,7 @@ const Login = () => {
     setIsLoading(true);
 
     const { success, data, error } = await apiRequest({
-      url: "http://localhost:8000/api/users/login",
+      url: BASE_URL + API_END_POINTS.LOGIN,
       method: "POST",
       data: {
         username: username,
@@ -134,14 +137,14 @@ const Login = () => {
         name: data.name,
         firstName: data.first_name,
         lastName: data.last_name,
-        role: data.user_type,
+        role: data.role,
       };
       dispatch(setUser({ user }));
-      setUserRole(data.user_type);
+      setUserRole(data.role);
       getQuizRelatedInfo();
       showToast("Success", "Info", "Login sccessfully.!");
-      if (userRole === "student") return navigate("/student/dashboard");
-      if (userRole === "teacher") return navigate("/teacher/dashboard");
+      if (data.role === CONSTANTS.STUDENT) navigate(ROUTES.STUDENT_DASHBOARD);
+      if (data.role === CONSTANTS.TEACHER) navigate(ROUTES.TEACHER_DASHBOARD);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
@@ -158,9 +161,9 @@ const Login = () => {
     // dispatch(setUser({ user }));
     // setUserRole(user.role);
 
-    // if (userRole === "student") return navigate("/student/dashboard");
-    // if (userRole === "teacher") return navigate("/teacher/dashboard");
-    // navigate("/");
+    // if (userRole === "student") return navigate(ROUTES.STUDENT_DASHBOARD);
+    // if (userRole === "teacher") return navigate(ROUTES.TEACHER_DASHBOARD);
+    // navigate(ROUTES.NO_PATH);
   };
   return (
     <div className="w-screen h-full px-12 py-8 flex flex-col items-center bg-color-background lg:pt-40">
@@ -221,7 +224,7 @@ const Login = () => {
         <p className="text-sm font-light text-color-text-1 pt-4 text-center">
           Don't have an account yet?{" "}
           <a
-            onClick={() => navigate("/register")}
+            onClick={() => navigate(ROUTES.REGISTER)}
             className="font-medium text-color-button-1 hover:underline hover:cursor-pointer"
           >
             Sign up

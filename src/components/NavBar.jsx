@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
+import { useSelector } from "react-redux";
+import { CONSTANTS } from "../constants/configs";
+import { ROUTES } from "../constants/routes";
 
 const NavBar = () => {
   const { showToast } = useToast();
   const [isDark, setIsDark] = useState(true);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user.user);
+
   const handleLogout = () => {
     showToast("Success", "Info", "Logout sccessfully.!");
     navigate("/login");
@@ -57,7 +62,7 @@ const NavBar = () => {
     <nav className="bg-color-navbar border-gray-20">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <span
-          onClick={() => navigate("student/dashboard")}
+          onClick={() => navigate(user.role === CONSTANTS.TEACHER ? ROUTES.TEACHER_DASHBOARD : ROUTES.STUDENT_DASHBOARD)}
           className="self-center text-2xl font-semibold whitespace-nowrap text-color-primary hover:cursor-pointer"
         >
           Quiz

@@ -3,7 +3,7 @@ import {
   Routes,
   Route,
   useLocation,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 import Login from "../components/Login";
 import Register from "../components/Register";
@@ -12,6 +12,8 @@ import StudentDashboard from "../pages/student/StudentDashboard";
 import StartQuiz from "../pages/student/StartQuiz";
 import StudentResult from "../pages/student/StudentResult";
 import { useEffect } from "react";
+import TeacherDashboard from "../pages/teacher/TeacherDashboard";
+import CreateQuiz from "../pages/teacher/CreateQuiz";
 
 // Student Pages
 // const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
@@ -20,8 +22,8 @@ const AttemptQuiz = () => <div className="p-6">Attempt Quiz Page</div>;
 // const ResultPage = () => <div className="p-6">Result Page</div>;
 
 // Teacher Pages
-const TeacherDashboard = () => <div className="p-6">Teacher Dashboard</div>;
-const CreateQuiz = () => <div className="p-6">Create Quiz Page</div>;
+// const TeacherDashboard = () => <div className="p-6">Teacher Dashboard</div>;
+// const CreateQuiz = () => <div className="p-6">Create Quiz Page</div>;
 const ManageQuiz = () => <div className="p-6">Manage Quiz Page</div>;
 
 // General Pages
@@ -33,8 +35,9 @@ const NotFound = () => (
 const AppLayout = ({ children }) => {
   const navigate = useNavigate(null);
 
-    useEffect(() => {
+  useEffect(() => {
     navigate("/login");
+    // navigate("/teacher/quiz/create");
   }, []);
 
   const location = useLocation();
@@ -60,17 +63,12 @@ const AppRoutes = () => {
       <AppLayout>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Login />} />
+          <Route path="/daw" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           {/* Student Routes */}
-          <Route
-            path="/student/dashboard"
-            element={
-              <StudentDashboard/>
-            }
-          />
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/student/quiz/start" element={<StartQuiz />} />
           <Route path="/student/quiz/:quizId" element={<AttemptQuiz />} />
           <Route path="/student/result" element={<StudentResult />} />
