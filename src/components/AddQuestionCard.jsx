@@ -3,10 +3,7 @@ import { useToast } from "../context/ToastContext";
 import { v4 as uuidv4 } from "uuid";
 
 const optionsLits = ["A", "B", "C", "D"];
-const idCounter = 1;
 function AddQuestionCard({ onSave }) {
-  const generateId = () =>
-    `${new Date().getTime()}-${Math.floor(Math.random() * 10000)}`;
   const { showToast } = useToast();
   const [selectedOption, setSelectedOption] = useState(null);
   const [qDetails, setQDetails] = useState(null);
@@ -48,8 +45,8 @@ function AddQuestionCard({ onSave }) {
       ],
     };
     onSave(q_data);
-    e.target.reset();
-    setSelectedOption(null);
+    // e.target.reset();
+    // setSelectedOption(null);
   };
 
   return (
@@ -58,7 +55,7 @@ function AddQuestionCard({ onSave }) {
         action="#"
         method="get"
         id="defaultModal"
-        className="w-full p-4 overflow-x-hidden overflow-y-auto md:h-full"
+        className="w-full overflow-x-hidden overflow-y-auto md:h-full"
         onSubmit={saveQuestionDetails}
       >
         <div className="bg-color-button-3 rounded-lg shadow">

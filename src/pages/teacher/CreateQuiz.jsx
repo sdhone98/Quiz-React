@@ -1,246 +1,367 @@
-import React, { useEffect, useState } from "react";
-import AddQuestionCard from "../../components/AddQuestionCard";
-import QuestionCard from "../../components/QuestionCard";
-import NewTopicAddPopUp from "../../components/NewTopicAddPopUp";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ALL_PERPOSE } from "../../constants/allPurpose";
 import { useToast } from "../../context/ToastContext";
 import { apiRequest } from "../../utils/api";
-import { useDispatch } from "react-redux";
 import {
   BASE_URL_END_POINT,
   API_END_POINTS,
 } from "../../constants/apiEndPoints";
-import { setTopics } from "../../redux/topicSlice";
-import DropDown from "../../components/DropDown";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
-const CreateQuiz = () => {
-  const dispatch = useDispatch();
+const SavePopUp = ({ onClose, onSave }) => {
   const { showToast } = useToast();
-  const [isTopicAddOn, setIsTopicAdd] = useState(false);
-  const user = useSelector((state) => state.topic.topics.data);
-  const [topicList, setTopicList] = useState(user);
-  const [quizName, setQuizName] = useState("");
-  const [quizTime, setQuizTime] = useState(null);
-  const [selectedTopic, setSelectedTopic] = useState(null);
-  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
-  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  const [questionList, setQuestionList] = useState([]);
 
+  const [quizDetails, setQuizDetails] = useState({
+    quizSetType: ALL_PERPOSE.SET_TYPES[0],
+    quizTime: null,
+  });
+
+  return (
+    <div className="fixed inset-0 z-50 backdrop-blur-md bg-opacity-50 flex justify-center items-center">
+      <div className="max-w-sm p-6 bg-transparent rounded-lg shadow-sm border">
+        <div className="flex justify-between">
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            Quiz Details
+          </h5>
+          <svg
+            className="w-6 h-6 text-gray-800 dark:text-white hover:cursor-pointer"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+            onClick={onClose}
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18 17.94 6M18 18 6.06 6"
+            />
+          </svg>
+        </div>
+
+        <div className="flex items-center mb-2">
+          <label className="w-20 text-sm font-medium text-gray-900 dark:text-white">
+            Set Type
+          </label>
+          <select
+            id="difficulty"
+            className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
+            onChange={(e) =>
+              setQuizDetails((prev) => ({
+                ...prev,
+                quizSetType: e.target.value ? e.target.value : null,
+              }))
+            }
+          >
+            {ALL_PERPOSE.SET_TYPES.map((ele) => (
+              <option value={ele}>{ele} </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex items-center">
+          <label className="w-20 text-sm font-medium text-gray-900 dark:text-white">
+            Total Time
+          </label>
+          <input
+            type="number"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-fit p-2.5"
+            placeholder="10"
+            required
+            onChange={(e) =>
+              setQuizDetails((prev) => ({
+                ...prev,
+                quizTime: e.target.value ? parseInt(e.target.value, 10) : null,
+              }))
+            }
+          />
+        </div>
+        <a
+          onClick={() => {
+            if (quizDetails.quizTime == null) {
+              return showToast("Warning", "Warning", "Time required.!");
+            }
+            onSave(quizDetails);
+          }}
+          className="mt-2 w-24 h-10 p-2 bg-color-accent-1 float-right sm:col-span-2 text-color-text-2hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          Save
+        </a>
+      </div>
+    </div>
+  );
+};
+
+const CreateQuiz = () => {
+  const { showToast } = useToast();
+
+  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(
+    ALL_PERPOSE.DIFFICULTY_TYPES[0]
+  );
+  const topicsList = useSelector((state) => state.topic.topics.data);
+  const [filterQuestions, setFilterQuestions] = useState([]);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [createdQuestionSet, setCreatedQuestionSet] = useState([]);
+  const [selectedIdsList, setSelectedIdsList] = useState([]);
+  const [isPopUpopen, setIsPopUPOpen] = useState(false);
 
   useEffect(() => {
-    const loadLanguages = async () => {
-      const { success, data, error } = await apiRequest({
-        url: BASE_URL + API_END_POINTS.GET_TOPIC,
-        method: "GET",
-      });
+    if (topicsList.length > 0) {
+      setSelectedTopic(topicsList[0].id);
+    }
+  }, [topicsList]);
 
-      if (success) {
-        dispatch(setTopics({ data }));
-        setTopicList(data);
-      } else {
-        showToast("Error", "Error", JSON.stringify(error.data));
-      }
+  const getQuestionsData = async () => {
+    setCreatedQuestionSet([]);
+    setSelectedIdsList([]);
+    console.log(
+      "------------------- SEND DATA -------------------",
+      selectedTopic,
+      selectedDifficulty
+    );
+    if (selectedTopic === null) {
+      return showToast("Warning", "Warning", "Topic details required.!");
+    }
+
+    if (selectedDifficulty === null) {
+      return showToast("Warning", "Warning", "Difficulty level required.!");
+    }
+
+    const _data = {
+      topic: selectedTopic,
+      difficulty: selectedDifficulty,
     };
 
-    loadLanguages();
-  }, [isTopicAddOn]);
+    const { success, data, error } = await apiRequest({
+      url: BASE_URL + API_END_POINTS.GET_QUESTIONS,
+      method: "GET",
+      params: {
+        topic: selectedTopic,
+        difficulty: selectedDifficulty,
+      },
+    });
 
-  const saveQuiz = () => {
-    console.log("------------------- DATA ----------------");
-    
-    if (quizName.trim().length === 0)
-      return showToast("Warning", "Warning", "Quiz name cannot be empty");
-    if (selectedTopic === null)
-      return showToast("Warning", "Warning", "Quiz Topic requried.!");
-    if (selectedDifficulty === null)
-      return showToast("Warning", "Warning", "Quiz Difficulty type requried.!");
-    if (quizTime === null)
-      return showToast("Warning", "Warning", "Quiz time requried.!");
-    if (quizTime <= 0)
-      return showToast(
-    "Warning",
-    "Warning",
-    "Quiz time should be more than 0 mins.!"
-  );
-  console.log("==> ", {
-    quiz_name: quizName,
-    topic: selectedTopic.id,
-    difficulty: selectedDifficulty,
-    quiz_time: quizTime,
-  });
-};
+    if (success) {
+      setFilterQuestions(data);
+    } else {
+      showToast("Error", "Error", JSON.stringify(error.data));
+    }
+  };
 
-const handleQuestionDetailsSelection = (answer) => {
-  setQuestionList((prev) => [...prev, answer]);
-};
+  const handelPopUpOnSave = (data) => {
+    console.log("-------------- ON POPUP SAVE ------------------- ", data);
+    saveQuestionSetData(data.quizSetType, data.quizTime);
+  };
 
-const handleQuestionRemove = (element) => {
-  setQuestionList((prev) => prev.filter((item) => item.id !== element.id));
-};
+  const saveQuestionSetData = async (quizSetType, quizTime) => {
+    const questionsIds = createdQuestionSet.map((item) => item.id);
+    if (selectedTopic === null) {
+      return showToast("Warning", "Warning", "Topic details required.!");
+    }
 
+    if (selectedDifficulty === null) {
+      return showToast("Warning", "Warning", "Difficulty level required.!");
+    }
+    if (createdQuestionSet.length === 0) {
+      return showToast("Warning", "Warning", "Please select Questions first.!");
+    }
+    const _data = {
+      topic: selectedTopic,
+      set_type: quizSetType,
+      total_time: quizTime,
+      difficulty_level: selectedDifficulty,
+      questions: questionsIds,
+    };
 
-return (
-  <section className="max-w-screen h-full grid grid-cols-1 grid-rows-13 bg-color-background py-8 px-20">
-      {isTopicAddOn && <NewTopicAddPopUp onClose={setIsTopicAdd} />}
-      <div className="row-span-1">
-        {" "}
-        <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-color-text-1">
-          Create New Quiz
+    const { success, data, error } = await apiRequest({
+      url: BASE_URL + API_END_POINTS.ADD_QUIZSETS,
+      method: "POST",
+      data: _data,
+    });
+
+    if (success) {
+      showToast("Info", "Info", "Quiz set saved successfully.!");
+      setIsPopUPOpen(false)
+    } else {
+      showToast("Error", "Error", JSON.stringify(error.data));
+    }
+  };
+
+  const handleAddQuestion = (question) => {
+    setCreatedQuestionSet((prev) => {
+      const exists = prev.some((item) => item.id === question.id);
+      if (exists) {
+        showToast(
+          "Warning",
+          "Warning",
+          `Question is ${question.id} already exists.`
+        );
+        return prev;
+      }
+      setSelectedIdsList((prev) => [...prev, question.id]);
+      return [...prev, question];
+    });
+  };
+
+  const handleQuestionRemove = (element) => {
+    setCreatedQuestionSet((prev) =>
+      prev.filter((item) => item.id !== element.id)
+    );
+    setSelectedIdsList((prev) => prev.filter((item) => item !== element.id));
+  };
+
+  return (
+    <div className="relative max-w-screen bg-color-background flex-col h-full px-20 py-8 text-color-text-1">
+      <div className="flex justify-between items-center">
+        <h1 className="text-5xl font-extrabold text-color-text-1 block">
+          Create QuizSet
         </h1>
-      </div>
-      <div className="row-span-6">
-        <div className="grid grid-cols-2">
-          <div className="col-span-1 p-4">
-            <div className="bg-color-button-3 p-4 rounded-xl">
-              <div className="grid gap-4 mb-4 grid-cols-10 sm:gap-6 sm:mb-5">
-                <label
-                  htmlFor="quizName"
-                  className="block mb-2 text-sm font-medium text-color-text-1 sm:col-span-2 self-center"
-                >
-                  Quiz Title:
-                </label>
-                <input
-                  value={quizName}
-                  onChange={(e) => setQuizName(e.target.value.trim())}
-                  type="text"
-                  name="quizName"
-                  id="quizName"
-                  className="sm:col-span-8 bg-color-button-3 text-color-text-1 text-sm rounded-lg  block w-full p-2.5"
-                  placeholder="Quiz Name"
-                  required
-                />
-              </div>
-              <div className="grid  mb-4 grid-cols-10 sm:mb-5">
-                <label
-                  htmlFor="difficulty"
-                  className="block mb-2 text-sm font-medium text-color-text-1 sm:col-span-2 self-center"
-                >
-                  Select Topic:
-                </label>
-                <div className="sm:col-span-6 bg-color-button-3 text-color-text-1 text-sm rounded-lg  w-fit">
-                  <button
-                    onClick={() => setIsDropDownOpen(true)}
-                    class="text-color-text-1 bg-color-button-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-                    type="button"
-                  >
-                    {selectedTopic ? selectedTopic.name : "Topic"}
-                    <svg
-                      class="w-2.5 h-2.5 ms-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 10 6"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m1 1 4 4 4-4"
-                      />
-                    </svg>
-                  </button>
-
-                  <div
-                    id="dropdownUsers"
-                    class={`${
-                      isDropDownOpen ? "" : "hidden"
-                    } absolute z-10 bg-[#696969] rounded-lg shadow-sm w-60`}
-                  >
-                    <ul
-                      class="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
-                      aria-labelledby="dropdownUsersButton"
-                    >
-                      {topicList.map(({ name, id }) => (
-                        <li key={id}>
-                          <a
-                            onClick={() => {
-                              setSelectedTopic({ name: name, id: id }),
-                                setIsDropDownOpen(false);
-                            }}
-                            class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                          >
-                            {name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setIsTopicAdd(true)}
-                  type="submit"
-                  className="sm:col-span-2 text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                >
-                  Add Topic
-                </button>
-              </div>
-              <div className="grid mb-4 grid-cols-10 sm:mb-5">
-                <label
-                  htmlFor="difficulty"
-                  className="block mb-2 text-sm font-medium text-color-text-1 sm:col-span-2 self-center"
-                >
-                  Difficulty Level:
-                </label>
-                <select
-                  id="difficulty"
-                  className="sm:col-span-8 bg-color-button-3 text-color-text-1 text-sm rounded-lg  block w-fit p-2.5"
-                  value={selectedDifficulty}
-                  onChange={(e) => setSelectedDifficulty(e.target.value.trim())}
-                >
-                  {ALL_PERPOSE.DIFFICULTY_TYPES.map((ele) => (
-                    <option value={ele}>{ele} </option>
-                  ))}
-                </select>
-              </div>
-              <div className="grid mb-4 grid-cols-10 sm:mb-5 pl-2">
-                <label
-                  htmlFor="time"
-                  className="block mb-2 text-sm font-medium text-color-text-1 sm:col-span-2 self-center"
-                >
-                  Duration (mins):
-                </label>
-                <input
-                  value={quizTime}
-                  onChange={(e) => setQuizTime(e.target.value.trim())}
-                  type="number"
-                  name="time"
-                  id="time"
-                  className="sm:col-span-8 bg-color-button-3 text-color-text-1 text-sm rounded-lg  block w-full p-2.5"
-                  placeholder="Ex. 12"
-                  required
-                />
-              </div>
-              <div>
-                <div className="grid mb-4 sm:grid-cols-10 sm:mb-5 pl-2">
-                  <a
-                    onClick={() => saveQuiz()}
-                    className={
-                      "sm:col-span-3 cursor-pointer inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
-                    }
-                  >
-                    Add New Question
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-span-1">
-            <AddQuestionCard
-              onSave={handleQuestionDetailsSelection}
-            />
+        <div className="flex h-fit">
+          <div className="flex gap-2">
+            <select
+              id="difficulty"
+              className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
+              onChange={(e) => setSelectedTopic(e.target.value.trim())}
+            >
+              {topicsList.map((ele) => (
+                <option key={ele.id} value={ele.id}>
+                  {ele.name}
+                </option>
+              ))}
+            </select>
+            <select
+              id="difficulty"
+              className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
+              value={selectedDifficulty ? selectedDifficulty : "Select Topic"}
+              onChange={(e) => setSelectedDifficulty(e.target.value.trim())}
+            >
+              {ALL_PERPOSE.DIFFICULTY_TYPES.map((ele) => (
+                <option value={ele}>{ele} </option>
+              ))}
+            </select>
+            <button
+              onClick={() => getQuestionsData()}
+              type="submit"
+              className="sm:col-span-2 text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Search
+            </button>
           </div>
         </div>
       </div>
+      <div className="flex w-full max-h-[90%] gap-2">
+        <div className="w-1/2 overflow-y-auto scrollbar-hide">
+          {filterQuestions.map((ele, index) => (
+            <div
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className={`${
+                selectedIdsList.includes(ele.id) && "bg-green-900"
+              } border rounded-xl p-2 mb-2`}
+            >
+              <div className="flex justify-between">
+                <p className="max-w-[95%] whitespace-nowrap w-fit text-lg font-bold text-color-text-1 overflow-hidden">
+                  {index + 1}. {ele.question_text}
+                  <span className="text-2xl font-bold whitespace-nowrap"></span>
+                </p>
 
-      <div className="row-span-6">
-        <QuestionCard optionsList={questionList} removeQuestion={handleQuestionRemove}/>
+                {hoveredIndex === index && (
+                  <span
+                    className="px-2 py-1 bg-color-button-3 text-center rounded-md cursor-pointer"
+                    onClick={() => handleAddQuestion(ele)}
+                  >
+                    Add
+                  </span>
+                )}
+              </div>
+
+              {ele.options_list.map((op, op_index) => (
+                <div>
+                  <p className="text-md text-color-text-1 overflow-hidden whitespace-nowrap pb-1">
+                    {op.op_key}:{" "}
+                    <span
+                      className={`${
+                        op.op_key == ele.correct_option
+                          ? "text-green-400"
+                          : "text-color-text-1"
+                      } text-xl font-no`}
+                    >
+                      {op.op_value}
+                    </span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+        <div className="w-1/2 overflow-y-auto scrollbar-hide">
+          {createdQuestionSet.map((ele, index) => (
+            <div className="border rounded-xl p-2 mb-2">
+              <div className="flex justify-between">
+                <p className="max-w-[95%] whitespace-nowrap w-fit text-lg font-bold text-color-text-1 overflow-hidden">
+                  {index + 1}. {ele.question_text}
+                  <span className="text-2xl font-bold whitespace-nowrap"></span>
+                </p>
+                <span
+                  className="px-2 py-1 bg-color-button-3 text-center rounded-md cursor-pointer"
+                  onClick={() => handleQuestionRemove(ele)}
+                >
+                  Remove
+                </span>
+              </div>
+
+              {ele.options_list.map((op, op_index) => (
+                <div>
+                  <p className="text-md text-color-text-1 overflow-hidden whitespace-nowrap pb-1">
+                    {op.op_key}:{" "}
+                    <span
+                      className={`${
+                        op.op_key == ele.correct_option
+                          ? "text-green-400"
+                          : "text-color-text-1"
+                      } text-xl font-no`}
+                    >
+                      {op.op_value}
+                    </span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-    </section>
+      {filterQuestions.length > 0 && (
+        <div className="w-full float-end flex-col">
+          <button
+            onClick={() => {
+              if (createdQuestionSet.length === 0) {
+                return showToast(
+                  "Warning",
+                  "Warning",
+                  "Please select Questions first.!"
+                );
+              }
+              setIsPopUPOpen(true);
+            }}
+            className="w-24 h-10 p-2 bg-color-accent-1 float-right sm:col-span-2 text-color-text-2hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Save
+          </button>
+        </div>
+      )}
+      {isPopUpopen && (
+        <SavePopUp
+          onClose={() => setIsPopUPOpen(!isPopUpopen)}
+          onSave={handelPopUpOnSave}
+        />
+      )}
+    </div>
   );
 };
 

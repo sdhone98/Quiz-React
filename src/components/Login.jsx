@@ -174,7 +174,7 @@ const Login = () => {
           </small>
           QuickQuiz
         </h1>
-        <p className="text-lg font-normal text-color-text-1 lg:text-xl">
+        <p className="text-lg font-normal text-color-text-1">
           Please login to your account
         </p>
       </div>

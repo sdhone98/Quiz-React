@@ -1,74 +1,51 @@
 import { useState } from "react";
 
-const QuestionCard = ({ optionsList, removeQuestion }) => {
+const QuestionCard = ({ questionsData, removeQuestion }) => {
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
   return (
-    <div className="flex-col h-full p-2">
-      <h2 className="text-xl font-semibold text-color-text-1 sm:text-2xl mb-4">
-        Question List
-      </h2>
-      <div className="flex-col h-8/9 overflow-y-auto scrollbar-hide">
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-2">
-          
-          {optionsList.map((ele, index) => (
-            <div class="grid grid-cols-1 rounded-lg border p-4 shadow-sm md:p-6 bg-color-button-3">
-              <div className="flex justify-between">
-              <label
-                id="question"
-                className="text-lg font-bold text-color-text-1"
-              >
-                Q.{index + 1}
-                {" - "}
+    <div className="overflow-y-auto scrollbar-hide max-h-[80vh] h-full px-2 flex-col w-1/2 gap-2">
+      {questionsData.map((ele, index) => (
+        <div
+          onMouseEnter={() => setHoveredIndex(index)}
+          onMouseLeave={() => setHoveredIndex(null)}
+          className="bg-color-button-3 rounded-lg p-4 mb-2"
+        >
+          <div className="flex justify-between text-color-text-1">
+            <p className="max-w-[95%] whitespace-nowrap w-fit text-lg font-bold text-color-text-1 overflow-hidden">
+              {index + 1}.{" "}
+              <span className="text-2xl font-bold whitespace-nowrap">
                 {ele.question}
-              </label>
-            {true && <button
-              type="button"
-              onClick={()=> removeQuestion(ele)}
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 top-2.5 end-2.5 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              <svg
-                class="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
+              </span>
+            </p>
+
+            {hoveredIndex === index && (
+              <span
+                className="px-2 py-1 bg-color-button-3 text-center rounded-md cursor-pointer"
+                onClick={() => removeQuestion(ele)}
               >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-              <span class="sr-only">Close menu</span>
-            </button>}
+                Discard
+              </span>
+            )}
           </div>
-              <div className="flex-col gap-2">
-                {ele.optionsList.map(({ op_key, op_value }) => (
-                  <div className="flex mt-1">
-                    <label
-                      key={op_key}
-                      id={op_key}
-                      className="text-base font-normal text-color-text-1"
-                    >
-                      {op_key} :
-                    </label>
-                    <label
-                      className={`${
-                        op_key == ele.correct_op
-                          ? "text-green-400"
-                          : "text-color-text-1"
-                      } px-2 text-base font-semibold"`}
-                    >
-                      {op_value}
-                    </label>
-                  </div>
-                ))}
-              </div>
+          {ele.optionsList.map((op) => (
+            <div>
+              <p className="text-md text-color-text-1 overflow-hidden whitespace-nowrap pb-1">
+                {op.op_key}:{" "}
+                <span
+                  className={`${
+                    op.op_key == ele.correct_op
+                      ? "text-green-400"
+                      : "text-color-text-1"
+                  } text-xl font-no`}
+                >
+                  {op.op_value}
+                </span>
+              </p>
             </div>
           ))}
         </div>
-      </div>
+      ))}
     </div>
   );
 };

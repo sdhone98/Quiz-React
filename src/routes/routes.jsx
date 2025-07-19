@@ -14,6 +14,8 @@ import StudentResult from "../pages/student/StudentResult";
 import { useEffect } from "react";
 import TeacherDashboard from "../pages/teacher/TeacherDashboard";
 import CreateQuiz from "../pages/teacher/CreateQuiz";
+import AddQuestions from "../pages/teacher/AddQuestions";
+import AllQuizzes from "../pages/teacher/AllQuizzes";
 
 // Student Pages
 // const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
@@ -75,6 +77,8 @@ const AppRoutes = () => {
 
           {/* Teacher Routes */}
           <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+          <Route path="/teacher/quiz" element={<AllQuizzes />} />
+          <Route path="/teacher/quiz/questions-add" element={<AddQuestions />} />
           <Route path="/teacher/quiz/create" element={<CreateQuiz />} />
           <Route path="/teacher/quiz/manage" element={<ManageQuiz />} />
 
