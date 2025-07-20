@@ -16,6 +16,7 @@ import TeacherDashboard from "../pages/teacher/TeacherDashboard";
 import CreateQuiz from "../pages/teacher/CreateQuiz";
 import AddQuestions from "../pages/teacher/AddQuestions";
 import AllQuizzes from "../pages/teacher/AllQuizzes";
+import QuizListing from "../pages/student/QuizListing";
 
 // Student Pages
 // const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
@@ -71,6 +72,7 @@ const AppRoutes = () => {
 
           {/* Student Routes */}
           <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/quiz/listing" element={<QuizListing />} />
           <Route path="/student/quiz/start" element={<StartQuiz />} />
           <Route path="/student/quiz/:quizId" element={<AttemptQuiz />} />
           <Route path="/student/result" element={<StudentResult />} />

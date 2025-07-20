@@ -1,0 +1,180 @@
+import React, { useState } from "react";
+import DropDown from "../../components/DropDown";
+import { ALL_PERPOSE } from "../../constants/allPurpose";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../../context/ToastContext";
+import {
+  BASE_URL_END_POINT,
+  API_END_POINTS,
+} from "../../constants/apiEndPoints";
+import { useSelector } from "react-redux";
+import { apiRequest } from "../../utils/api";
+const BASE_URL = BASE_URL_END_POINT.BASE_URL;
+
+function QuizListing() {
+  const { showToast } = useToast();
+  const navigate = useNavigate();
+  const topicsList = useSelector((state) => state.topic.topics.data);
+  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
+  const [quizList, setQuizlist] = useState([]);
+
+  const NoDataFoundComponet = () => (
+    <div className="flex w-full h-full justify-center items-center text-color-text-1">
+      No Data Found.!
+    </div>
+  );
+
+  const getQuizSetsData = async () => {
+    if (selectedTopic === null) {
+      return showToast("Warning", "Warning", "Topic details required.!");
+    }
+
+    const payload = {
+      detail: true,
+      topic: Number(selectedTopic.id),
+    };
+
+    if (selectedDifficulty !== null) {
+      payload.difficulty = selectedDifficulty.name;
+    }
+
+    const { success, data, error } = await apiRequest({
+      url: BASE_URL + API_END_POINTS.GET_QUIZSETS,
+      method: "GET",
+      params: payload,
+    });
+
+    if (success) {
+      if (data.length == 0) {
+        showToast("Warning", "Warning", "Quiz not avilable.!");
+      }
+      setQuizlist(data);
+    } else {
+      showToast("Error", "Error", JSON.stringify(error.data));
+    }
+  };
+
+  const getColorClass = (difficulty_type) => {
+    if (difficulty_type === "Hard")
+      return "bg-red-400 text-color-text-1 dark:text-color-text-2";
+    if (difficulty_type === "Medium")
+      return "bg-yellow-400 text-color-text-1 dark:text-color-text-2";
+    if (difficulty_type === "Easy")
+      return "bg-green-400 text-color-text-1 dark:text-color-text-2";
+    return "bg-green-400 text-color-text-1 dark:text-color-text-2";
+  };
+
+  const startQuiz = (ele) => {
+    console.log("---------------------- START QUIZ ----------------------");
+    console.log("START QUIZ DATA ----------------------", ele);
+    navigate("/student/quiz/start", {
+        state: {
+            data: ele
+        }
+    });
+  };
+
+  return (
+    <section className="max-w-screen h-full flex-col bg-color-background py-8 px-20 ">
+      <div className="flex justify-between items-center">
+        <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-color-text-1">
+          Start Quiz
+        </h1>
+        <div className="flex gap-2 h-fit">
+          <DropDown
+            label={"Topic"}
+            onSelect={setSelectedTopic}
+            optionsList={topicsList}
+            isDisable={false}
+          />
+          <DropDown
+            label={"Difficulty"}
+            onSelect={setSelectedDifficulty}
+            optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
+            isDisable={false}
+          />
+          <button
+            onClick={() => getQuizSetsData()}
+            type="submit"
+            className="sm:col-span-2 text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div className="flex gap-2 w-full flex-wrap f-full">
+        {quizList.length == 0 ? (
+          <NoDataFoundComponet />
+        ) : (
+          quizList.map((ele) => (
+            <div 
+            key={ele.quiz_set_id} 
+            className="relative w-90 h-70 bg-[#1E1E1E] rounded-xl shadow-lg overflow-hidden">
+              <div className="w-full h-[45%] absolute top-5 text-color-text-1 text-center text-8xl font-bold flex items-center justify-center select-none pointer-events-none opacity-5">
+                {ele.topic_name}
+              </div>
+              <div className="h-[55%] w-full absolute bottom-0 bg-[#2B2B2B] px-4 py-2 flex-col">
+                <div className="flex justify-between items-center">
+                  <h5 class="text-3xl font-semibold text-color-text-1 select-none pointer-events-none mb-2">
+                    {ele.topic_name}
+                  </h5>
+                  <div className="flex gap-1">
+                    <label
+                      className={
+                        "bg-color-button-3 px-3 h-fit w-fit rounded text-center font-semibold select-none pointer-events-none"
+                      }
+                    >
+                      {ele.set_type}
+                    </label>
+                    <label
+                      className={`${getColorClass(
+                        ele.difficulty_level
+                      )} px-3 h-fit w-fit rounded text-center select-none pointer-events-none`}
+                    >
+                      {ele.difficulty_level}
+                    </label>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <svg
+                    class="w-4 h-4 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"
+                    />
+                  </svg>
+                  <p class="text-sm text-color-text-1 select-none pointer-events-none">
+                    {ele.total_time + " "}Mins.
+                  </p>
+                </div>
+                <p class="text-sm text-color-text-1 select-none pointer-events-none mb-4">
+                  Questions Count :{" "}
+                  <span className="font-semibold">{ele.questions_count}</span>
+                </p>
+                <button
+                  onClick={() => startQuiz(ele)}
+                  className="bg-color-button-1 text-sm font-semibold px-4 py-2 rounded-md hover:cursor-pointer float-right"
+                >
+                  Start
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </section>
+  );
+}
+
+export default QuizListing;

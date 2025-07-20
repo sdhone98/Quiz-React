@@ -137,13 +137,8 @@ const StudentDashboard = () => {
             </div>
             <a
               onClick={() => {
-                loadQuizQuestionBySelection();
-                console.log(
-                  "CHOICE ===> ",
-                  selectedTopic,
-                  selectDifficulty,
-                  selectSet
-                );
+                // loadQuizQuestionBySelection();
+                navigate("/student/quiz/listing");
               }}
               className={`${
                 !Boolean(selectedTopic && selectDifficulty && setSelectSet)

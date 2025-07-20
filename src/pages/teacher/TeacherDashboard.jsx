@@ -6,7 +6,7 @@ const TeacherDashboard = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="max-w-screen h-full flex-col bg-color-background py-8 px-20 ">
+    <section className="max-w-screen h-full flex-col bg-color-background py-8 px-20">
       <div className="mb-8">
         <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-color-text-1">
           QuickQuiz - Teacher Dashboard
