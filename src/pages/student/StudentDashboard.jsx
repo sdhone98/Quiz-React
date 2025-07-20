@@ -102,16 +102,16 @@ const StudentDashboard = () => {
     <section className="max-w-screen h-full flex justify-center items-center bg-color-background">
       <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div className="mr-auto place-self-center lg:col-span-7">
-          <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
+          <h1 className="max-w-2xl mb-4 text-5xl font-extrabold tracking-tight leading-none dark:text-white">
             Welcome, {user.name}
           </h1>
-          <p className="max-w-2xl font-light text-color-text-1 md:text-lg lg:text-xl">
+          <p className="max-w-2xl font-light text-color-text-1 text-lg">
             {msgLine1}
           </p>
-          <p className="max-w-2xl mb-6 font-light text-color-text-1 lg:mb-8 md:text-lg lg:text-xl">
+          <p className="max-w-2xl mb-6 font-light text-color-text-1 text-lg">
             {msgLine2}
           </p>
-          <p className="max-w-2xl mb-6 font-light text-color-text-1 lg:mb-8 md:text-lg lg:text-xl">
+          <p className="max-w-2xl mb-6 font-light text-color-text-1 text-lg">
             {formattedDate}
           </p>
           <div className="w-full f-hull flex items-center justify-between">
@@ -149,7 +149,7 @@ const StudentDashboard = () => {
                 !Boolean(selectedTopic && selectDifficulty && setSelectSet)
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
-              } w-2/6 inline-flex items-center justify-center px-5 py-3  text-base font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1`}
+              } w-2/6 inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1`}
             >
               {Boolean(selectedTopic) && Boolean(selectDifficulty)
                 ? "Start Quiz"

@@ -18,12 +18,10 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
   return (
     <div>
       <button
-        id="dropdownDefaultButton"
-        data-dropdown-toggle="dropdown"
         onClick={() => !isDisable && setOpen(true)}
         className={`${
           isDisable && "cursor-not-allowed"
-        } py-3 text-color-text-2 bg-color-button-1 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 text-center inline-flex items-center`}
+        } w-fit py-3 text-color-text-2 bg-color-button-1 font-medium rounded-lg text-sm px-5 text-center inline-flex items-center`}
         type="button"
       >
         {userSelection}
@@ -46,7 +44,7 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
 
       <div
         id="dropdown"
-        className={`z-10 ${getClass()} divide-y divide-gray-100 rounded-lg shadow-sm w-fit bg-color-button-1  absolute mt-2`}
+        className={`z-10 ${getClass()} divide-y divide-gray-100 rounded-lg shadow-sm w-fit bg-color-button-1  absolute mt-2 h-fit max-h-1/4 overflow-y-auto scrollbar-hide`}
       >
         <ul
           className="py-2 text-sm text-color-text-2 h-fit overflow-y-auto"

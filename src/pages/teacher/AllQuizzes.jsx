@@ -7,24 +7,16 @@ import {
   BASE_URL_END_POINT,
   API_END_POINTS,
 } from "../../constants/apiEndPoints";
+import DropDown from "../../components/DropDown";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
 const AllQuizzes = () => {
   const { showToast } = useToast();
-
   const topicsList = useSelector((state) => state.topic.topics.data);
   const [selectedTopic, setSelectedTopic] = useState(null);
-  const [selectedDifficulty, setSelectedDifficulty] = useState(
-    ALL_PERPOSE.DIFFICULTY_TYPES[0]
-  );
+  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [quizList, setQuizlist] = useState([]);
-
-  useEffect(() => {
-    if (topicsList.length > 0) {
-      setSelectedTopic(topicsList[0].id);
-    }
-  }, [topicsList]);
 
   const getQuestionsData = async () => {
     if (selectedTopic === null) {
@@ -35,56 +27,56 @@ const AllQuizzes = () => {
       return showToast("Warning", "Warning", "Difficulty level required.!");
     }
 
-    const _data = {
-      topic: selectedTopic,
-      difficulty: selectedDifficulty,
-    };
-
     const { success, data, error } = await apiRequest({
       url: BASE_URL + API_END_POINTS.GET_QUIZSETS,
       method: "GET",
       params: {
         detail: true,
-        difficulty: selectedDifficulty,
-        topic: Number(selectedTopic),
+        difficulty: selectedDifficulty.name,
+        topic: Number(selectedTopic.id),
       },
     });
 
     if (success) {
+      if (data.length == 0) {
+        showToast("Warning", "Warning", "Quiz not avilable.!");
+      }
       setQuizlist(data);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
   };
+  const NoDataFoundComponet = () => <div className="flex w-full h-full justify-center items-center">No Data Found.!</div>;
+
+  const getColorClass = (difficulty_type) => {
+    if (difficulty_type === "Hard")
+      return "bg-red-400 text-color-text-1 dark:text-color-text-2";
+    if (difficulty_type === "Medium")
+      return "bg-yellow-400 text-color-text-1 dark:text-color-text-2";
+    if (difficulty_type === "Easy")
+      return "bg-green-400 text-color-text-1 dark:text-color-text-2";
+    return "bg-green-400 text-color-text-1 dark:text-color-text-2";
+  };
 
   return (
     <div className="w-full h-full bg-color-background text-color-text-1 px-20 py-8 flex-col">
       <div className="flex justify-between items-center">
-        <h1 className="text-5xl font-extrabold text-color-text-1 block">
+        <h1 className="text-5xl font-extrabold text-color-text-1 block select-none pointer-events-none mb-8">
           All Quizzes
         </h1>
         <div className="flex gap-2 h-fit">
-          <select
-            id="difficulty"
-            className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
-            onChange={(e) => setSelectedTopic(e.target.value.trim())}
-          >
-            {topicsList.map((ele) => (
-              <option key={ele.id} value={ele.id}>
-                {ele.name}
-              </option>
-            ))}
-          </select>
-          <select
-            id="difficulty"
-            className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
-            value={selectedDifficulty ? selectedDifficulty : "Select Topic"}
-            onChange={(e) => setSelectedDifficulty(e.target.value.trim())}
-          >
-            {ALL_PERPOSE.DIFFICULTY_TYPES.map((ele) => (
-              <option value={ele}>{ele} </option>
-            ))}
-          </select>
+          <DropDown
+            label={"Topic"}
+            onSelect={setSelectedTopic}
+            optionsList={topicsList}
+            isDisable={false}
+          />
+          <DropDown
+            label={"Difficulty"}
+            onSelect={setSelectedDifficulty}
+            optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
+            isDisable={false}
+          />
           <button
             onClick={() => getQuestionsData()}
             type="submit"
@@ -94,30 +86,49 @@ const AllQuizzes = () => {
           </button>
         </div>
       </div>
-      <div className="flex gap-2">
-        {quizList.map((ele) => (
-          <div className="flex-col">
-            <a
-              class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-            >
-              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {ele.topic_name}
-              </h5>
-              <p class="font-normal text-gray-700 dark:text-gray-400">
-                Difficulty : {ele.difficulty_level}
-              </p>
-              <p class="font-normal text-gray-700 dark:text-gray-400">
-                Set Type : {ele.set_type}
-              </p>
-              <p class="font-normal text-gray-700 dark:text-gray-400">
-                Time : {ele.total_time} Mins.
-              </p>
-              <p class="font-normal text-gray-700 dark:text-gray-400">
-                Questions Count : {ele.questions_count}
-              </p>
-            </a>
-          </div>
-        ))}
+      <div className="flex gap-2 w-full flex-wrap f-full">
+        {quizList.length == 0
+          ? <NoDataFoundComponet/>
+          : quizList.map((ele) => (
+              <div className="relative w-90 h-60 bg-[#1E1E1E] rounded-xl shadow-lg overflow-hidden">
+                <div className="w-full h-[45%] absolute top-5  text-center text-8xl font-bold flex items-center justify-center select-none pointer-events-none opacity-10">
+                  {ele.topic_name}
+                </div>
+                <div className="h-[55%] w-full absolute bottom-0 bg-[#2B2B2B] px-4 py-2 flex-col">
+                  <div className="flex justify-between items-center">
+                    <h5 class="text-3xl font-semibold text-color-text-1 select-none pointer-events-none mb-2">
+                      {ele.topic_name}
+                    </h5>
+                    <div className="flex gap-1">
+                      <label
+                        className={
+                          "bg-color-button-3 px-3 h-fit w-fit rounded text-center font-semibold select-none pointer-events-none"
+                        }
+                      >
+                        {ele.set_type}
+                      </label>
+                      <label
+                        className={`${getColorClass(
+                          ele.difficulty_level
+                        )} px-3 h-fit w-fit rounded text-center select-none pointer-events-none`}
+                      >
+                        {ele.difficulty_level}
+                      </label>
+                    </div>
+                  </div>
+                  <p class="text-sm text-color-text-1 select-none pointer-events-none">
+                    Time :{" "}
+                    <span className="font-semibold">
+                      {ele.total_time + " "}Mins.
+                    </span>
+                  </p>
+                  <p class="text-sm text-color-text-1 select-none pointer-events-none">
+                    Questions Count :{" "}
+                    <span className="font-semibold">{ele.questions_count}</span>
+                  </p>
+                </div>
+              </div>
+            ))}
       </div>
     </div>
   );
