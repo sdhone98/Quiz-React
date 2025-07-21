@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DropDown from "../../components/DropDown";
 import { ALL_PERPOSE } from "../../constants/allPurpose";
 import { useNavigate } from "react-router-dom";
@@ -11,13 +11,20 @@ import { useSelector } from "react-redux";
 import { apiRequest } from "../../utils/api";
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
+const now = new Date();
+
 function QuizListing() {
   const { showToast } = useToast();
   const navigate = useNavigate();
   const topicsList = useSelector((state) => state.topic.topics.data);
+  const userData = useSelector((state) => state.user.user);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [quizList, setQuizlist] = useState([]);
+
+  useEffect(() => {
+    getQuizSetsData();
+  }, []);
 
   const NoDataFoundComponet = () => (
     <div className="flex w-full h-full justify-center items-center text-color-text-1">
@@ -26,14 +33,14 @@ function QuizListing() {
   );
 
   const getQuizSetsData = async () => {
-    if (selectedTopic === null) {
-      return showToast("Warning", "Warning", "Topic details required.!");
-    }
-
     const payload = {
       detail: true,
-      topic: Number(selectedTopic.id),
+      user: userData.userId,
     };
+
+    if (selectedTopic !== null) {
+      payload.topic = selectedTopic.id;
+    }
 
     if (selectedDifficulty !== null) {
       payload.difficulty = selectedDifficulty.name;
@@ -65,14 +72,27 @@ function QuizListing() {
     return "bg-green-400 text-color-text-1 dark:text-color-text-2";
   };
 
-  const startQuiz = (ele) => {
-    console.log("---------------------- START QUIZ ----------------------");
-    console.log("START QUIZ DATA ----------------------", ele);
-    navigate("/student/quiz/start", {
-        state: {
-            data: ele
-        }
+  const checkUserAllowedOrNot = async (ele) => {
+    const { success, data, error } = await apiRequest({
+      url: BASE_URL + API_END_POINTS.START_QUIZ,
+      method: "POST",
+      data: {
+        user: userData.userId,
+        quiz_set: ele.quiz_set_id,
+        start_at: now.toUTCString(),
+      },
     });
+
+    if (success) {
+      ele["quiz_attempt_id"] = data.id;
+      navigate("/student/quiz/start", {
+        state: {
+          data: ele,
+        },
+      });
+    } else {
+      showToast("Warning", "Warning", JSON.stringify(error.data));
+    }
   };
 
   return (
@@ -108,13 +128,14 @@ function QuizListing() {
           <NoDataFoundComponet />
         ) : (
           quizList.map((ele) => (
-            <div 
-            key={ele.quiz_set_id} 
-            className="relative w-90 h-70 bg-[#1E1E1E] rounded-xl shadow-lg overflow-hidden">
-              <div className="w-full h-[45%] absolute top-5 text-color-text-1 text-center text-8xl font-bold flex items-center justify-center select-none pointer-events-none opacity-5">
+            <div
+              key={ele.quiz_set_id}
+              className="relative w-90 h-60 bg-[#1E1E1E] rounded-xl shadow-lg overflow-hidden"
+            >
+              <div className="w-full h-[40%] absolute top-5 text-color-text-1 text-center text-8xl font-bold flex items-center justify-center select-none pointer-events-none opacity-5">
                 {ele.topic_name}
               </div>
-              <div className="h-[55%] w-full absolute bottom-0 bg-[#2B2B2B] px-4 py-2 flex-col">
+              <div className="h-[60%] w-full absolute bottom-0 bg-[#2B2B2B] px-4 py-2 flex-col">
                 <div className="flex justify-between items-center">
                   <h5 class="text-3xl font-semibold text-color-text-1 select-none pointer-events-none mb-2">
                     {ele.topic_name}
@@ -158,17 +179,22 @@ function QuizListing() {
                     {ele.total_time + " "}Mins.
                   </p>
                 </div>
-                <p class="text-sm text-color-text-1 select-none pointer-events-none mb-4">
+                <p class="text-sm text-color-text-1 select-none pointer-events-none mb-2">
                   Questions Count :{" "}
                   <span className="font-semibold">{ele.questions_count}</span>
                 </p>
                 <button
-                  onClick={() => startQuiz(ele)}
+                  onClick={() => checkUserAllowedOrNot(ele)}
                   className="bg-color-button-1 text-sm font-semibold px-4 py-2 rounded-md hover:cursor-pointer float-right"
                 >
                   Start
                 </button>
               </div>
+              {ele.is_completed && (
+                <div className="absolute w-full h-full text-6xl flex justify-center items-center pb-8 font-semibold text-color-text-1 backdrop-blur-xl select-none pointer-events-none">
+                  Completed
+                </div>
+              )}
             </div>
           ))
         )}

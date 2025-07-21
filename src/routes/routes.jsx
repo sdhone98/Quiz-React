@@ -47,6 +47,7 @@ const AppLayout = ({ children }) => {
   const hideNavbar = [
     "/login",
     "/register",
+    "/student/quiz/start",
     // "/"
   ].includes(location.pathname.toLowerCase());
 

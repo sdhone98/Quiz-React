@@ -8,6 +8,8 @@ export const API_END_POINTS = {
     GET_QUESTIONS: "/question",
     GET_QUIZSETS: "/quiz-set",
     ADD_QUIZSETS: "/quiz-set",
+    START_QUIZ: "/exam/attempt/",
+    ADD_QUIZ_RESPONSE: "/exam/attempt/submit",
 }
 
 export const BASE_URL_END_POINT = {

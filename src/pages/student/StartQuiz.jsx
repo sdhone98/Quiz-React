@@ -6,6 +6,13 @@ import PopUp from "../../components/PopUp";
 import { useSelector } from "react-redux";
 import { apiRequest } from "../../utils/api";
 import { useToast } from "../../context/ToastContext";
+import {
+  BASE_URL_END_POINT,
+  API_END_POINTS,
+} from "../../constants/apiEndPoints";
+import DropDown from "../../components/DropDown";
+
+const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
 const now = new Date();
 
@@ -17,15 +24,15 @@ const StartQuiz = () => {
 
   const QuizDetails = {
     quizSetID: state.data.quiz_set_id,
+    quizAttemptID: state.data.quiz_attempt_id,
     questions: state.data.questions,
     setType: state.data.set_type,
     topicName: state.data.topic_name,
     topicID: state.data.topic_id,
     time: state.data.total_time,
     difficulty: state.data.difficulty_level,
-  }
-  
-  
+  };
+
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isTimeOver, setIsTimeOver] = useState(false);
   const [isQuizEnd, setIsQuizEnd] = useState(false);
@@ -33,14 +40,21 @@ const StartQuiz = () => {
   const [selectedAnswers, setSelectedAnswers] = useState([]);
 
   const handleAnswerSelection = (answer) => {
-    setSelectedAnswers((prev) => [...prev, answer]);
+    selectedAnswers.push({
+      questionId: answer.questionId,
+      selectedOption: answer.selectedOption.split("_")[1].toUpperCase(),
+    });
+    updateQuestion();
+  };
 
+  function updateQuestion() {
     if (questionIndex + 1 < QuizDetails.questions.length) {
       setQuestionIndex((prev) => prev + 1);
     } else {
       setIsQuizComplete(true);
+      saveQuizDetails();
     }
-  };
+  }
 
   const closePopUpFn = () => {
     setIsQuizEnd(false);
@@ -48,21 +62,20 @@ const StartQuiz = () => {
 
   const saveQuizDetails = async () => {
     const reqBody = {
-      user_name: userData.userName,
-      user_id: userData.userId,
+      user: userData.userId,
+      attempt: QuizDetails.quizAttemptID,
       quiz_user_response: selectedAnswers,
-      attempted_questions: selectedAnswers.length,
     };
     console.log("saveQuizDetails ==> ", reqBody);
 
     const { success, data, error } = await apiRequest({
-      url: "http://localhost:8000/api/exam/attempt/submit",
+      url: BASE_URL + API_END_POINTS.ADD_QUIZ_RESPONSE,
       method: "POST",
       data: reqBody,
     });
 
     if (success) {
-      showToast("Info", "Info", "Store.!!!!!!!");
+      showToast("Info", "Info", "Quiz response store successfully.");
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
@@ -126,26 +139,15 @@ const StartQuiz = () => {
       {isQuizEnd && quizEndFn()}
 
       <div className="w-screen h-full py-6 px-10 bg-color-background">
-        <div className="w-full mb-4">
-          <div className="w-full flex items-center justify-between">
-            <h2 className="mb-1 text-4xl tracking-tight font-extrabold text-color-text-1">
-              {QuizDetails.topicName}
-            </h2>
-            <div className="w-fit flex flex-row gap-2">
-              <button
-                type="button"
-                className="py-2 px-4 w-fit text-sm font-medium bg-color-button-1 text-color-text-2 rounded-lg hover:cursor-pointer"
-                onClick={() => setIsQuizEnd(true)}
-              >
-                End Test
-              </button>
-              <CountdownTimer min={QuizDetails.time} onTimeOver={setIsTimeOver} />
-            </div>
-          </div>
-          <div className="w-fit flex-row justify-center">
-            <p className="text-color-text-1 text-sm">Difficaulty Level -{" "}<span className="font-semibold">{QuizDetails.difficulty}</span></p>
-            <p className="text-color-text-1 text-sm">Set -{" "}<span className="font-semibold">{QuizDetails.setType}</span></p>
-          </div>
+        <div className="w-full flex justify-between">
+          <CountdownTimer min={QuizDetails.time} onTimeOver={setIsTimeOver} />
+          <button
+            type="button"
+            className="py-2 px-4 w-fit text-sm font-medium bg-color-button-1 text-color-text-2 rounded-lg hover:cursor-pointer"
+            onClick={() => setIsQuizEnd(true)}
+          >
+            End Test
+          </button>
         </div>
         <QuizCard
           questionIndex={questionIndex}

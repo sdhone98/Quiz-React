@@ -21,14 +21,13 @@ const CountdownTimer = ({ min, onTimeOver }) => {
   };
 
   const getBgClass = () => {
-  if (timeLeft <= 0) return "bg-red-600 text-color-text-1 font-bold";
-  if (timeLeft <= 60) return "bg-red-600 animate-pulse text-color-text-1 font-bold";
-  if (timeLeft <= 300) return "bg-orange-500";
-  return "bg-color-button-2";
+  if (timeLeft <= 60) return "animate-pulse text-red-600";
+  if (timeLeft <= 300) return "text-orange-500";
+  return "text-color-text-1";
 };
 
 return (
-  <div className={`text-color-text-2 ${getBgClass()} text-l text-center px-4 py-1 rounded-4xl`}>
+  <div className={`${getBgClass()} text-md font-bold text-center rounded-lg flex items-center`}>
     Time Left: {formatTime(timeLeft)}
   </div>
 );

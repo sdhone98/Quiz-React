@@ -19,7 +19,6 @@ export const apiRequest = async ({
 
     return { success: true, data: response.data.data };
   } catch (error) {
-    console.error("API Request Error:", error);
     return {
       success: false,
       error: error.response?.data || "Something went wrong",
