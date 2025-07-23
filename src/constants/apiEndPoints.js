@@ -12,6 +12,7 @@ export const API_END_POINTS = {
     START_QUIZ: "/exam/attempt/",
     ADD_QUIZ_RESPONSE: "/exam/attempt/submit",
     GET_RESULT: "/exam/result",
+    GET_TEACHERS_DASHBOARD: "/quiz-set-details",
 }
 
 export const BASE_URL_END_POINT = {

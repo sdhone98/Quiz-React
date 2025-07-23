@@ -47,11 +47,11 @@ function StudentResult() {
     if (user?.userId) loadResultData();
   }, [user]);
   return (
-    <div className="w-full h-full text-color-text-1 bg-color-background px-10 py-6">
-      <h3 className="w-full mb-8 text-4xl font-extrabold tracking-tight select-none pointer-events-none">
+    <div className="w-full h-full text-color-text-1 bg-color-background py-8 px-20">
+      <h3 className="w-full mb-8 text-5xl font-extrabold tracking-tight select-none pointer-events-none">
         Quiz History
       </h3>
-      <div className="flex w-full justify-center">
+      <div className="flex w-full">
         <div className="w-2/3">
           <ResultTable tableData={resultData} tableHeader={tableHeader} />
         </div>
