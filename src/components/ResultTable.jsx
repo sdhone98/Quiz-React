@@ -1,6 +1,6 @@
 const ResultTable = ({ tableData, tableHeader}) => {
   return (
-    <div className="overflow-x-auto shadow-md sm:rounded-lg border border-color-text-1">
+    <div className="overflow-x-auto shadow-md sm:rounded-lg border border-color-text-1 w-full">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs uppercase bg-color-navbar text-color-text-1 ">
           <tr>
