@@ -1,9 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ResultTable from "../../components/ResultTable";
 import { useNavigate } from "react-router-dom";
+import { apiRequest } from "../../utils/api";
+import { useToast } from "../../context/ToastContext";
+import { useSelector } from "react-redux";
+import {
+  BASE_URL_END_POINT,
+  API_END_POINTS,
+} from "../../constants/apiEndPoints";
+
+const BASE_URL = BASE_URL_END_POINT.BASE_URL;
+
+const tableHeader = [
+  "Topic",
+  "difficulty",
+  "Set",
+  "Total Questions",
+  "Correct Count",
+  "Wrong Count",
+  "Total Time",
+  "Taken Time",
+];
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
+  const user = useSelector((state) => state.user.user);
+  const [resultData, setResultData] = useState([]);
+
+  useEffect(() => {
+    const loadResultData = async () => {
+      const { success, data, error } = await apiRequest({
+        url: BASE_URL + API_END_POINTS.GET_RESULT,
+        method: "GET"
+      });
+
+      if (success) {
+        setResultData(data);
+      } else {
+        showToast(
+          "Error",
+          "Failed to fetch results",
+          error?.data?.message || "Unexpected error"
+        );
+      }
+    };
+    if (user?.userId) loadResultData();
+  }, [user]);
 
   return (
     <section className="max-w-screen h-full flex-col bg-color-background py-8 px-20">
@@ -45,7 +88,10 @@ const TeacherDashboard = () => {
             </dl>
           </div>
         </div>
-        <ResultTable />
+        <div className="w-1/2 p-4 h-1/2">
+
+        <ResultTable tableData={resultData} tableHeader={tableHeader} />
+        </div>
       </div>
       <div className="flex max-w-xl gap-2">
         <a

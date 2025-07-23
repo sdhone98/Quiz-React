@@ -137,7 +137,7 @@ function QuizListing() {
               </div>
               <div className="h-[60%] w-full absolute bottom-0 bg-[#2B2B2B] px-4 py-2 flex-col">
                 <div className="flex justify-between items-center">
-                  <h5 class="text-3xl font-semibold text-color-text-1 select-none pointer-events-none mb-2">
+                  <h5 className="text-3xl font-semibold text-color-text-1 select-none pointer-events-none mb-2">
                     {ele.topic_name}
                   </h5>
                   <div className="flex gap-1">
@@ -159,7 +159,7 @@ function QuizListing() {
                 </div>
                 <div className="flex items-center">
                   <svg
-                    class="w-4 h-4 text-gray-800 dark:text-white"
+                    className="w-4 h-4 text-gray-800 dark:text-white"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -169,17 +169,17 @@ function QuizListing() {
                   >
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"
                     />
                   </svg>
-                  <p class="text-sm text-color-text-1 select-none pointer-events-none">
+                  <p className="text-sm text-color-text-1 select-none pointer-events-none">
                     {ele.total_time + " "}Mins.
                   </p>
                 </div>
-                <p class="text-sm text-color-text-1 select-none pointer-events-none mb-2">
+                <p className="text-sm text-color-text-1 select-none pointer-events-none mb-2">
                   Questions Count :{" "}
                   <span className="font-semibold">{ele.questions_count}</span>
                 </p>

@@ -1,11 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ResultTable from "../../components/ResultTable";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useToast } from "../../context/ToastContext";
+import {
+  BASE_URL_END_POINT,
+  API_END_POINTS,
+} from "../../constants/apiEndPoints";
+import { apiRequest } from "../../utils/api";
+
+const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
 const today = new Date();
+
+const tableHeader = [
+  "Topic",
+  "difficulty",
+  "Set",
+  "Total Questions",
+  "Correct Count",
+  "Wrong Count",
+  "Total Time",
+  "Taken Time",
+];
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -17,9 +35,30 @@ const StudentDashboard = () => {
   });
 
   const user = useSelector((state) => state.user.user);
+  const [resultData, setResultData] = useState([]);
 
   const msgLine1 = "Ready to challenge yourself and grow your skills?";
   const msgLine2 = "Pick a topic and show us what you've got!";
+
+  useEffect(() => {
+    const loadResultData = async () => {
+      const { success, data, error } = await apiRequest({
+        url: BASE_URL + API_END_POINTS.GET_RESULT,
+        method: "GET",
+      });
+
+      if (success) {
+        setResultData(data);
+      } else {
+        showToast(
+          "Error",
+          "Failed to fetch results",
+          error?.data?.message || "Unexpected error"
+        );
+      }
+    };
+    if (user?.userId) loadResultData();
+  }, [user]);
 
   return (
     <section className="max-w-screen h-full flex justify-center items-center bg-color-background">
@@ -60,7 +99,7 @@ const StudentDashboard = () => {
           <div className="w-full f-hull flex items-center justify-between"></div>
         </div>
         <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-          <ResultTable />
+          <ResultTable tableData={resultData} tableHeader={tableHeader} />
         </div>
       </div>
     </section>

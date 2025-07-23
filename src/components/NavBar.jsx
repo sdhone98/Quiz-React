@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CONSTANTS } from "../constants/configs";
 import { ROUTES } from "../constants/routes";
+import { resetToken } from "../redux/tokenSlice";
+import { logout } from "../redux/userSlice";
 
 const NavBar = () => {
+  const dispatch = useDispatch();
   const { showToast } = useToast();
   const [isDark, setIsDark] = useState(true);
   const navigate = useNavigate();
@@ -14,6 +17,8 @@ const NavBar = () => {
   const handleLogout = () => {
     showToast("Success", "Info", "Logout sccessfully.!");
     navigate("/login");
+    dispatch(resetToken());
+    dispatch(logout());
   };
 
   const svgIcon = (

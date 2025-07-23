@@ -10,15 +10,13 @@ const Register = () => {
   const { showToast } = useToast();
   const { setIsLoading } = useLoading();
 
-  const [defaultUserRole, setDefaultUserRole] = useState("student");
+  const [defaultUserRole, setDefaultUserRole] = useState("Student");
   const handleRegister = async (e) => {
     e.preventDefault();
 
     
     // VALIDATION 
     if (e.target.password.value != e.target.confirmPassword.value) return showToast("Warning", "Warning", "Password and confirm password do not match.");
-    console.log("HERE ====================")
-    // return showToast("Success", "Info", "111 User Register Sucessfully.!");
     setIsLoading(true);
     const { success, data, error } = await apiRequest({
       url: "http://localhost:8000/api/users/",

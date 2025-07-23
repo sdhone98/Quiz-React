@@ -96,7 +96,7 @@ const AllQuizzes = () => {
                 </div>
                 <div className="h-[55%] w-full absolute bottom-0 bg-[#2B2B2B] px-4 py-2 flex-col">
                   <div className="flex justify-between items-center">
-                    <h5 class="text-3xl font-semibold text-color-text-1 select-none pointer-events-none mb-2">
+                    <h5 className="text-3xl font-semibold text-color-text-1 select-none pointer-events-none mb-2">
                       {ele.topic_name}
                     </h5>
                     <div className="flex gap-1">
@@ -116,13 +116,13 @@ const AllQuizzes = () => {
                       </label>
                     </div>
                   </div>
-                  <p class="text-sm text-color-text-1 select-none pointer-events-none">
+                  <p className="text-sm text-color-text-1 select-none pointer-events-none">
                     Time :{" "}
                     <span className="font-semibold">
                       {ele.total_time + " "}Mins.
                     </span>
                   </p>
-                  <p class="text-sm text-color-text-1 select-none pointer-events-none">
+                  <p className="text-sm text-color-text-1 select-none pointer-events-none">
                     Questions Count :{" "}
                     <span className="font-semibold">{ele.questions_count}</span>
                   </p>

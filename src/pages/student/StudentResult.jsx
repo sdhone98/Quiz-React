@@ -1,14 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import ResultTable from "../../components/ResultTable";
+import { useToast } from "../../context/ToastContext";
+import { apiRequest } from "../../utils/api";
+import { useSelector } from "react-redux";
+import {
+  BASE_URL_END_POINT,
+  API_END_POINTS,
+} from "../../constants/apiEndPoints";
+
+const BASE_URL = BASE_URL_END_POINT.BASE_URL;
+
+const tableHeader = [
+  "Topic",
+  "difficulty",
+  "Set",
+  "Total Questions",
+  "Correct Count",
+  "Wrong Count",
+  "Total Time",
+  "Taken Time",
+];
 
 function StudentResult() {
+  const { showToast } = useToast();
+  const user = useSelector((state) => state.user.user);
+  const [resultData, setResultData] = useState([]);
+
+  useEffect(() => {
+    const loadResultData = async () => {
+      const { success, data, error } = await apiRequest({
+        url: BASE_URL + API_END_POINTS.GET_RESULT,
+        method: "GET",
+      });
+
+      if (success) {
+        setResultData(data);
+      } else {
+        showToast(
+          "Error",
+          "Failed to fetch results",
+          error?.data?.message || "Unexpected error"
+        );
+      }
+    };
+    if (user?.userId) loadResultData();
+  }, [user]);
   return (
-    <div className="w-screen h-full text-color-text-1 text-[80px] font-bold bg-color-background px-10 py-6">
-          <h3 className="max-w-2xl mb-8 text-4xl font-extrabold tracking-tight">
-            Quiz History
-          </h3>
-          <ResultTable/>
+    <div className="w-full h-full text-color-text-1 bg-color-background px-10 py-6">
+      <h3 className="w-full mb-8 text-4xl font-extrabold tracking-tight select-none pointer-events-none">
+        Quiz History
+      </h3>
+      <div className="flex w-full justify-center">
+        <div className="w-2/3">
+          <ResultTable tableData={resultData} tableHeader={tableHeader} />
+        </div>
+      </div>
     </div>
   );
 }

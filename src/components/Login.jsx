@@ -3,14 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../utils/api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
-import { setTopics, setDifficulties, setQuizSetsTypes} from "../redux/topicSlice";
+import {
+  setTopics,
+  setDifficulties,
+  setQuizSetsTypes,
+} from "../redux/topicSlice";
 import { useLoading } from "../context/LoadingContext";
 import { useToast } from "../context/ToastContext";
-import { CONSTANTS } from "../constants/configs"
+import { CONSTANTS } from "../constants/configs";
 import { ROUTES } from "../constants/routes";
 import { BASE_URL_END_POINT, API_END_POINTS } from "../constants/apiEndPoints";
+import { jwtDecode } from "jwt-decode";
+import { setAccessToken, setRefreshToken } from "../redux/tokenSlice";
 
-const BASE_URL = BASE_URL_END_POINT.BASE_URL
+const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,9 +26,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-
   const getQuizRelatedInfo = () => {
-
     const loadLanguages = async () => {
       const { success, data, error } = await apiRequest({
         url: BASE_URL + API_END_POINTS.GET_TOPIC,
@@ -65,57 +69,7 @@ const Login = () => {
     loadLanguages();
     loadDifficulty();
     loadSets();
-
-  }
-// loadSets();
-  // useEffect(() => {
-  //   const loadLanguages = async () => {
-  //     const { success, data, error } = await apiRequest({
-  //       url: "http://localhost:8000/api/topic",
-  //       method: "GET",
-  //     });
-
-  //     if (success) {
-  //       dispatch(setTopics({ data }));
-  //     } else {
-  //       showToast("Error", "Error", JSON.stringify(error.data));
-  //     }
-  //   };
-
-  //   const loadDifficulty = async () => {
-  //     const { success, data, error } = await apiRequest({
-  //       url: "http://localhost:8000/api/topic/difficulty",
-  //       method: "GET",
-  //     });
-
-  //     if (success) {
-  //       dispatch(setDifficulties({ data }));
-  //     } else {
-  //       showToast("Error", "Error", JSON.stringify(error.data));
-  //     }
-  //   };
-
-  //   const loadSets = async () => {
-  //     const { success, data, error } = await apiRequest({
-  //       url: "http://localhost:8000/api/topic/difficulty/set",
-  //       method: "POST",
-  //       data: {
-  //         topic: 1,
-  //         difficulty: "Easy",
-  //       },
-  //     });
-
-  //     if (success) {
-  //       dispatch(setSelectedSet({ data }));
-  //     } else {
-  //       showToast("Error", "Error", JSON.stringify(error.data));
-  //     }
-  //   };
-
-  //   loadLanguages();
-  //   loadDifficulty();
-  //   loadSets();
-  // }, []);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -131,39 +85,32 @@ const Login = () => {
     });
     setIsLoading(false);
     if (success) {
+      const { access, refresh } = data;
+      const userDetails = jwtDecode(access);
       let user = {
-        userId: data.id,
-        userName: data.username,
-        name: data.name,
-        firstName: data.first_name,
-        lastName: data.last_name,
-        role: data.role,
+        userId: userDetails.user_id,
+        userName: userDetails.username,
+        name: userDetails.name,
+        firstName: userDetails.firstName,
+        lastName: userDetails.lastName,
+        role: userDetails.role,
+        age: userDetails.age,
+        contactNo: userDetails.contactNo,
+        email: userDetails.email,
       };
       dispatch(setUser({ user }));
-      setUserRole(data.role);
+      dispatch(setAccessToken(access));
+      dispatch(setRefreshToken(refresh));
+      setUserRole(userDetails.role);
       getQuizRelatedInfo();
       showToast("Success", "Info", "Login sccessfully.!");
-      if (data.role === CONSTANTS.STUDENT) navigate(ROUTES.STUDENT_DASHBOARD);
-      if (data.role === CONSTANTS.TEACHER) navigate(ROUTES.TEACHER_DASHBOARD);
+      if (userDetails.role === CONSTANTS.STUDENT)
+        navigate(ROUTES.STUDENT_DASHBOARD);
+      if (userDetails.role === CONSTANTS.TEACHER)
+        navigate(ROUTES.TEACHER_DASHBOARD);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
-
-    // const user = {
-    //   userId: 1,
-    //   userName: "sdhone98",
-    //   name: "Sagar Dhone",
-    //   firstName: "Sagar",
-    //   lastName: "Dhone",
-    //   role: "student",
-    // };
-
-    // dispatch(setUser({ user }));
-    // setUserRole(user.role);
-
-    // if (userRole === "student") return navigate(ROUTES.STUDENT_DASHBOARD);
-    // if (userRole === "teacher") return navigate(ROUTES.TEACHER_DASHBOARD);
-    // navigate(ROUTES.NO_PATH);
   };
   return (
     <div className="w-screen h-full px-12 py-8 flex flex-col items-center bg-color-background lg:pt-40">

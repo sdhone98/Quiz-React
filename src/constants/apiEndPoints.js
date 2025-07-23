@@ -3,6 +3,7 @@ export const API_END_POINTS = {
     GET_TOPIC_DIFFICULTY: "/topic/difficulty",
     GET_TOPIC_DIFFICULTY_WITH_SET: "/topic/difficulty/set",
     LOGIN: "/users/login",
+    GET_REFRESH_TOKEN: "/users/token/refresh/",
     ADD_TOPIC: "/topic",
     ADD_QUESTIONS: "/question",
     GET_QUESTIONS: "/question",
@@ -10,6 +11,7 @@ export const API_END_POINTS = {
     ADD_QUIZSETS: "/quiz-set",
     START_QUIZ: "/exam/attempt/",
     ADD_QUIZ_RESPONSE: "/exam/attempt/submit",
+    GET_RESULT: "/exam/result",
 }
 
 export const BASE_URL_END_POINT = {

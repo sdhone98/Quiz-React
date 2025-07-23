@@ -10,8 +10,9 @@ import {
   BASE_URL_END_POINT,
   API_END_POINTS,
 } from "../../constants/apiEndPoints";
-import { setTopics } from "../../redux/topicSlice";
+import { setDifficulties, setTopics } from "../../redux/topicSlice";
 import { v4 as uuidv4 } from "uuid";
+import DropDown from "../../components/DropDown";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 const optionsLits = ["A", "B", "C", "D"];
@@ -20,8 +21,8 @@ const AddQuestions = () => {
   const dispatch = useDispatch();
   const { showToast } = useToast();
   const [isTopicAddOn, setIsTopicAdd] = useState(false);
-  const user = useSelector((state) => state.topic.topics.data);
-  const [topicList, setTopicList] = useState(user);
+  const topicData = useSelector((state) => state.topic.topics.data);
+  const [topicList, setTopicList] = useState(topicData);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
@@ -82,13 +83,11 @@ const AddQuestions = () => {
       ],
     };
     handleQuestionDetailsSelection(q_data);
-    e.target.reset();
-    setSelectedOption(null);
+    // e.target.reset();
+    // setSelectedOption(null);
   };
 
   const saveQuiz = async () => {
-    console.log("------------------- DATA ----------------");
-
     if (selectedTopic === null)
       return showToast("Warning", "Warning", "Quiz Topic requried.!");
     if (selectedDifficulty === null)
@@ -117,6 +116,10 @@ const AddQuestions = () => {
 
     if (success) {
       showToast("Info", "Info", "Quiz Store Completely.");
+
+      setSelectedTopic(null);
+      setSelectedDifficulty(null);
+      setQuestionList([]);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
@@ -150,91 +153,31 @@ const AddQuestions = () => {
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex h-[80vh] gap-2">
         <div className="w-1/2 h-fit">
           <div className="bg-color-button-3 p-4 rounded-xl mb-4">
-            <div className="flex mb-2 justify-between">
-              <div className="flex">
-                <label
-                  htmlFor="difficulty"
-                  className="text-sm font-medium text-color-text-1 w-[130px] self-center"
-                >
-                  Select Topic:
-                </label>
-                <button
-                  onClick={() => setIsDropDownOpen(true)}
-                  class="text-color-text-1 bg-color-button-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-                  type="button"
-                >
-                  {selectedTopic ? selectedTopic.name : "Topic"}
-                  <svg
-                    class="w-2.5 h-2.5 ms-3"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      stroke-linejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 4 4 4-4"
-                    />
-                  </svg>
-                </button>
-              </div>
+            <div className="w-full flex justify-between items-center mb-4 px-1">
+              <div className="flex gap-2">
+                <DropDown
+                  label={"Topic"}
+                  onSelect={setSelectedTopic}
+                  optionsList={topicList}
+                  isDisable={false}
+                />
 
-              <div
-                id="dropdownUsers"
-                class={`${
-                  isDropDownOpen ? "" : "hidden"
-                } absolute z-10 bg-[#696969] rounded-lg shadow-sm w-fit`}
-              >
-                <ul
-                  class="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
-                  aria-labelledby="dropdownUsersButton"
-                >
-                  {topicList.map(({ name, id }) => (
-                    <li key={id}>
-                      <a
-                        onClick={() => {
-                          setSelectedTopic({ name: name, id: id }),
-                            setIsDropDownOpen(false);
-                        }}
-                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        {name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                <DropDown
+                  label={"Difficulty"}
+                  onSelect={setSelectedDifficulty}
+                  optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
+                  isDisable={false}
+                />
               </div>
-              <button
+              <span
                 onClick={() => setIsTopicAdd(true)}
-                type="submit"
-                className="sm:col-span-2 text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className="h-fit text-color-text-2 cursor-pointer hover:underline font-medium rounded-lg text-sm text-center"
               >
-                Add Topic
-              </button>
-            </div>
-            <div className="flex mb-2">
-              <label
-                htmlFor="difficulty"
-                className="text-sm font-medium text-color-text-1 w-[130px] self-center"
-              >
-                Difficulty Level:
-              </label>
-              <select
-                id="difficulty"
-                className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
-                value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value.trim())}
-              >
-                {ALL_PERPOSE.DIFFICULTY_TYPES.map((ele) => (
-                  <option value={ele}>{ele} </option>
-                ))}
-              </select>
+                Add Topics
+              </span>
             </div>
             <form
               className="w-full overflow-x-hidden overflow-y-auto md:h-full"
@@ -312,10 +255,12 @@ const AddQuestions = () => {
             </form>
           </div>
         </div>
-        <QuestionCard
+        <div className="w-1/2 bg-color-button-3 rounded-xl h-full p-2">
+                <QuestionCard
           questionsData={questionList}
           removeQuestion={handleQuestionRemove}
         />
+        </div>
       </div>
     </section>
   );
