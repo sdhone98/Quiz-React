@@ -150,7 +150,7 @@ const TeacherDashboard = () => {
             </dl>
           </div>
 
-          <div className="w-1/2 p-4 h-1/2">
+          <div className="w-1/2 p-4 h-1/2 flex justify-center items-center">
             <ResultTable tableData={resultData} tableHeader={tableHeader} />
           </div>
         </div>
