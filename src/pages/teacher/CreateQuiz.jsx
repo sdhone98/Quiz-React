@@ -101,16 +101,20 @@ const SavePopUp = ({ onClose, onSave }) => {
 const CreateQuiz = () => {
   const { showToast } = useToast();
 
-  const [selectedTopic, setSelectedTopic] = useState(null);
-  const [selectedDifficulty, setSelectedDifficulty] = useState(
-    ALL_PERPOSE.DIFFICULTY_TYPES[0]
-  );
   const topicsList = useSelector((state) => state.topic.topics.data);
+  const [selectedTopic, setSelectedTopic] = useState(topicsList[0]);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(
+    ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES[0]
+  );
   const [filterQuestions, setFilterQuestions] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [createdQuestionSet, setCreatedQuestionSet] = useState([]);
   const [selectedIdsList, setSelectedIdsList] = useState([]);
   const [isPopUpopen, setIsPopUPOpen] = useState(false);
+
+  useEffect(() => {
+    getQuestionsData();
+  }, []);
 
   useEffect(() => {
     if (topicsList.length > 0) {
@@ -121,11 +125,6 @@ const CreateQuiz = () => {
   const getQuestionsData = async () => {
     setCreatedQuestionSet([]);
     setSelectedIdsList([]);
-    console.log(
-      "------------------- SEND DATA -------------------",
-      selectedTopic,
-      selectedDifficulty
-    );
     if (selectedTopic === null) {
       return showToast("Warning", "Warning", "Topic details required.!");
     }
@@ -134,17 +133,12 @@ const CreateQuiz = () => {
       return showToast("Warning", "Warning", "Difficulty level required.!");
     }
 
-    const _data = {
-      topic: selectedTopic,
-      difficulty: selectedDifficulty,
-    };
-
     const { success, data, error } = await apiRequest({
       url: BASE_URL + API_END_POINTS.GET_QUESTIONS,
       method: "GET",
       params: {
-        topic: selectedTopic,
-        difficulty: selectedDifficulty,
+        topic: selectedTopic.id,
+        difficulty: selectedDifficulty.name,
       },
     });
 
@@ -156,7 +150,6 @@ const CreateQuiz = () => {
   };
 
   const handelPopUpOnSave = (data) => {
-    console.log("-------------- ON POPUP SAVE ------------------- ", data);
     saveQuestionSetData(data.quizSetType, data.quizTime);
   };
 
@@ -172,22 +165,23 @@ const CreateQuiz = () => {
     if (createdQuestionSet.length === 0) {
       return showToast("Warning", "Warning", "Please select Questions first.!");
     }
-    const _data = {
-      topic: selectedTopic,
-      set_type: quizSetType,
-      total_time: quizTime,
-      difficulty_level: selectedDifficulty,
-      questions: questionsIds,
-    };
 
     const { success, data, error } = await apiRequest({
       url: BASE_URL + API_END_POINTS.ADD_QUIZSETS,
       method: "POST",
-      data: _data,
+      data: {
+        topic: selectedTopic.id,
+        set_type: quizSetType,
+        total_time: quizTime,
+        difficulty_level: selectedDifficulty.id,
+        questions: questionsIds,
+      },
     });
 
     if (success) {
       showToast("Info", "Info", "Quiz set saved successfully.!");
+      setFilterQuestions([]);
+      setCreatedQuestionSet([]);
       setIsPopUPOpen(false);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
@@ -226,21 +220,18 @@ const CreateQuiz = () => {
         <div className="flex h-fit">
           <div className="flex gap-2">
             <DropDown
-              label={"Topic"}
+              label={selectedTopic.name}
               onSelect={setSelectedTopic}
               optionsList={topicsList}
               isDisable={false}
             />
             <DropDown
-              label={"Difficulty"}
+              label={selectedDifficulty.name}
               onSelect={setSelectedDifficulty}
               optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
               isDisable={false}
             />
-            <CustomBtn
-            label={"Search"}
-            onBtnClick={() => getQuestionsData()}
-            />
+            <CustomBtn label={"Search"} onBtnClick={() => getQuestionsData()} />
           </div>
         </div>
       </div>

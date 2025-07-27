@@ -30,7 +30,7 @@ const AttemptQuiz = () => <div className="p-6">Attempt Quiz Page</div>;
 // const ManageQuiz = () => <div className="p-6">Manage Quiz Page</div>;
 
 // General Pages
-const Contact = () => <div className="p-6">Contact</div>;
+const Contact = () => <div className="w-full h-full bg-color-bg text-color-text text-8xl flex justify-center items-center font-bold">Contact</div>;
 const NotFound = () => (
   <div className="p-6 text-center">404 - Page Not Found</div>
 );
@@ -40,7 +40,6 @@ const AppLayout = ({ children }) => {
 
   useEffect(() => {
     navigate("/login");
-    // navigate("/teacher/quiz/create");
   }, []);
 
   const location = useLocation();

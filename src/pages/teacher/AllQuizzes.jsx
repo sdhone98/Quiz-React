@@ -15,9 +15,14 @@ const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 const AllQuizzes = () => {
   const { showToast } = useToast();
   const topicsList = useSelector((state) => state.topic.topics.data);
-  const [selectedTopic, setSelectedTopic] = useState(null);
-  const [selectedDifficulty, setSelectedDifficulty] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState(topicsList[0]);
+  const [selectedDifficulty, setSelectedDifficulty] = useState(ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES[0]);
   const [quizList, setQuizlist] = useState([]);
+
+
+  useEffect(() => {
+    getQuestionsData()
+  }, [])
 
   const getQuestionsData = async () => {
     if (selectedTopic === null) {
@@ -71,13 +76,13 @@ const AllQuizzes = () => {
         </h1>
         <div className="flex gap-2 h-fit">
           <DropDown
-            label={"Topic"}
+            label={selectedTopic.name}
             onSelect={setSelectedTopic}
             optionsList={topicsList}
             isDisable={false}
           />
           <DropDown
-            label={"Difficulty"}
+            label={selectedDifficulty.name}
             onSelect={setSelectedDifficulty}
             optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
             isDisable={false}
