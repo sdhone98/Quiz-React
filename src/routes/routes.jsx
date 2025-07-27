@@ -27,10 +27,10 @@ const AttemptQuiz = () => <div className="p-6">Attempt Quiz Page</div>;
 // Teacher Pages
 // const TeacherDashboard = () => <div className="p-6">Teacher Dashboard</div>;
 // const CreateQuiz = () => <div className="p-6">Create Quiz Page</div>;
-const ManageQuiz = () => <div className="p-6">Manage Quiz Page</div>;
+// const ManageQuiz = () => <div className="p-6">Manage Quiz Page</div>;
 
 // General Pages
-const Home = () => <div className="p-6">Home Page</div>;
+const Contact = () => <div className="p-6">Contact</div>;
 const NotFound = () => (
   <div className="p-6 text-center">404 - Page Not Found</div>
 );
@@ -70,6 +70,7 @@ const AppRoutes = () => {
           <Route path="/daw" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/* Student Routes */}
           <Route path="/student/dashboard" element={<StudentDashboard />} />
@@ -83,7 +84,6 @@ const AppRoutes = () => {
           <Route path="/teacher/quiz" element={<AllQuizzes />} />
           <Route path="/teacher/quiz/questions-add" element={<AddQuestions />} />
           <Route path="/teacher/quiz/create" element={<CreateQuiz />} />
-          <Route path="/teacher/quiz/manage" element={<ManageQuiz />} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />

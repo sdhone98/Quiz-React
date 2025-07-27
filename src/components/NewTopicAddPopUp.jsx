@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setTopics } from "../redux/topicSlice";
 import { apiRequest } from "../utils/api";
 import { useLoading } from "../context/LoadingContext";
+import CustomBtn from "./CustomBtn";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
@@ -48,8 +49,8 @@ const NewTopicAddPopUp = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-md">
-      <div className="flex-col w-full max-w-1/3 relative bg-color-button-3 rounded-lg shadow-sm px-6 py-4">
-        <h3 className="text-lg font-semibold text-color-text-1 mb-4">
+      <div className="flex-col w-full max-w-1/3 relative bg-color-bg-2 rounded-lg shadow-sm px-6 py-4">
+        <h3 className="text-lg font-semibold text-color-text mb-4">
           Add New Topics
         </h3>
         <div className="flex items-center gap-2 mb-4">
@@ -57,30 +58,23 @@ const NewTopicAddPopUp = ({ onClose }) => {
             type="topic"
             name="topic"
             id="topic"
-            className="border text-color-text-1 text-sm rounded-lg px-3 py-2.5 flex-2"
+            className="border text-color-text text-sm rounded-lg px-3 py-2.5 flex-2"
             placeholder="Kotlin"
             value={topicName}
             onChange={(e) => setTopicName(e.target.value)}
             required
           />
-          <button
-            onClick={() => addTopicToList()}
-            data-modal-hide="default-modal"
-            type="button"
-            className="text-color-text-2 bg-color-button-1 hover:cursor-pointer font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Add
-          </button>
+          <CustomBtn label={"Add"} onBtnClick={() => addTopicToList()} />
         </div>
 
         <div className="mb-2 rounded-md w-full h-6 flex justify-between items-center">
-          <label className="text-color-text-1 text-sm font-semibold px-1 select-none">
+          <label className="text-color-text text-sm font-semibold px-1 select-none">
             Topic List
           </label>
           {topicList.length > 5 && (
             <span
               onClick={() => setTopicList([])}
-              className="text-color-text-1 text-sm font-normal px-2 py-1 rounded-md cursor-pointer bg-color-button-3 hover:bg-color-button-2 hover:text-color-text-2"
+              className="text-color-text text-sm font-normal px-2 py-1 rounded-md cursor-pointer bg-color-bg-2 hover:bg-color-bg-2 hover:text-color-text-dark"
             >
               Clear All
             </span>
@@ -90,12 +84,12 @@ const NewTopicAddPopUp = ({ onClose }) => {
         <div
           className={`${
             topicList ? "" : "hidden"
-          } bg-color-button-2 rounded-lg p-2 flex flex-wrap gap-2 h-24 overflow-y-auto mb-4 scrollbar-hide`}
+          } bg-color-bg-2 rounded-lg p-2 flex flex-wrap gap-2 h-24 overflow-y-auto mb-4 scrollbar-hide`}
         >
           {topicList.map((ele, index) => (
             <span
               key={index}
-              className="h-fit inline-flex items-center px-2 py-1 text-sm font-medium bg-color-background text-color-text-1 rounded-sm cursor-default select-none"
+              className="h-fit inline-flex items-center px-2 py-1 text-sm font-medium bg-color-bg text-color-text rounded-sm cursor-default select-none"
             >
               {ele}
               <button
@@ -103,7 +97,7 @@ const NewTopicAddPopUp = ({ onClose }) => {
                   setTopicList(topicList.filter((item) => item !== ele))
                 }
                 type="button"
-                className="inline-flex items-center p-1 ms-2 text-sm hover:bg-color-accent-1 cursor-pointer"
+                className="inline-flex items-center p-1 ms-2 text-sm hover:bg-color-btn cursor-pointer"
               >
                 <svg
                   className="w-2 h-2"
@@ -127,20 +121,8 @@ const NewTopicAddPopUp = ({ onClose }) => {
         </div>
 
         <div className="disable flex items-center border-gray-200 rounded-b dark:border-gray-600 gap-2">
-          <button
-            onClick={() => saveTopics()}
-            type="button"
-            className="sm:col-span-2 text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Save
-          </button>
-          <button
-            onClick={() => onClose(false)}
-            type="button"
-            className="text-color-text-2 bg-color-button-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Close
-          </button>
+          <CustomBtn label={"Save"} onBtnClick={() => saveTopics()} />
+          <CustomBtn label={"Close"} onBtnClick={() => onClose(false)} />
         </div>
       </div>
     </div>

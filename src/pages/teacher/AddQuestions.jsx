@@ -13,6 +13,7 @@ import {
 import { setDifficulties, setTopics } from "../../redux/topicSlice";
 import { v4 as uuidv4 } from "uuid";
 import DropDown from "../../components/DropDown";
+import CustomBtn from "../../components/CustomBtn";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 const optionsLits = ["A", "B", "C", "D"];
@@ -28,6 +29,13 @@ const AddQuestions = () => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const [questionList, setQuestionList] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [questionIndex, setQuestionIndex] = useState(1);
+
+  useEffect(() => {
+    if (questionList.length === 0) {
+      setQuestionIndex(1);
+    }
+  }, [questionList]);
 
   useEffect(() => {
     const loadLanguages = async () => {
@@ -69,6 +77,7 @@ const AddQuestions = () => {
 
     const q_data = {
       id: uuidv4(),
+      questionCounter: questionIndex,
       question: e.target.question.value,
       op_a: e.target["option-A"].value,
       op_b: e.target["option-B"].value,
@@ -127,6 +136,7 @@ const AddQuestions = () => {
 
   const handleQuestionDetailsSelection = (answer) => {
     setQuestionList((prev) => [...prev, answer]);
+    setQuestionIndex((prev) => prev + 1);
   };
 
   const handleQuestionRemove = (element) => {
@@ -134,28 +144,21 @@ const AddQuestions = () => {
   };
 
   return (
-    <section className="max-w-screen bg-color-background flex-col h-full px-20 py-8">
+    <section className="max-w-screen bg-color-bg flex-col h-full px-20 py-8">
       {isTopicAddOn && <NewTopicAddPopUp onClose={setIsTopicAdd} />}
       <div className="row-span-1 flex items-center justify-between">
         {" "}
-        <h1 className="mb-2 text-5xl font-extrabold text-color-text-1 block">
+        <h1 className="mb-2 text-5xl font-extrabold text-color-text block">
           Add Questions
         </h1>
         <div className="">
-          <a
-            onClick={() => saveQuiz()}
-            className={
-              "cursor-pointer inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1"
-            }
-          >
-            Save Questions
-          </a>
+          <CustomBtn label={"Save Questions"} onBtnClick={() => saveQuiz()} />
         </div>
       </div>
 
       <div className="flex h-[80vh] gap-2">
         <div className="w-1/2 h-fit">
-          <div className="bg-color-button-3 p-4 rounded-xl mb-4">
+          <div className="bg-color-bg-1 p-4 rounded-xl mb-4">
             <div className="w-full flex justify-between items-center mb-4 px-1">
               <div className="flex gap-2">
                 <DropDown
@@ -172,27 +175,27 @@ const AddQuestions = () => {
                   isDisable={false}
                 />
               </div>
-              <span
-                onClick={() => setIsTopicAdd(true)}
-                className="h-fit text-color-text-2 cursor-pointer hover:underline font-medium rounded-lg text-sm text-center"
-              >
-                Add Topics
-              </span>
+              <CustomBtn
+                label={"Add Topics"}
+                onBtnClick={() => setIsTopicAdd(true)}
+              />
             </div>
             <form
               className="w-full overflow-x-hidden overflow-y-auto md:h-full"
               onSubmit={saveQuestionDetails}
             >
-              <div className="border border-white rounded-lg shadow">
+              <div className="rounded-lg shadow">
                 <div className="grid grid-cols-10 items-center justify-between px-6 py-4 rounded-t">
-                  <h3 className="col-span-1 text-lg font-bold text-color-text-1 text-center p-2">
-                    Q
+                  <h3 className="col-span-1 text-2xl font-semibold text-color-text text-center p-2">
+                    {questionList.length === 0
+                      ? "Q."
+                      : `${questionList.length}.`}
                   </h3>
                   <input
                     type="text"
                     name="question"
                     id="question"
-                    className="col-span-9 bg-color-button-3 text-color-text-1 text-lg font-bold rounded-lg block w-full p-2.5"
+                    className="col-span-9 bg-color-bg-2 text-color-text text-xl font-normal rounded-lg block w-full p-2.5 placeholder-color-text-light"
                     placeholder="Question"
                     required
                   />
@@ -201,23 +204,18 @@ const AddQuestions = () => {
                 <div className="flex-col gap-2 px-6">
                   {optionsLits.map((label, index) => (
                     <div key={label} className="grid grid-cols-10">
-                      <span className="col-span-1 flex justify-center items-center">
-                        <input
-                          id={label}
-                          type="radio"
-                          name="correctAnswer"
-                          value={label}
-                          className="w-4 h-3 text-color-text-1 rounded-4xl hover:cursor-pointer"
-                          onChange={() => setSelectedOption(label)}
-                          checked={selectedOption === label}
-                        />
-                      </span>
+                      <span
+                        onClick={() => setSelectedOption(label)}
+                        className={`${
+                          selectedOption === label ? "bg-color-btn" : "bg-white"
+                        } col-span-1 self-center justify-self-center w-3 h-3 rounded-4xl cursor-pointer`}
+                      ></span>
                       <div className="col-span-9 pb-2">
                         <input
                           type="text"
                           name={`option-${label}`}
                           id={`option-${label}`}
-                          className="w-full bg-color-button-3 text-color-text-1 text-sm rounded-lg block p-2.5"
+                          className="w-full bg-color-bg-2 text-color-text text-sm rounded-lg block p-2.5 placeholder-color-text-light"
                           placeholder={`Option ${label}`}
                           onFocus={() => setSelectedOption(label)}
                         />
@@ -228,38 +226,28 @@ const AddQuestions = () => {
 
                 <div className="w-full px-6 py-4 flex justify-between items-center">
                   <div>
-                    <p className="w-fit h-fit rounded-md text-md text-color-text-2 py-1 px-3 bg-color-button-3">
-                      Selected Option:{" "}
-                      <span className="font-medium">
-                        {selectedOption || "-"}
-                      </span>
+                    <p className="w-fit rounded-md text-sm text-color-text-sub py-2 px-4 bg-color-bg-2">
+                      Selected Option -{" "}
+                      <span className="font-medium">{selectedOption}</span>
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <button
-                      type="submit"
-                      className="text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    >
-                      Add
-                    </button>
-                    <button
-                      type="reset"
-                      className="text-color-text-2 bg-color-button-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                      onClick={() => setSelectedOption(null)}
-                    >
-                      Reset
-                    </button>
+                    <CustomBtn label={"Add"} />
+                    <CustomBtn
+                      label={"Reset"}
+                      onBtnClick={() => setSelectedOption(null)}
+                    />
                   </div>
                 </div>
               </div>
             </form>
           </div>
         </div>
-        <div className="w-1/2 bg-color-button-3 rounded-xl h-full p-2">
-                <QuestionCard
-          questionsData={questionList}
-          removeQuestion={handleQuestionRemove}
-        />
+        <div className="w-1/2 bg-color-bg-1 rounded-xl h-full p-2">
+          <QuestionCard
+            questionsData={questionList}
+            removeQuestion={handleQuestionRemove}
+          />
         </div>
       </div>
     </section>

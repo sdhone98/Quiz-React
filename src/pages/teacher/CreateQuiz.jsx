@@ -7,6 +7,8 @@ import {
   BASE_URL_END_POINT,
   API_END_POINTS,
 } from "../../constants/apiEndPoints";
+import DropDown from "../../components/DropDown";
+import CustomBtn from "../../components/CustomBtn";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
@@ -14,15 +16,22 @@ const SavePopUp = ({ onClose, onSave }) => {
   const { showToast } = useToast();
 
   const [quizDetails, setQuizDetails] = useState({
-    quizSetType: ALL_PERPOSE.SET_TYPES[0],
+    quizSetType: null,
     quizTime: null,
   });
 
+  const handelOnClick = (ele) => {
+    setQuizDetails((prev) => ({
+      ...prev,
+      quizSetType: ele.id ? ele.id : null,
+    }));
+  };
+
   return (
     <div className="fixed inset-0 z-50 backdrop-blur-md bg-opacity-50 flex justify-center items-center">
-      <div className="max-w-sm p-6 bg-transparent rounded-lg shadow-sm border">
-        <div className="flex justify-between">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <div className="max-w-sm p-6 rounded-lg shadow-sm bg-color-bg-1">
+        <div className="flex justify-between items-center mb-4">
+          <h5 className="mb-2 text-2xl font-semibold select-none text-color-text">
             Quiz Details
           </h5>
           <svg
@@ -46,31 +55,23 @@ const SavePopUp = ({ onClose, onSave }) => {
         </div>
 
         <div className="flex items-center mb-2">
-          <label className="w-20 text-sm font-medium text-gray-900 dark:text-white">
+          <label className="w-20 text-sm font-normal text-color-text">
             Set Type
           </label>
-          <select
-            id="difficulty"
-            className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
-            onChange={(e) =>
-              setQuizDetails((prev) => ({
-                ...prev,
-                quizSetType: e.target.value ? e.target.value : null,
-              }))
-            }
-          >
-            {ALL_PERPOSE.SET_TYPES.map((ele) => (
-              <option value={ele}>{ele} </option>
-            ))}
-          </select>
+          <DropDown
+            label={"Set Type"}
+            onSelect={handelOnClick}
+            optionsList={ALL_PERPOSE.SET_TYPES_OBJ_FORMAT}
+            isDisable={false}
+          />
         </div>
         <div className="flex items-center">
-          <label className="w-20 text-sm font-medium text-gray-900 dark:text-white">
+          <label className="w-20 text-sm font-normal text-color-text">
             Total Time
           </label>
           <input
             type="number"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-fit p-2.5"
+            className="bg-color-bg-1 text-color-text font-semibold text-sm rounded-lg w-fit p-2.5 border-1"
             placeholder="10"
             required
             onChange={(e) =>
@@ -88,7 +89,7 @@ const SavePopUp = ({ onClose, onSave }) => {
             }
             onSave(quizDetails);
           }}
-          className="mt-2 w-24 h-10 p-2 bg-color-accent-1 float-right sm:col-span-2 text-color-text-2hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="mt-4 w-24 h-10 p-2 bg-color-btn float-right text-color-text-dark hover:bg-color-btn-hover hover:text-color-text font-medium rounded-4xl text-sm px-5 py-2.5 text-center cursor-pointer"
         >
           Save
         </a>
@@ -187,7 +188,7 @@ const CreateQuiz = () => {
 
     if (success) {
       showToast("Info", "Info", "Quiz set saved successfully.!");
-      setIsPopUPOpen(false)
+      setIsPopUPOpen(false);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
@@ -217,63 +218,52 @@ const CreateQuiz = () => {
   };
 
   return (
-    <div className="relative max-w-screen bg-color-background flex-col h-full px-20 py-8 text-color-text-1">
-      <div className="flex justify-between items-center">
-        <h1 className="text-5xl font-extrabold text-color-text-1 block">
+    <div className="relative max-w-screen bg-color-bg flex-col h-full px-20 py-8 text-color-text">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-5xl font-extrabold text-color-text block">
           Create QuizSet
         </h1>
         <div className="flex h-fit">
           <div className="flex gap-2">
-            <select
-              id="difficulty"
-              className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
-              onChange={(e) => setSelectedTopic(e.target.value.trim())}
-            >
-              {topicsList.map((ele) => (
-                <option key={ele.id} value={ele.id}>
-                  {ele.name}
-                </option>
-              ))}
-            </select>
-            <select
-              id="difficulty"
-              className="bg-color-button-3 text-color-text-1 text-sm rounded-lg w-fit p-2.5"
-              value={selectedDifficulty ? selectedDifficulty : "Select Topic"}
-              onChange={(e) => setSelectedDifficulty(e.target.value.trim())}
-            >
-              {ALL_PERPOSE.DIFFICULTY_TYPES.map((ele) => (
-                <option value={ele}>{ele} </option>
-              ))}
-            </select>
-            <button
-              onClick={() => getQuestionsData()}
-              type="submit"
-              className="sm:col-span-2 text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-              Search
-            </button>
+            <DropDown
+              label={"Topic"}
+              onSelect={setSelectedTopic}
+              optionsList={topicsList}
+              isDisable={false}
+            />
+            <DropDown
+              label={"Difficulty"}
+              onSelect={setSelectedDifficulty}
+              optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
+              isDisable={false}
+            />
+            <CustomBtn
+            label={"Search"}
+            onBtnClick={() => getQuestionsData()}
+            />
           </div>
         </div>
       </div>
-      <div className="flex w-full max-h-[90%] gap-2">
+      <div className="flex w-full h-[85%] gap-2">
         <div className="w-1/2 overflow-y-auto scrollbar-hide">
           {filterQuestions.map((ele, index) => (
             <div
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               className={`${
-                selectedIdsList.includes(ele.id) && "bg-green-900"
-              } border rounded-xl p-2 mb-2`}
+                selectedIdsList.includes(ele.id)
+                  ? "bg-green-900"
+                  : "bg-color-bg-1"
+              } bg-color-bg-1 rounded-xl px-4 py-2 mb-2`}
             >
               <div className="flex justify-between">
-                <p className="max-w-[95%] whitespace-nowrap w-fit text-lg font-bold text-color-text-1 overflow-hidden">
+                <p className="max-w-[95%] whitespace-nowrap w-fit text-2xl font-bold text-color-text overflow-hidden">
                   {index + 1}. {ele.question_text}
-                  <span className="text-2xl font-bold whitespace-nowrap"></span>
                 </p>
 
                 {hoveredIndex === index && (
                   <span
-                    className="px-2 py-1 bg-color-button-3 text-center rounded-md cursor-pointer"
+                    className="h-fit px-3 py-1 bg-color-bg text-center text-sm rounded-md cursor-pointer"
                     onClick={() => handleAddQuestion(ele)}
                   >
                     Add
@@ -283,14 +273,15 @@ const CreateQuiz = () => {
 
               {ele.options_list.map((op, op_index) => (
                 <div>
-                  <p className="text-md text-color-text-1 overflow-hidden whitespace-nowrap pb-1">
-                    {op.op_key}:{" "}
+                  <p className="text-sm text-color-text overflow-hidden whitespace-nowrap pb-1">
+                    {op.op_key}
+                    {""}:{" "}
                     <span
                       className={`${
                         op.op_key == ele.correct_option
                           ? "text-green-400"
-                          : "text-color-text-1"
-                      } text-xl font-no`}
+                          : "text-color-text"
+                      } text-sm font-no`}
                     >
                       {op.op_value}
                     </span>
@@ -302,14 +293,13 @@ const CreateQuiz = () => {
         </div>
         <div className="w-1/2 overflow-y-auto scrollbar-hide">
           {createdQuestionSet.map((ele, index) => (
-            <div className="border rounded-xl p-2 mb-2">
+            <div className="bg-color-bg-1 rounded-xl px-4 py-2 mb-2">
               <div className="flex justify-between">
-                <p className="max-w-[95%] whitespace-nowrap w-fit text-lg font-bold text-color-text-1 overflow-hidden">
+                <p className="w-[95%] whitespace-nowrap text-2xl font-semibold text-color-text overflow-hidden">
                   {index + 1}. {ele.question_text}
-                  <span className="text-2xl font-bold whitespace-nowrap"></span>
                 </p>
                 <span
-                  className="px-2 py-1 bg-color-button-3 text-center rounded-md cursor-pointer"
+                  className="h-fit px-2 py-1 bg-color-bg text-center rounded-md cursor-pointer text-color-text text-sm"
                   onClick={() => handleQuestionRemove(ele)}
                 >
                   Remove
@@ -318,14 +308,14 @@ const CreateQuiz = () => {
 
               {ele.options_list.map((op, op_index) => (
                 <div>
-                  <p className="text-md text-color-text-1 overflow-hidden whitespace-nowrap pb-1">
-                    {op.op_key}:{" "}
+                  <p className="text-sm text-color-text overflow-hidden whitespace-nowrap pb-1">
+                    {op.op_key} :{" "}
                     <span
                       className={`${
                         op.op_key == ele.correct_option
                           ? "text-green-400"
-                          : "text-color-text-1"
-                      } text-xl font-no`}
+                          : "text-color-text"
+                      } text-sm font-no`}
                     >
                       {op.op_value}
                     </span>
@@ -337,7 +327,7 @@ const CreateQuiz = () => {
         </div>
       </div>
       {filterQuestions.length > 0 && (
-        <div className="w-full float-end flex-col">
+        <div className="w-full float-end flex-col pt-2">
           <button
             onClick={() => {
               if (createdQuestionSet.length === 0) {
@@ -349,7 +339,7 @@ const CreateQuiz = () => {
               }
               setIsPopUPOpen(true);
             }}
-            className="w-24 h-10 p-2 bg-color-accent-1 float-right sm:col-span-2 text-color-text-2hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-fit p-2 bg-color-btn text-color-text-dark float-right hover:bg-color-btn-hover hover:text-color-text font-semibold rounded-4xl text-sm px-5 py-2.5 text-center hover:cursor-pointer"
           >
             Save
           </button>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useToast } from "../context/ToastContext";
 import { v4 as uuidv4 } from "uuid";
+import CustomBtn from "./CustomBtn";
 
 const optionsLits = ["A", "B", "C", "D"];
 function AddQuestionCard({ onSave }) {
@@ -58,16 +59,16 @@ function AddQuestionCard({ onSave }) {
         className="w-full overflow-x-hidden overflow-y-auto md:h-full"
         onSubmit={saveQuestionDetails}
       >
-        <div className="bg-color-button-3 rounded-lg shadow">
+        <div className="bg-color-bg-2 rounded-lg shadow">
           <div className="grid grid-cols-10 items-center justify-between px-6 py-4 rounded-t">
-            <h3 className="col-span-1 text-lg font-bold text-color-text-1 text-center p-2">
+            <h3 className="col-span-1 text-lg font-bold text-color-text text-center p-2">
               1
             </h3>
             <input
               type="text"
               name="question"
               id="question"
-              className="col-span-9 bg-color-button-3 text-color-text-1 text-lg font-bold rounded-lg block w-full p-2.5"
+              className="col-span-9 bg-color-bg-2 text-color-text text-lg font-bold rounded-lg block w-full p-2.5"
               placeholder="Question"
               required
             />
@@ -82,7 +83,7 @@ function AddQuestionCard({ onSave }) {
                     type="radio"
                     name="correctAnswer"
                     value={label}
-                    className="w-4 h-3 text-color-text-1 rounded-4xl hover:cursor-pointer"
+                    className="w-4 h-3 text-color-text rounded-4xl hover:cursor-pointer"
                     onChange={() => setSelectedOption(label)}
                     checked={selectedOption === label}
                   />
@@ -92,7 +93,7 @@ function AddQuestionCard({ onSave }) {
                     type="text"
                     name={`option-${label}`}
                     id={`option-${label}`}
-                    className="w-full bg-color-button-3 text-color-text-1 text-sm rounded-lg block p-2.5"
+                    className="w-full bg-color-bg-2 text-color-text text-sm rounded-lg block p-2.5"
                     placeholder={`Option ${label}`}
                     onFocus={() => setSelectedOption(label)}
                   />
@@ -103,25 +104,17 @@ function AddQuestionCard({ onSave }) {
 
           <div className="w-full px-6 py-4 flex justify-between items-center">
             <div>
-              <p className="w-fit h-fit rounded-md text-md text-color-text-2 py-1 px-3 bg-color-button-3">
+              <p className="w-fit h-fit rounded-md text-md text-color-text-dark py-1 px-3 bg-color-bg-2">
                 Selected Option:{" "}
                 <span className="font-medium">{selectedOption || "-"}</span>
               </p>
             </div>
             <div className="flex gap-2">
-              <button
-                type="submit"
-                className="text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              >
-                Apply
-              </button>
-              <button
-                type="reset"
-                className="text-color-text-2 bg-color-button-3 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                onClick={() => setSelectedOption(null)}
-              >
-                Reset
-              </button>
+              <CustomBtn label={"Apply"} />
+              <CustomBtn
+                label={"Reset"}
+                onBtnClick={() => setSelectedOption(null)}
+              />
             </div>
           </div>
         </div>

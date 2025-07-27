@@ -11,6 +11,7 @@ import {
   API_END_POINTS,
 } from "../../constants/apiEndPoints";
 import DropDown from "../../components/DropDown";
+import CustomBtn from "../../components/CustomBtn";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
@@ -38,6 +39,7 @@ const StartQuiz = () => {
   const [isQuizEnd, setIsQuizEnd] = useState(false);
   const [isQuizComplte, setIsQuizComplete] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState([]);
+  const progress = ((questionIndex + 1) / QuizDetails.questions.length) * 100;
 
   const handleAnswerSelection = (answer) => {
     selectedAnswers.push({
@@ -66,7 +68,6 @@ const StartQuiz = () => {
       attempt: QuizDetails.quizAttemptID,
       quiz_user_response: selectedAnswers,
     };
-    console.log("saveQuizDetails ==> ", reqBody);
 
     const { success, data, error } = await apiRequest({
       url: BASE_URL + API_END_POINTS.ADD_QUIZ_RESPONSE,
@@ -138,16 +139,34 @@ const StartQuiz = () => {
       {isTimeOver && timeOverFn()}
       {isQuizEnd && quizEndFn()}
 
-      <div className="w-screen h-full py-6 px-10 bg-color-background">
+      <div className="w-screen h-full py-6 px-10 bg-color-bg">
         <div className="w-full flex justify-between">
-          <CountdownTimer min={QuizDetails.time} onTimeOver={setIsTimeOver} />
-          <button
-            type="button"
-            className="py-2 px-4 w-fit text-sm font-medium bg-color-button-1 text-color-text-2 rounded-lg hover:cursor-pointer"
-            onClick={() => setIsQuizEnd(true)}
-          >
-            End Test
-          </button>
+          <CountdownTimer min={QuizDetails.time} onTimeOver={setIsTimeOver} />\
+          <CustomBtn
+          label={"End Test"}
+          onBtnClick={() => setIsQuizEnd(true)}
+          />
+        </div>
+        <div className="w-full flex flex-col justify-center items-center">
+          <div className="w-1/3 flex justify-between items-center px-2 mb-1">
+            <p className="text-color-text text-sm font-normal">
+              Progress Counter
+            </p>
+            <p className="text-color-text text-sm font-normal">
+              {questionIndex + 1}
+              {"/"}
+              {QuizDetails.questions.length}
+            </p>
+          </div>
+
+          <div class="w-1/3 bg-color-bg-2 rounded-full px-1.5 py-1">
+            <div
+              class="bg-color-btn text-xs font-bold text-color-text-dark text-center p-0.5 leading-none rounded-full"
+              style={{ width: `${progress}%` }}
+            >
+              {progress}%
+            </div>
+          </div>
         </div>
         <QuizCard
           questionIndex={questionIndex}

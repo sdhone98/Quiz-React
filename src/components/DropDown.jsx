@@ -20,8 +20,8 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
       <button
         onClick={() => !isDisable && setOpen(true)}
         className={`${
-          isDisable && "cursor-not-allowed"
-        } w-fit py-3 text-color-text-2 bg-color-button-1 font-medium rounded-lg text-sm px-5 text-center inline-flex items-center`}
+          isDisable && "cursor-not-allowed"  
+        } w-fit py-3 text-color-text bg-color-btn-light font-medium rounded-lg text-sm px-5 text-center inline-flex items-center`}
         type="button"
       >
         {userSelection}
@@ -44,10 +44,10 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
 
       <div
         id="dropdown"
-        className={`z-10 ${getClass()} divide-y divide-gray-100 rounded-lg shadow-sm w-fit bg-color-button-1  absolute mt-2 h-fit max-h-1/4 overflow-y-auto scrollbar-hide`}
+        className={`z-10 ${getClass()} divide-y divide-gray-100 rounded-lg shadow-sm w-fit bg-color-btn-light absolute mt-2 h-fit max-h-1/4 overflow-y-auto scrollbar-hide`}
       >
         <ul
-          className="py-2 text-sm text-color-text-2 h-fit overflow-y-auto"
+          className="py-2 text-sm text-color-text h-fit overflow-y-auto"
           aria-labelledby="dropdownDefaultButton"
         >
           {" "}
@@ -60,7 +60,7 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
                   setOpen(false),
                   setUserSelection(name)
                 )}
-                className="block px-4 py-2 hover:bg-color-button-2"
+                className="block px-4 py-2 hover:bg-color-bg-1"
               >
                 {name}
               </a>

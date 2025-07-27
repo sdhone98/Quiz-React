@@ -22,6 +22,33 @@ const tableHeader = [
   "Taken Time",
 ];
 
+const dashBoardData = [
+  {
+    key: "Total Quizzes",
+    value: "totalQuizzes",
+  },
+  {
+    key: "Total Quizzes",
+    value: "activeQuizzes",
+  },
+  {
+    key: "Quiz Takers",
+    value: "totalStudentsParticipated",
+  },
+  {
+    key: "Your Quizzes",
+    value: "userTotalQuizzes",
+  },
+  {
+    key: "Your Active Quizzes",
+    value: "userActiveQuizzes",
+  },
+  {
+    key: "Your Quiz Takers",
+    value: "userTotalStudentsParticipated",
+  },
+];
+
 const TeacherDashboard = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -83,96 +110,55 @@ const TeacherDashboard = () => {
   }, []);
 
   return (
-    <section className="max-w-screen w-screen h-full flex flex-col bg-color-background py-8 px-20 items-center">
+    <section className="max-w-screen w-screen h-full flex flex-col bg-color-bg py-8 px-20 items-center">
       <div className="w-full">
-        <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-color-text-1">
+        <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-color-text">
           QuickQuiz - Teacher Dashboard
         </h1>
-        <p className="max-w-2xl text-color-text-1 text-lg font-normal">
+        <p className="max-w-2xl text-color-text-sub text-lg font-normal">
           Logged in as: <span className="font-semibold">Mr. Sagar Dhone</span>
         </p>
       </div>
-      <div className="h-9/10 w-full lg:px-36 flex flex-col items-center justify-center">
-        <div className="w-full h-fit flex justify-between items-center">
-          <div
-            className="w-1/2 p-4 rounded-lg bg-color-button-3"
-            id="stats"
-            role="tabpanel"
-            aria-labelledby="stats-tab"
-          >
-            <dl className="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto sm:grid-cols-2 xl:grid-cols-3 text-color-text-1 sm:p-8">
-              <div className="flex flex-col items-center justify-center">
-                <dt className="mb-2 text-3xl font-extrabold">
-                  {dashboardData.totalQuizzes}
-                </dt>
-                <dd className="text-color-accent-1 text-center text-sm">
-                  Total Quizzes
-                </dd>
-              </div>
-              <div className="flex flex-col items-center justify-center text-sm">
-                <dt className="mb-2 text-3xl font-extrabold">
-                  {dashboardData.activeQuizzes}
-                </dt>
-                <dd className="text-color-accent-1 text-center">
-                  Active Quizzes
-                </dd>
-              </div>
-              <div className="flex flex-col items-center justify-center text-sm">
-                <dt className="mb-2 text-3xl font-extrabold">
-                  {dashboardData.totalStudentsParticipated}
-                </dt>
-                <dd className="text-color-accent-1 text-center">Quiz Takers</dd>
-              </div>
-              <div className="flex flex-col items-center justify-center text-sm">
-                <dt className="mb-2 text-3xl font-extrabold">
-                  {dashboardData.totalStudentsParticipated}
-                </dt>
-                <dd className="text-color-accent-1 text-center">
-                  Your Quizzes
-                </dd>
-              </div>
-              <div className="flex flex-col items-center justify-center text-sm">
-                <dt className="mb-2 text-3xl font-extrabold">
-                  {dashboardData.totalStudentsParticipated}
-                </dt>
-                <dd className="text-color-accent-1 text-center">
-                  Your Active Quizzes
-                </dd>
-              </div>
-              <div className="flex flex-col items-center justify-center text-sm">
-                <dt className="mb-2 text-3xl font-extrabold">
-                  {dashboardData.totalStudentsParticipated}
-                </dt>
-                <dd className="text-color-accent-1 text-center">
-                  Your Quiz Takers
-                </dd>
-              </div>
+      <div className="h-9/10 w-full lg:px-48 flex items-center justify-center gap-4">
+        <div className="w-full flex flex-col gap-2">
+          <div className="w-full rounded-lg bg-color-bg-1">
+            <dl className="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto sm:grid-cols-2 xl:grid-cols-3 text-color-text sm:p-8">
+              {dashBoardData.map((ele) => (
+                <div className="flex flex-col items-center justify-center">
+                  <dt className="mb-2 text-3xl font-extrabold">
+                    {dashboardData[ele.value]}
+                  </dt>
+                  <dd className="text-color-text-light text-center text-sm">
+                    {ele.key}
+                  </dd>
+                </div>
+              ))}
             </dl>
           </div>
-
-          <div className="w-1/2 p-4 h-1/2 flex justify-center items-center">
-            <ResultTable tableData={resultData} tableHeader={tableHeader} />
-          </div>
+          {/* <div className="flex gap-2">
+            <a
+              onClick={() => navigate("/teacher/quiz")}
+              className={`w-36 h-12 cursor-pointer inline-flex items-center justify-center text-sm font-medium text-center text-color-text-dark bg-color-btn rounded-4xl hover:bg-color-btn-hover hover:text-color-text`}
+            >
+              View Quizzes
+            </a>
+            <a
+              onClick={() => navigate("/teacher/quiz/questions-add")}
+              className={`w-36 h-12  cursor-pointer inline-flex items-center justify-center text-sm font-medium text-center text-color-text-dark bg-color-btn rounded-4xl hover:bg-color-btn-hover hover:text-color-text`}
+            >
+              Add Questions
+            </a>
+            <a
+              onClick={() => navigate("/teacher/quiz/create/")}
+              className={`w-36 h-12  cursor-pointer inline-flex items-center justify-center text-sm font-medium text-center text-color-text-dark bg-color-btn rounded-4xl hover:bg-color-btn-hover hover:text-color-text`}
+            >
+              Create Quiz
+            </a>
+          </div> */}
         </div>
-        <div className="flex w-full gap-2 py-4 items-start">
-          <a
-            onClick={() => navigate("/teacher/quiz")}
-            className={`w-36 h-12 cursor-pointer inline-flex items-center justify-center text-sm font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1`}
-          >
-            View Quizzes
-          </a>
-          <a
-            onClick={() => navigate("/teacher/quiz/questions-add")}
-            className={`w-36 h-12  cursor-pointer inline-flex items-center justify-center text-sm font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1`}
-          >
-            Add Questions
-          </a>
-          <a
-            onClick={() => navigate("/teacher/quiz/create/")}
-            className={`w-36 h-12  cursor-pointer inline-flex items-center justify-center text-sm font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1`}
-          >
-            Create Quiz
-          </a>
+
+        <div className="w-1/2 h-1/2  flex justify-center items-center">
+          <ResultTable tableData={resultData} />
         </div>
       </div>
     </section>

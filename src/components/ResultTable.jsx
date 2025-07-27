@@ -1,13 +1,17 @@
-const ResultTable = ({ tableData, tableHeader}) => {
+const ResultTable = ({ tableData }) => {
+  const tableHeader = tableData.length > 0 ? Object.keys(tableData[0]) : [];
+
   return (
-    <div className="overflow-x-auto shadow-md sm:rounded-lg border border-color-text-1 w-full">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs uppercase bg-color-navbar text-color-text-1 ">
+    <div className="overflow-x-auto shadow-md rounded-lg w-full h-full scrollbar-hide">
+      <table className="w-full text-sm text-left rtl:text-right text-color-bg-2">
+        <thead className="text-sm bg-color-bg-1 text-color-text">
           <tr>
             <th scope="col" className="p-4"></th>
-            {tableHeader.map((i) => (
-              <th key={i} scope="col" className="px-6 py-3 text-center">
-                {i}
+            {tableHeader.map((key) => (
+              <th key={key} scope="col" className="px-6 py-3 text-center text-color-text">
+                {key
+                  .replace(/_/g, " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())}
               </th>
             ))}
           </tr>
@@ -23,25 +27,14 @@ const ResultTable = ({ tableData, tableHeader}) => {
             tableData.map((item, index) => (
               <tr
                 key={index}
-                className="bg-color-background border-b dark:border-gray-700 border-gray-200 hover:bg-color-button-3"
+                className="bg-color-bg-2 hover:bg-color-bg text-color-text-light"
               >
                 <td className="w-4 p-4"></td>
-                <th scope="row" className="px-6 py-4 text-center">
-                  {item.topic_name}
-                </th>
-                <td className="px-6 py-4 text-center">
-                  {item.difficulty_level}
-                </td>
-                <td className="px-6 py-4 text-center">{item.set_type}</td>
-                <td className="px-6 py-4 text-center">
-                  {item.total_questions}
-                </td>
-                <td className="px-6 py-4 text-center">
-                  {item.correct_answers}
-                </td>
-                <td className="px-6 py-4 text-center">{item.wrong_answers}</td>
-                <td className="px-6 py-4 text-center">{item.total_time}</td>
-                <td className="px-6 py-4 text-center">{item.completed_time}</td>
+                {tableHeader.map((key) => (
+                  <td key={key} className="px-6 py-4 text-center">
+                    {item[key]}
+                  </td>
+                ))}
               </tr>
             ))
           )}

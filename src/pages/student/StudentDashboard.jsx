@@ -9,21 +9,24 @@ import {
   API_END_POINTS,
 } from "../../constants/apiEndPoints";
 import { apiRequest } from "../../utils/api";
+import CustomBtn from "../../components/CustomBtn";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
 const today = new Date();
 
-const tableHeader = [
-  "Topic",
-  "difficulty",
-  "Set",
-  "Total Questions",
-  "Correct Count",
-  "Wrong Count",
-  "Total Time",
-  "Taken Time",
-];
+const arrowIcon = <svg
+              className="w-5 h-5 ml-2 -mr-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -36,6 +39,9 @@ const StudentDashboard = () => {
 
   const user = useSelector((state) => state.user.user);
   const [resultData, setResultData] = useState([]);
+
+  const msgLine =
+    "Ready to challenge yourself and grow your skills? Pick a topic and show us what you've got!";
 
   const msgLine1 = "Ready to challenge yourself and grow your skills?";
   const msgLine2 = "Pick a topic and show us what you've got!";
@@ -61,46 +67,27 @@ const StudentDashboard = () => {
   }, [user]);
 
   return (
-    <section className="max-w-screen h-full flex justify-center items-center bg-color-background">
-      <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-        <div className="mr-auto place-self-center lg:col-span-7">
-          <h1 className="max-w-2xl mb-4 text-5xl font-extrabold tracking-tight leading-none dark:text-white">
+    <section className="w-screen max-w-screen h-full flex justify-center items-center bg-color-bg px-20 lg:px-48 gap-2">
+      <div className="w-1/2 p-2">
+        <div className="place-self-start p-4">
+          <h1 className="mb-4 text-5xl font-bold tracking-tight leading-none text-color-text select-none">
             Welcome, {user.name}
           </h1>
-          <p className="max-w-2xl font-light text-color-text-1 text-lg">
-            {msgLine1}
+          <p className="w-3/4 text-color-text text-sm font-semibold mb-2 select-none">
+            {msgLine}
           </p>
-          <p className="max-w-2xl mb-6 font-light text-color-text-1 text-lg">
-            {msgLine2}
-          </p>
-          <p className="max-w-2xl mb-6 font-light text-color-text-1 text-lg">
+          <p className="mb-4 font-light text-color-text text-sm select-none">
             {formattedDate}
           </p>
-          <a
-            onClick={() => {
-              navigate("/student/quiz/listing");
-            }}
-            className={`cursor-pointer inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-center text-color-text-2 bg-color-button-1 rounded-lg hover:bg-color-accent-1`}
-          >
-            Start Quiz
-            <svg
-              className="w-5 h-5 ml-2 -mr-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </a>
-          <div className="w-full f-hull flex items-center justify-between"></div>
+          <CustomBtn
+            label={"Start Quiz"}
+            onBtnClick={() => navigate("/student/quiz/listing")}
+            icon={arrowIcon}
+          />
         </div>
-        <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-          <ResultTable tableData={resultData} tableHeader={tableHeader} />
-        </div>
+      </div>
+      <div className="w-1/2 p-2">
+        <ResultTable tableData={resultData} />
       </div>
     </section>
   );

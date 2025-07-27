@@ -6,4 +6,10 @@ export const ALL_PERPOSE = {
     { id: "Hard", name: "Hard" },
   ],
   SET_TYPES: ["A", "B", "C", "D"],
+  SET_TYPES_OBJ_FORMAT: [
+    { id: "A", name: "A" },
+    { id: "B", name: "B" },
+    { id: "C", name: "C" },
+    { id: "D", name: "D" },
+  ],
 };

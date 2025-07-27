@@ -9,6 +9,7 @@ import {
 } from "../../constants/apiEndPoints";
 import { useSelector } from "react-redux";
 import { apiRequest } from "../../utils/api";
+import CustomBtn from "../../components/CustomBtn";
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
 const now = new Date();
@@ -27,7 +28,7 @@ function QuizListing() {
   }, []);
 
   const NoDataFoundComponet = () => (
-    <div className="flex w-full h-full justify-center items-center text-color-text-1">
+    <div className="flex w-full h-full justify-center items-center text-color-text">
       No Data Found.!
     </div>
   );
@@ -64,12 +65,12 @@ function QuizListing() {
 
   const getColorClass = (difficulty_type) => {
     if (difficulty_type === "Hard")
-      return "bg-red-400 text-color-text-1 dark:text-color-text-2";
+      return "bg-red-400 text-color-text dark:text-color-text-dark";
     if (difficulty_type === "Medium")
-      return "bg-yellow-400 text-color-text-1 dark:text-color-text-2";
+      return "bg-yellow-400 text-color-text dark:text-color-text-dark";
     if (difficulty_type === "Easy")
-      return "bg-green-400 text-color-text-1 dark:text-color-text-2";
-    return "bg-green-400 text-color-text-1 dark:text-color-text-2";
+      return "bg-green-400 text-color-text dark:text-color-text-dark";
+    return "bg-green-400 text-color-text dark:text-color-text-dark";
   };
 
   const checkUserAllowedOrNot = async (ele) => {
@@ -96,9 +97,9 @@ function QuizListing() {
   };
 
   return (
-    <section className="max-w-screen h-full flex-col bg-color-background py-8 px-20 ">
+    <section className="max-w-screen h-full flex-col bg-color-bg py-8 px-20 ">
       <div className="flex justify-between items-center">
-        <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-color-text-1">
+        <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-color-text">
           Start Quiz
         </h1>
         <div className="flex gap-2 h-fit">
@@ -114,13 +115,10 @@ function QuizListing() {
             optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
             isDisable={false}
           />
-          <button
-            onClick={() => getQuizSetsData()}
-            type="submit"
-            className="sm:col-span-2 text-color-text-2 bg-color-button-1 hover:bg-color-button-3 hover:text-color-text-1 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Search
-          </button>
+          <CustomBtn
+          label={"Search"}
+          onBtnClick={() => getQuizSetsData()}
+          />
         </div>
       </div>
       <div className="flex gap-2 w-full flex-wrap f-full">
@@ -132,18 +130,18 @@ function QuizListing() {
               key={ele.quiz_set_id}
               className="relative w-90 h-60 bg-[#1E1E1E] rounded-xl shadow-lg overflow-hidden"
             >
-              <div className="w-full h-[40%] absolute top-5 text-color-text-1 text-center text-8xl font-bold flex items-center justify-center select-none pointer-events-none opacity-5">
+              <div className="w-full h-[40%] absolute top-5 text-color-text text-center text-8xl font-bold flex items-center justify-center select-none pointer-events-none opacity-5">
                 {ele.topic_name}
               </div>
               <div className="h-[60%] w-full absolute bottom-0 bg-[#2B2B2B] px-4 py-2 flex-col">
                 <div className="flex justify-between items-center">
-                  <h5 className="text-3xl font-semibold text-color-text-1 select-none pointer-events-none mb-2">
+                  <h5 className="text-3xl font-semibold text-color-text select-none pointer-events-none mb-2">
                     {ele.topic_name}
                   </h5>
                   <div className="flex gap-1">
                     <label
                       className={
-                        "bg-color-button-3 px-3 h-fit w-fit rounded text-center font-semibold select-none pointer-events-none"
+                        "bg-color-bg-2 px-3 h-fit w-fit rounded text-center font-semibold select-none pointer-events-none"
                       }
                     >
                       {ele.set_type}
@@ -175,23 +173,22 @@ function QuizListing() {
                       d="M18.5 4h-13m13 16h-13M8 20v-3.333a2 2 0 0 1 .4-1.2L10 12.6a1 1 0 0 0 0-1.2L8.4 8.533a2 2 0 0 1-.4-1.2V4h8v3.333a2 2 0 0 1-.4 1.2L13.957 11.4a1 1 0 0 0 0 1.2l1.643 2.867a2 2 0 0 1 .4 1.2V20H8Z"
                     />
                   </svg>
-                  <p className="text-sm text-color-text-1 select-none pointer-events-none">
+                  <p className="text-sm text-color-text select-none pointer-events-none">
                     {ele.total_time + " "}Mins.
                   </p>
                 </div>
-                <p className="text-sm text-color-text-1 select-none pointer-events-none mb-2">
+                <p className="text-sm text-color-text select-none pointer-events-none mb-2">
                   Questions Count :{" "}
                   <span className="font-semibold">{ele.questions_count}</span>
                 </p>
-                <button
-                  onClick={() => checkUserAllowedOrNot(ele)}
-                  className="bg-color-button-1 text-sm font-semibold px-4 py-2 rounded-md hover:cursor-pointer float-right"
-                >
-                  Start
-                </button>
+                <CustomBtn
+                label={"Start"}
+                 onBtnClick={() => checkUserAllowedOrNot(ele)}
+
+                />
               </div>
               {ele.is_completed && (
-                <div className="absolute w-full h-full text-6xl flex justify-center items-center pb-8 font-semibold text-color-text-1 backdrop-blur-xl select-none pointer-events-none">
+                <div className="absolute w-full h-full text-6xl flex justify-center items-center pb-8 font-semibold text-color-text backdrop-blur-xl select-none pointer-events-none">
                   Completed
                 </div>
               )}

@@ -23,7 +23,7 @@ const CountdownTimer = ({ min, onTimeOver }) => {
   const getBgClass = () => {
   if (timeLeft <= 60) return "animate-pulse text-red-600";
   if (timeLeft <= 300) return "text-orange-500";
-  return "text-color-text-1";
+  return "text-color-text";
 };
 
 return (
