@@ -92,8 +92,8 @@ const AddQuestions = () => {
       ],
     };
     handleQuestionDetailsSelection(q_data);
-    // e.target.reset();
-    // setSelectedOption(null);
+    e.target.reset();
+    setSelectedOption(null);
   };
 
   const saveQuiz = async () => {
@@ -113,7 +113,7 @@ const AddQuestions = () => {
         option_d: ele.op_d,
         correct_option: ele.correct_op,
         topic: selectedTopic.id,
-        difficulty_level: selectedDifficulty,
+        difficulty_level: selectedDifficulty.name,
       });
     });
 
