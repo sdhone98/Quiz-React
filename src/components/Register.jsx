@@ -5,6 +5,9 @@ import { useToast } from "../context/ToastContext";
 import { setUser } from "../redux/userSlice";
 import { useLoading } from "../context/LoadingContext";
 import CustomBtn from "./CustomBtn";
+import { BASE_URL_END_POINT, API_END_POINTS } from "../constants/apiEndPoints";
+
+const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
 const Register = () => {
   const navigate = useNavigate();
@@ -15,12 +18,18 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // VALIDATION 
-    if (e.target.username.value === null) return showToast("Warning", "Warning", "Username required.!");
-    if (e.target.password.value != e.target.confirmPassword.value) return showToast("Warning", "Warning", "Password and confirm password do not match.");
+    // VALIDATION
+    if (e.target.username.value === null)
+      return showToast("Warning", "Warning", "Username required.!");
+    if (e.target.password.value != e.target.confirmPassword.value)
+      return showToast(
+        "Warning",
+        "Warning",
+        "Password and confirm password do not match."
+      );
     setIsLoading(true);
     const { success, data, error } = await apiRequest({
-      url: "http://localhost:8000/api/users/",
+      url: BASE_URL + API_END_POINTS.REGISTER,
       method: "POST",
       data: {
         username: e.target.username.value,
@@ -149,9 +158,7 @@ const Register = () => {
                   required
                 />
               </div>
-              <CustomBtn
-              label={"Create an account"}
-              />
+              <CustomBtn label={"Create an account"} />
               <p className="text-sm font-light text-color-text text-center">
                 Already have an account?{" "}
                 <a

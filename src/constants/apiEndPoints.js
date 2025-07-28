@@ -2,6 +2,7 @@ export const API_END_POINTS = {
     GET_TOPIC: "/topic",
     GET_TOPIC_DIFFICULTY: "/topic/difficulty",
     GET_TOPIC_DIFFICULTY_WITH_SET: "/topic/difficulty/set",
+    REGISTER: "users/",
     LOGIN: "/users/login",
     GET_REFRESH_TOKEN: "/users/token/refresh/",
     ADD_TOPIC: "/topic",
