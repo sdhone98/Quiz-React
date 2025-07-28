@@ -46,8 +46,8 @@ function AddQuestionCard({ onSave }) {
       ],
     };
     onSave(q_data);
-    // e.target.reset();
-    // setSelectedOption(null);
+    e.target.reset();
+    setSelectedOption(null);
   };
 
   return (

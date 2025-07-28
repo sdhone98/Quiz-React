@@ -17,20 +17,13 @@ import CreateQuiz from "../pages/teacher/CreateQuiz";
 import AddQuestions from "../pages/teacher/AddQuestions";
 import AllQuizzes from "../pages/teacher/AllQuizzes";
 import QuizListing from "../pages/student/QuizListing";
+import ContactUs from "../components/ContactUs";
 
-// Student Pages
-// const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
-// const StartQuiz = () => <div className="p-6">Start Quiz Page</div>;
+
 const AttemptQuiz = () => <div className="p-6">Attempt Quiz Page</div>;
-// const ResultPage = () => <div className="p-6">Result Page</div>;
-
-// Teacher Pages
-// const TeacherDashboard = () => <div className="p-6">Teacher Dashboard</div>;
-// const CreateQuiz = () => <div className="p-6">Create Quiz Page</div>;
-// const ManageQuiz = () => <div className="p-6">Manage Quiz Page</div>;
 
 // General Pages
-const Contact = () => <div className="w-full h-full bg-color-bg text-color-text text-8xl flex justify-center items-center font-bold">Contact</div>;
+// const Contact = () => <div className="w-full h-full bg-color-bg text-color-text text-8xl flex justify-center items-center font-bold">Contact</div>;
 const NotFound = () => (
   <div className="p-6 text-center">404 - Page Not Found</div>
 );
@@ -69,7 +62,7 @@ const AppRoutes = () => {
           <Route path="/daw" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/contact" element={ <ContactUs/>} />
 
           {/* Student Routes */}
           <Route path="/student/dashboard" element={<StudentDashboard />} />
