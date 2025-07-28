@@ -1,3 +1,5 @@
+const apiUrl = process.env.REACT_APP_API_URL;
+
 export const API_END_POINTS = {
     GET_TOPIC: "/topic",
     GET_TOPIC_DIFFICULTY: "/topic/difficulty",
@@ -15,7 +17,6 @@ export const API_END_POINTS = {
     GET_QUIZ_RESULT_REPORT: "/exam/attempt/result",
     GET_TEACHERS_DASHBOARD: "/quiz-set-details",
 }
-
 export const BASE_URL_END_POINT = {
-    BASE_URL: "http://localhost:8000/api"
+    BASE_URL: apiUrl
 }
