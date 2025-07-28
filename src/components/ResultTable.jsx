@@ -19,7 +19,7 @@ const ResultTable = ({ tableData }) => {
         <tbody>
           {tableData.length === 0 ? (
             <tr>
-              <td colSpan={tableHeader.length + 1} className="text-center py-4">
+              <td colSpan={tableHeader.length + 1} className="text-color-text text-center py-4">
                 No results found.
               </td>
             </tr>

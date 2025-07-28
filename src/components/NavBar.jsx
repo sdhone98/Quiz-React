@@ -26,7 +26,7 @@ const NavBar = () => {
     <div>
       <div className="relative flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         <button
-        onClick={()=> setIsUserPopUpOpen(!isUserPopUpOpen)}
+          onClick={() => setIsUserPopUpOpen(!isUserPopUpOpen)}
           type="button"
           className="flex text-sm bg-gray-800 rounded-full md:me-0 cursor-pointer"
         >
@@ -49,7 +49,9 @@ const NavBar = () => {
         </button>
 
         <div
-          className={`${isUserPopUpOpen ? "" : "hidden"} absolute top-full mt-2 z-10 w-48 text-base list-none divide-y divide-color-btn rounded-lg shadow-sm bg-color-bg-2 select-none`}
+          className={`${
+            isUserPopUpOpen ? "" : "hidden"
+          } absolute top-full mt-2 z-10 w-48 text-base list-none divide-y divide-color-btn rounded-lg shadow-sm bg-color-bg-2 select-none`}
           id="user-dropdown"
         >
           <div className="px-4 py-3">
@@ -58,9 +60,6 @@ const NavBar = () => {
             </span>
             <span className="block text-sm text-color-sub truncate text-color-text-light">
               {user.email}
-            </span>
-                        <span className="block text-sm text-color-sub truncate text-color-text-light">
-              {user.userId}
             </span>
           </div>
           <ul className="py-2" aria-labelledby="user-menu-button">
@@ -78,10 +77,6 @@ const NavBar = () => {
     </div>
   );
 
-  // useEffect(() => {
-  //   const root = document.documentElement;
-  //   isDark ? root.classList.add("dark") : root.classList.remove("dark");
-  // }, [isDark]);
   return (
     <nav className="bg-color-bg-1 border-gray-20">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -98,7 +93,7 @@ const NavBar = () => {
           Quiz
         </span>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          {user && <UserIcon/>}
+          {user && <UserIcon />}
         </div>
         <div
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
@@ -121,7 +116,7 @@ const NavBar = () => {
                 Result
               </a>
             </li>
-            {(user && user.role === CONSTANTS.TEACHER) && (
+            {user && user.role === CONSTANTS.TEACHER && (
               <li>
                 <a
                   onClick={() => navigate("/teacher/quiz")}
@@ -131,7 +126,7 @@ const NavBar = () => {
                 </a>
               </li>
             )}
-            {(user && user.role === CONSTANTS.TEACHER) && (
+            {user && user.role === CONSTANTS.TEACHER && (
               <li>
                 <a
                   onClick={() => navigate("/teacher/quiz/questions-add")}
@@ -141,7 +136,7 @@ const NavBar = () => {
                 </a>
               </li>
             )}
-            {(user && user.role === CONSTANTS.TEACHER) && (
+            {user && user.role === CONSTANTS.TEACHER && (
               <li>
                 <a
                   onClick={() => navigate("/teacher/quiz/create/")}
