@@ -1,5 +1,3 @@
-const apiUrl = process.env.REACT_APP_API_URL;
-
 export const API_END_POINTS = {
     GET_TOPIC: "/topic",
     GET_TOPIC_DIFFICULTY: "/topic/difficulty",
@@ -18,5 +16,5 @@ export const API_END_POINTS = {
     GET_TEACHERS_DASHBOARD: "/quiz-set-details",
 }
 export const BASE_URL_END_POINT = {
-    BASE_URL: apiUrl
+    BASE_URL: import.meta.env.VITE_API_URL
 }
