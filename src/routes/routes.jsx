@@ -18,6 +18,7 @@ import AddQuestions from "../pages/teacher/AddQuestions";
 import AllQuizzes from "../pages/teacher/AllQuizzes";
 import QuizListing from "../pages/student/QuizListing";
 import ContactUs from "../components/ContactUs";
+import LeaderBoard from "../components/LeaderBoard";
 
 
 const AttemptQuiz = () => <div className="p-6">Attempt Quiz Page</div>;
@@ -59,10 +60,10 @@ const AppRoutes = () => {
       <AppLayout>
         <Routes>
           {/* Public Routes */}
-          <Route path="/daw" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/contact" element={ <ContactUs/>} />
+          <Route path="/leaderboard" element={ <LeaderBoard/>} />
 
           {/* Student Routes */}
           <Route path="/student/dashboard" element={<StudentDashboard />} />

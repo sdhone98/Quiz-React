@@ -15,18 +15,20 @@ const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
 const today = new Date();
 
-const arrowIcon = <svg
-              className="w-5 h-5 ml-2 -mr-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
+const arrowIcon = (
+  <svg
+    className="w-5 h-5 ml-2 -mr-1"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fillRule="evenodd"
+      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+      clipRule="evenodd"
+    ></path>
+  </svg>
+);
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -42,9 +44,6 @@ const StudentDashboard = () => {
 
   const msgLine =
     "Ready to challenge yourself and grow your skills? Pick a topic and show us what you've got!";
-
-  const msgLine1 = "Ready to challenge yourself and grow your skills?";
-  const msgLine2 = "Pick a topic and show us what you've got!";
 
   useEffect(() => {
     const loadResultData = async () => {

@@ -116,6 +116,14 @@ const NavBar = () => {
                 Result
               </a>
             </li>
+            <li>
+              <a
+                onClick={() => navigate("/leaderboard")}
+                className="block py-2 px-3 md:p-0 text-color-text hover:text-color-btn cursor-pointer"
+              >
+                Leader Board
+              </a>
+            </li>
             {user && user.role === CONSTANTS.TEACHER && (
               <li>
                 <a
