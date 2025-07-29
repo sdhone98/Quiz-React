@@ -84,7 +84,7 @@ const Login = () => {
         password: password,
       },
     });
-    setIsLoading(false);
+
     if (success) {
       const { access, refresh } = data;
       const userDetails = jwtDecode(access);
@@ -104,11 +104,17 @@ const Login = () => {
       dispatch(setRefreshToken(refresh));
       setUserRole(userDetails.role);
       getQuizRelatedInfo();
+
+      setTimeout(() => {
+        setIsLoading(false);
+
+        if (userDetails.role === CONSTANTS.STUDENT)
+          navigate(ROUTES.STUDENT_DASHBOARD);
+        if (userDetails.role === CONSTANTS.TEACHER)
+          navigate(ROUTES.TEACHER_DASHBOARD);
+      }, 2000);
+
       showToast("Success", "Info", "Login sccessfully.!");
-      if (userDetails.role === CONSTANTS.STUDENT)
-        navigate(ROUTES.STUDENT_DASHBOARD);
-      if (userDetails.role === CONSTANTS.TEACHER)
-        navigate(ROUTES.TEACHER_DASHBOARD);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
