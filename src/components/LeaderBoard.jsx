@@ -20,9 +20,9 @@ function SearchTable() {
     difficulty: null,
   });
 
-    useEffect(() => {
-      loadTblData();
-    }, []);
+  useEffect(() => {
+    loadTblData();
+  }, []);
 
   const loadTblData = async () => {
     const reqParams = {};
@@ -60,29 +60,31 @@ function SearchTable() {
     }));
   };
   return (
-    <section className="bg-color-bg w-screen h-full">
-      <div className="flex justify-between items-center">
-        <h1 className="mb-2 text-5xl font-extrabold text-color-text block">
-          Leader Board
-        </h1>
-        <div className="h-full flex gap-2">
-          <DropDown
-            label={"Topic"}
-            onSelect={handelTopicSelection}
-            optionsList={topicDetails}
-            isDisable={false}
-          />
-          <DropDown
-            label={"Difficulty"}
-            onSelect={handelDifficultySelection}
-            optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
-            isDisable={false}
-          />
-          <CustomBtn label={"Search"} onBtnClick={loadTblData} />
+    <section className="max-w-screen w-screen h-full bg-color-bg items-center text-color-text">
+      <div className="flex flex-col mx-48 h-full">
+        <div className="mt-12 mb-8 flex justify-between items-center">
+          <h1 className="mb-2 text-3xl font-extrabold text-color-text block">
+            Leader Board
+          </h1>
+          <div className="h-full flex gap-2">
+            <DropDown
+              label={"Topic"}
+              onSelect={handelTopicSelection}
+              optionsList={topicDetails}
+              isDisable={false}
+            />
+            <DropDown
+              label={"Difficulty"}
+              onSelect={handelDifficultySelection}
+              optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
+              isDisable={false}
+            />
+            <CustomBtn label={"Search"} onBtnClick={loadTblData} />
+          </div>
         </div>
-      </div>
-      <div className="w-2/3 p-10">
-        <ResultTable tableData={resultTblData} isSearchOn={true}/>
+        <div className="w-full">
+          <ResultTable tableData={resultTblData} isSearchOn={true} />
+        </div>
       </div>
     </section>
   );

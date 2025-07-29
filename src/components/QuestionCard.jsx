@@ -4,7 +4,7 @@ const QuestionCard = ({ questionsData, removeQuestion }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
-    <div className="overflow-y-auto scrollbar-hide max-h-[80vh] h-full px-2 flex-col w-full gap-2 mt-2 pt-8">
+    <div className="overflow-y-auto scrollbar-hide h-full px-2 flex-col w-full gap-2 pt-8">
       {questionsData.map((ele, index) => (
         <div
         key={index}

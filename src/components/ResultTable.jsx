@@ -19,7 +19,7 @@ const searchIcon = (
   </svg>
 );
 
-const ResultTable = ({ tableData, isSearchOn =false }) => {
+const ResultTable = ({ tableData, isSearchOn = false }) => {
   const [search, setSearch] = useState("");
   const tableHeader = tableData.length > 0 ? Object.keys(tableData[0]) : [];
 
@@ -30,7 +30,7 @@ const ResultTable = ({ tableData, isSearchOn =false }) => {
   return (
     <div className="w-full h-full flex flex-col">
       <div className={`${!isSearchOn && "hidden"} flex justify-end`}>
-        <div class="relative mb-6 w-1/3">
+        <div class="relative mb-6 w-1/3 max-w-sm">
           <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
             {searchIcon}
           </div>

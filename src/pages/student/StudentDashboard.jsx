@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
-import ResultTable from "../../components/ResultTable";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { useToast } from "../../context/ToastContext";
 import {
   BASE_URL_END_POINT,
   API_END_POINTS,
 } from "../../constants/apiEndPoints";
-import { apiRequest } from "../../utils/api";
 import CustomBtn from "../../components/CustomBtn";
-
-const BASE_URL = BASE_URL_END_POINT.BASE_URL;
+import TopicHeroSection from "../../components/TopicHeroSection";
 
 const today = new Date();
 
@@ -40,53 +34,32 @@ const StudentDashboard = () => {
   });
 
   const user = useSelector((state) => state.user.user);
-  const [resultData, setResultData] = useState([]);
 
   const msgLine =
     "Ready to challenge yourself and grow your skills? Pick a topic and show us what you've got!";
 
-  useEffect(() => {
-    const loadResultData = async () => {
-      const { success, data, error } = await apiRequest({
-        url: BASE_URL + API_END_POINTS.GET_RESULT,
-        method: "GET",
-      });
-
-      if (success) {
-        setResultData(data);
-      } else {
-        showToast(
-          "Error",
-          "Failed to fetch results",
-          error?.data?.message || "Unexpected error"
-        );
-      }
-    };
-    if (user?.userId) loadResultData();
-  }, [user]);
-
   return (
-    <section className="w-screen max-w-screen h-full flex justify-center items-center bg-color-bg px-20 lg:px-48 gap-2">
-      <div className="w-1/2 p-2">
-        <div className="place-self-start p-4">
-          <h1 className="mb-4 text-5xl font-bold tracking-tight leading-none text-color-text select-none">
-            Welcome, {user.name}
-          </h1>
-          <p className="w-3/4 text-color-text text-sm font-semibold mb-2 select-none">
-            {msgLine}
-          </p>
-          <p className="mb-4 font-light text-color-text text-sm select-none">
-            {formattedDate}
-          </p>
-          <CustomBtn
-            label={"Start Quiz"}
-            onBtnClick={() => navigate("/student/quiz/listing")}
-            icon={arrowIcon}
-          />
+    <section className="w-screen max-w-screen h-full flex justify-start items-center bg-color-bg">
+      <div className="w-full p-2 mx-48 h-1/2 flex items-center">
+        <div className="w-1/2">
+          <div className="place-self-start p-4">
+            <h1 className="mb-4 text-5xl font-bold tracking-tight leading-none text-color-text select-none">
+              Welcome, {user.name}
+            </h1>
+            <p className="w-3/4 text-color-text text-sm font-semibold mb-2 select-none">
+              {msgLine}
+            </p>
+            <p className="mb-4 font-light text-color-text text-sm select-none">
+              {formattedDate}
+            </p>
+            <CustomBtn
+              label={"Start Quiz"}
+              onBtnClick={() => navigate("/student/quiz/listing")}
+              icon={arrowIcon}
+            />
+          </div>
         </div>
-      </div>
-      <div className="w-1/2 p-2">
-        <ResultTable tableData={resultData} />
+        <div className="w-1/2 h-1/1">{<TopicHeroSection />}</div>
       </div>
     </section>
   );

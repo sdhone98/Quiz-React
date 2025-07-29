@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Loading from "../../components/Loading";
 import ResultTable from "../../components/ResultTable";
 import { useToast } from "../../context/ToastContext";
 import { apiRequest } from "../../utils/api";
@@ -10,17 +9,6 @@ import {
 } from "../../constants/apiEndPoints";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
-
-const tableHeader = [
-  "Topic",
-  "difficulty",
-  "Set",
-  "Total Questions",
-  "Correct Count",
-  "Wrong Count",
-  "Total Time",
-  "Taken Time",
-];
 
 function StudentResult() {
   const { showToast } = useToast();
@@ -47,16 +35,18 @@ function StudentResult() {
     if (user?.userId) loadResultData();
   }, [user]);
   return (
-    <div className="w-full h-full text-color-text bg-color-bg py-8 px-20">
-      <h3 className="w-full mb-8 text-5xl font-extrabold tracking-tight select-none pointer-events-none">
-        Quiz History
-      </h3>
-      <div className="flex w-full">
-        <div className="w-2/3">
-          <ResultTable tableData={resultData}/>
+    <section className="max-w-screen w-screen h-full bg-color-bg items-center text-color-text">
+      <div className="flex flex-col mx-48 h-full">
+        <h3 className="w-full mt-12 mb-8 text-3xl font-extrabold tracking-tight select-none pointer-events-none">
+          Your Quiz Result
+        </h3>
+        <div className="flex w-full">
+          <div className="w-full">
+            <ResultTable tableData={resultData} isSearchOn={true} />
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

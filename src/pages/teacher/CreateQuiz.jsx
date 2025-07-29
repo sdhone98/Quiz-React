@@ -212,137 +212,142 @@ const CreateQuiz = () => {
   };
 
   return (
-    <div className="relative max-w-screen bg-color-bg flex-col h-full px-20 py-8 text-color-text">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-5xl font-extrabold text-color-text block">
-          Create QuizSet
-        </h1>
-        <div className="flex h-fit">
-          <div className="flex gap-2">
-            <DropDown
-              label={selectedTopic.name}
-              onSelect={setSelectedTopic}
-              optionsList={topicsList}
-              isDisable={false}
-            />
-            <DropDown
-              label={selectedDifficulty.name}
-              onSelect={setSelectedDifficulty}
-              optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
-              isDisable={false}
-            />
-            <CustomBtn label={"Search"} onBtnClick={() => getQuestionsData()} />
+    <section className="max-w-screen w-screen h-full bg-color-bg items-center text-color-text">
+      <div className="flex flex-col mx-48 h-full">
+        <div className="flex justify-between items-center mt-12 mb-8">
+          <h1 className="text-3xl font-extrabold text-color-text block">
+            Create QuizSet
+          </h1>
+          <div className="flex h-fit">
+            <div className="flex gap-2">
+              <DropDown
+                label={selectedTopic.name}
+                onSelect={setSelectedTopic}
+                optionsList={topicsList}
+                isDisable={false}
+              />
+              <DropDown
+                label={selectedDifficulty.name}
+                onSelect={setSelectedDifficulty}
+                optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
+                isDisable={false}
+              />
+              <CustomBtn
+                label={"Search"}
+                onBtnClick={() => getQuestionsData()}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="flex w-full h-[85%] gap-2">
-        <div className="w-1/2 overflow-y-auto scrollbar-hide">
-          {filterQuestions.map((ele, index) => (
-            <div
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className={`${
-                selectedIdsList.includes(ele.id)
-                  ? "bg-green-900"
-                  : "bg-color-bg-1"
-              } bg-color-bg-1 rounded-xl px-4 py-2 mb-2`}
-            >
-              <div className="flex justify-between">
-                <p className="max-w-[95%] whitespace-nowrap w-fit text-2xl font-bold text-color-text overflow-hidden">
-                  {index + 1}. {ele.question_text}
-                </p>
+        <div className="flex w-full h-[75%] gap-2">
+          <div className="w-1/2 overflow-y-auto scrollbar-hide">
+            {filterQuestions.map((ele, index) => (
+              <div
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className={`${
+                  selectedIdsList.includes(ele.id)
+                    ? "bg-green-900"
+                    : "bg-color-bg-1"
+                } bg-color-bg-1 rounded-xl px-4 py-2 mb-2`}
+              >
+                <div className="flex justify-between">
+                  <p className="max-w-[95%] whitespace-nowrap w-fit text-2xl font-bold text-color-text overflow-hidden">
+                    {index + 1}. {ele.question_text}
+                  </p>
 
-                {hoveredIndex === index && (
+                  {hoveredIndex === index && (
+                    <span
+                      className="h-fit px-3 py-1 bg-color-bg text-center text-sm rounded-md cursor-pointer"
+                      onClick={() => handleAddQuestion(ele)}
+                    >
+                      Add
+                    </span>
+                  )}
+                </div>
+
+                {ele.options_list.map((op, op_index) => (
+                  <div>
+                    <p className="text-sm text-color-text overflow-hidden whitespace-nowrap pb-1">
+                      {op.op_key}
+                      {""}:{" "}
+                      <span
+                        className={`${
+                          op.op_key == ele.correct_option
+                            ? "text-green-400"
+                            : "text-color-text"
+                        } text-sm font-no`}
+                      >
+                        {op.op_value}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div className="w-1/2 overflow-y-auto scrollbar-hide">
+            {createdQuestionSet.map((ele, index) => (
+              <div className="bg-color-bg-1 rounded-xl px-4 py-2 mb-2">
+                <div className="flex justify-between">
+                  <p className="w-[95%] whitespace-nowrap text-2xl font-semibold text-color-text overflow-hidden">
+                    {index + 1}. {ele.question_text}
+                  </p>
                   <span
-                    className="h-fit px-3 py-1 bg-color-bg text-center text-sm rounded-md cursor-pointer"
-                    onClick={() => handleAddQuestion(ele)}
+                    className="h-fit px-2 py-1 bg-color-bg text-center rounded-md cursor-pointer text-color-text text-sm"
+                    onClick={() => handleQuestionRemove(ele)}
                   >
-                    Add
+                    Remove
                   </span>
-                )}
-              </div>
-
-              {ele.options_list.map((op, op_index) => (
-                <div>
-                  <p className="text-sm text-color-text overflow-hidden whitespace-nowrap pb-1">
-                    {op.op_key}
-                    {""}:{" "}
-                    <span
-                      className={`${
-                        op.op_key == ele.correct_option
-                          ? "text-green-400"
-                          : "text-color-text"
-                      } text-sm font-no`}
-                    >
-                      {op.op_value}
-                    </span>
-                  </p>
                 </div>
-              ))}
-            </div>
-          ))}
-        </div>
-        <div className="w-1/2 overflow-y-auto scrollbar-hide">
-          {createdQuestionSet.map((ele, index) => (
-            <div className="bg-color-bg-1 rounded-xl px-4 py-2 mb-2">
-              <div className="flex justify-between">
-                <p className="w-[95%] whitespace-nowrap text-2xl font-semibold text-color-text overflow-hidden">
-                  {index + 1}. {ele.question_text}
-                </p>
-                <span
-                  className="h-fit px-2 py-1 bg-color-bg text-center rounded-md cursor-pointer text-color-text text-sm"
-                  onClick={() => handleQuestionRemove(ele)}
-                >
-                  Remove
-                </span>
-              </div>
 
-              {ele.options_list.map((op, op_index) => (
-                <div>
-                  <p className="text-sm text-color-text overflow-hidden whitespace-nowrap pb-1">
-                    {op.op_key} :{" "}
-                    <span
-                      className={`${
-                        op.op_key == ele.correct_option
-                          ? "text-green-400"
-                          : "text-color-text"
-                      } text-sm font-no`}
-                    >
-                      {op.op_value}
-                    </span>
-                  </p>
-                </div>
-              ))}
-            </div>
-          ))}
+                {ele.options_list.map((op, op_index) => (
+                  <div>
+                    <p className="text-sm text-color-text overflow-hidden whitespace-nowrap pb-1">
+                      {op.op_key} :{" "}
+                      <span
+                        className={`${
+                          op.op_key == ele.correct_option
+                            ? "text-green-400"
+                            : "text-color-text"
+                        } text-sm font-no`}
+                      >
+                        {op.op_value}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
+        {filterQuestions.length > 0 && (
+          <div className="w-full float-end flex-col pt-2">
+            <button
+              onClick={() => {
+                if (createdQuestionSet.length === 0) {
+                  return showToast(
+                    "Warning",
+                    "Warning",
+                    "Please select Questions first.!"
+                  );
+                }
+                setIsPopUPOpen(true);
+              }}
+              className="w-fit p-2 bg-color-btn text-color-text-dark float-right hover:bg-color-btn-hover hover:text-color-text font-semibold rounded-4xl text-sm px-5 py-2.5 text-center hover:cursor-pointer"
+            >
+              Save
+            </button>
+          </div>
+        )}
+        {isPopUpopen && (
+          <SavePopUp
+            onClose={() => setIsPopUPOpen(!isPopUpopen)}
+            onSave={handelPopUpOnSave}
+          />
+        )}
       </div>
-      {filterQuestions.length > 0 && (
-        <div className="w-full float-end flex-col pt-2">
-          <button
-            onClick={() => {
-              if (createdQuestionSet.length === 0) {
-                return showToast(
-                  "Warning",
-                  "Warning",
-                  "Please select Questions first.!"
-                );
-              }
-              setIsPopUPOpen(true);
-            }}
-            className="w-fit p-2 bg-color-btn text-color-text-dark float-right hover:bg-color-btn-hover hover:text-color-text font-semibold rounded-4xl text-sm px-5 py-2.5 text-center hover:cursor-pointer"
-          >
-            Save
-          </button>
-        </div>
-      )}
-      {isPopUpopen && (
-        <SavePopUp
-          onClose={() => setIsPopUPOpen(!isPopUpopen)}
-          onSave={handelPopUpOnSave}
-        />
-      )}
-    </div>
+    </section>
   );
 };
 

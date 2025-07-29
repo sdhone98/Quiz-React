@@ -29,7 +29,7 @@ function ContactUs() {
   return (
     <section className="w-screen h-full bg-color-bg text-color-text">
       <div className="py-8 px-4 mx-auto max-w-screen-md bg">
-        <h2 className="mb-4 text-5xl tracking-tight font-extrabold text-center">
+        <h2 className="mb-4 text-3xl tracking-tight font-extrabold text-center">
           Contact Us
         </h2>
         <p className="mb-8 lg:mb-16 text-center text-color-text text-sm font-normal">
