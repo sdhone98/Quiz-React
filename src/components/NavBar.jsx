@@ -10,10 +10,10 @@ import { logout } from "../redux/userSlice";
 const NavBar = () => {
   const dispatch = useDispatch();
   const { showToast } = useToast();
-  const [isUserPopUpOpen, setIsUserPopUpOpen] = useState(false);
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
-  const currentUserRole = null;
+  const [isUserPopUpOpen, setIsUserPopUpOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleLogout = () => {
     showToast("Success", "Info", "Logout sccessfully.!");
@@ -21,6 +21,9 @@ const NavBar = () => {
     dispatch(resetToken());
     dispatch(logout());
   };
+
+  const navOptionClassCss =
+    "block py-2 px-3 md:p-0 text-color-text cursor-pointer hover:text-color-btn transition-colors duration-300 ease-in-out";
 
   const UserIcon = () => (
     <div>
@@ -63,7 +66,13 @@ const NavBar = () => {
             </span>
           </div>
           <ul className="py-2" aria-labelledby="user-menu-button">
-            <li>
+            <li
+              className={`${
+                selectedOption === "Leader Board"
+                  ? "border-b border-color-btn"
+                  : ""
+              }`}
+            >
               <a
                 onClick={handleLogout}
                 className="block px-4 py-2 text-sm text-color-text hover:bg-gray-100 dark:hover:bg-color-bg-1 cursor-pointer"
@@ -100,64 +109,122 @@ const NavBar = () => {
           id="navbar-cta"
         >
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border bg-color-bg-1 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
-            <li>
+            <li
+              className={`${
+                selectedOption === "Home"
+                  ? "border-b border-color-btn"
+                  : ""
+              }`}
+            >
               <a
-                onClick={() => navigate("student/dashboard")}
-                className="block py-2 px-3 md:p-0 text-color-text hover:text-color-btn cursor-pointer"
+                onClick={() => {
+                  setSelectedOption("Home"), navigate("student/dashboard");
+                }}
+                className={`${navOptionClassCss}`}
               >
                 Home
               </a>
             </li>
-            <li>
+            <li
+              className={`${
+                selectedOption === "Result"
+                  ? "border-b border-color-btn"
+                  : ""
+              }`}
+            >
               <a
-                onClick={() => navigate("/student/result")}
-                className="block py-2 px-3 md:p-0 text-color-text hover:text-color-btn cursor-pointer"
+                onClick={() => {
+                  setSelectedOption("Result"), navigate("/student/result");
+                }}
+                className={`${navOptionClassCss}`}
               >
                 Result
               </a>
             </li>
-            <li>
+            <li
+              className={`${
+                selectedOption === "Leader Board"
+                  ? "border-b border-color-btn"
+                  : ""
+              }`}
+            >
               <a
-                onClick={() => navigate("/leaderboard")}
-                className="block py-2 px-3 md:p-0 text-color-text hover:text-color-btn cursor-pointer"
+                onClick={() => {
+                  setSelectedOption("Leader Board"), navigate("/leaderboard");
+                }}
+                className={`${navOptionClassCss}`}
               >
                 Leader Board
               </a>
             </li>
             {user && user.role === CONSTANTS.TEACHER && (
-              <li>
+              <li
+                className={`${
+                  selectedOption === "Quizze"
+                    ? "border-b border-color-btn"
+                    : ""
+                }`}
+              >
                 <a
-                  onClick={() => navigate("/teacher/quiz")}
-                  className="block py-2 px-3 md:p-0 text-color-text hover:text-color-btn cursor-pointer"
+                  onClick={() => {
+                    setSelectedOption("Quizze"), navigate("/teacher/quiz");
+                  }}
+                  className={`${navOptionClassCss}`}
                 >
                   Quizze
                 </a>
               </li>
             )}
             {user && user.role === CONSTANTS.TEACHER && (
-              <li>
+              <li
+                className={`${
+                  selectedOption === "Question"
+                    ? "border-b border-color-btn"
+                    : ""
+                }`}
+              >
                 <a
-                  onClick={() => navigate("/teacher/quiz/questions-add")}
-                  className="block py-2 px-3 md:p-0 text-color-text hover:text-color-btn cursor-pointer"
+                  onClick={() => {
+                    setSelectedOption("Question"),
+                      navigate("/teacher/quiz/questions-add");
+                  }}
+                  className={`${navOptionClassCss}`}
                 >
                   Question
                 </a>
               </li>
             )}
             {user && user.role === CONSTANTS.TEACHER && (
-              <li>
+              <li
+                className={`${
+                  selectedOption === "Create Quiz"
+                    ? "border-b border-color-btn"
+                    : ""
+                }`}
+              >
                 <a
-                  onClick={() => navigate("/teacher/quiz/create/")}
-                  className="block py-2 px-3 md:p-0 text-color-text hover:text-color-btn cursor-pointer"
+                  onClick={() => {
+                    setSelectedOption("Create Quiz"),
+                      navigate("/teacher/quiz/create/");
+                  }}
+                  className={`${navOptionClassCss}`}
                 >
                   Create Quiz
                 </a>
               </li>
             )}
-            <li>
+            <li
+              className={`${
+                selectedOption === "Contact"
+                  ? "border-b border-color-btn"
+                  : ""
+              }`}
+            >
               <a
-                onClick={() => navigate("/contact")}
-                className="block py-2 px-3 md:p-0 text-color-text hover:text-color-btn cursor-pointer"
+                onClick={() => {
+                  setSelectedOption("Contact"), navigate("/contact");
+                }}
+                className={`${navOptionClassCss}`}
               >
                 Contact
               </a>
