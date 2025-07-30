@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-const ANIMATION_DURATION = 200;
+const ANIMATION_DURATION = 150;
 
 function TopicHeroSection() {
   const topicList = useSelector((state) => state.topic.topics.data);
