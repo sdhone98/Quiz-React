@@ -107,6 +107,8 @@ const CreateQuiz = () => {
     ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES[0]
   );
   const [filterQuestions, setFilterQuestions] = useState([]);
+  const [filterQuestionsCounterDetails, setFilterQuestionsCounterDetails] =
+    useState(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [createdQuestionSet, setCreatedQuestionSet] = useState([]);
   const [selectedIdsList, setSelectedIdsList] = useState([]);
@@ -143,7 +145,8 @@ const CreateQuiz = () => {
     });
 
     if (success) {
-      setFilterQuestions(data);
+      setFilterQuestions(data.questionsData);
+      setFilterQuestionsCounterDetails(data.questionsCounterDetails);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
@@ -214,7 +217,7 @@ const CreateQuiz = () => {
   return (
     <section className="max-w-screen w-screen h-full bg-color-bg items-center text-color-text">
       <div className="flex flex-col mx-48 h-full">
-        <div className="flex justify-between items-center mt-12 mb-8">
+        <div className="flex justify-between items-center mt-12">
           <h1 className="text-3xl font-extrabold text-color-text block">
             Create QuizSet
           </h1>
@@ -239,56 +242,139 @@ const CreateQuiz = () => {
             </div>
           </div>
         </div>
-        <div className="flex w-full h-[75%] gap-2">
-          <div className="w-1/2 overflow-y-auto scrollbar-hide">
-            {filterQuestions.map((ele, index) => (
+        <div className="flex justify-between items-center my-4">
+          <div className="w-1/2 flex flex-col mb-2 select-none">
+            <div className="flex justify-between px-2 text-color-text-light mb-1">
+              <span className="text-sm font-semibold">
+                Used Questions:{" "}
+                {filterQuestionsCounterDetails
+                  ? filterQuestionsCounterDetails.usedQuestions
+                  : 0}
+              </span>
+              <span className="text-sm font-semibold">
+                Remaining Questions:{" "}
+                {filterQuestionsCounterDetails
+                  ? filterQuestionsCounterDetails.remainingQuestions
+                  : 0}
+              </span>
+            </div>
+            <div className="w-full h-1 bg-color-bg-2 rounded-full p-1 flex items-center">
               <div
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className={`${
-                  selectedIdsList.includes(ele.id)
-                    ? "bg-green-900"
-                    : "bg-color-bg-1"
-                } bg-color-bg-1 rounded-xl px-4 py-2 mb-2`}
-              >
-                <div className="flex justify-between">
-                  <p className="max-w-[95%] whitespace-nowrap w-fit text-2xl font-bold text-color-text overflow-hidden">
-                    {index + 1}. {ele.question_text}
-                  </p>
-
-                  {hoveredIndex === index && (
-                    <span
-                      className="h-fit px-3 py-1 bg-color-bg text-center text-sm rounded-md cursor-pointer"
-                      onClick={() => handleAddQuestion(ele)}
-                    >
-                      Add
-                    </span>
-                  )}
-                </div>
-
-                {ele.options_list.map((op, op_index) => (
-                  <div>
-                    <p className="text-sm text-color-text overflow-hidden whitespace-nowrap pb-1">
-                      {op.op_key}
-                      {""}:{" "}
-                      <span
-                        className={`${
-                          op.op_key == ele.correct_option
-                            ? "text-green-400"
-                            : "text-color-text"
-                        } text-sm font-no`}
-                      >
-                        {op.op_value}
-                      </span>
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ))}
+                className="h-1 bg-color-btn rounded-full transition-all duration-300"
+                style={{
+                  width: `${
+                    ((filterQuestionsCounterDetails
+                      ? filterQuestionsCounterDetails.usedQuestions
+                      : 0) /
+                      (filterQuestionsCounterDetails
+                        ? filterQuestionsCounterDetails.totalQuestions
+                        : 0)) *
+                    100
+                  }%`,
+                }}
+                role="progressbar"
+                aria-valuenow={10}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              ></div>
+            </div>
+            <div className="text-xs text-color-text-light mt-1 px-2">
+              Total questions:{" "}
+              {filterQuestionsCounterDetails
+                ? filterQuestionsCounterDetails.totalQuestions
+                : 0}
+            </div>
           </div>
-          <div className="w-1/2 overflow-y-auto scrollbar-hide">
+          {filterQuestions.length > 0 && (
+            <button
+              onClick={() => {
+                if (createdQuestionSet.length === 0) {
+                  return showToast(
+                    "Warning",
+                    "Warning",
+                    "Please select Questions first.!"
+                  );
+                }
+                setIsPopUPOpen(true);
+              }}
+              className="w-fit p-2 bg-color-btn text-color-text-dark float-right hover:bg-color-btn-hover hover:text-color-text font-semibold rounded-4xl text-sm px-5 py-2.5 text-center hover:cursor-pointer"
+            >
+              Save
+            </button>
+          )}
+        </div>
+        <div className="flex w-full gap-2 h-[78%]">
+          <div className="w-1/2 h-full">
+            <div className="h-full overflow-y-auto pr-2">
+              {filterQuestions.map((ele, index) => (
+                <div
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className={
+                    "bg-color-bg-2 rounded-xl flex flex-col relative mb-2"
+                  }
+                >
+                  <div
+                    className={`${
+                      !selectedIdsList.includes(ele.id) && "hidden"
+                    } absolute bg-color-bg-2 w-full h-full flex justify-center items-center rounded-xl`}
+                  >
+                    <span className="text-6xl text-color-text-sub font-bold opacity-20">
+                      Selected
+                    </span>
+                  </div>
+                  <div className="px-6 py-4">
+                    <div className="flex items-center justify-between mb-1">
+                      <h1 className="text-lg font-bold">Q. {index + 1}</h1>
+                      <div className="flex items-center justify-end gap-4 ">
+                        {ele.is_used.length > 0 && (
+                          <div className="w-fit bg-color-accent-blue text-color-text-dark h-fit text-sm rounded-sm flex items-center justify-center">
+                            <p className="px-2">
+                              Used in{" "}
+                              <span className="font-bold">
+                                {ele.is_used.length}
+                              </span>{" "}
+                              Quiz.
+                            </p>
+                          </div>
+                        )}
+                        <span
+                          className="h-fit px-3 py-1 bg-color-bg text-center text-sm rounded-md cursor-pointer"
+                          onClick={() => handleAddQuestion(ele)}
+                        >
+                          Add
+                        </span>
+                      </div>
+                    </div>
+                    <p className="w-full whitespace-nowrap text-2xl font-bold text-color-text overflow-hidden">
+                      {ele.question_text}
+                    </p>
+
+                    {ele.options_list.map((op, op_index) => (
+                      <div>
+                        <p className="text-sm text-color-text overflow-hidden whitespace-nowrap pb-1">
+                          {op.op_key}
+                          {""}:{" "}
+                          <span
+                            className={`${
+                              op.op_key == ele.correct_option
+                                ? "text-green-400"
+                                : "text-color-text"
+                            } text-sm font-no`}
+                          >
+                            {op.op_value}
+                          </span>
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="w-1/2 overflow-y-auto pr-2">
             {createdQuestionSet.map((ele, index) => (
-              <div className="bg-color-bg-1 rounded-xl px-4 py-2 mb-2">
+              <div className="bg-color-bg-1 rounded-xl px-6 py-4 mb-2">
                 <div className="flex justify-between">
                   <p className="w-[95%] whitespace-nowrap text-2xl font-semibold text-color-text overflow-hidden">
                     {index + 1}. {ele.question_text}
@@ -321,25 +407,6 @@ const CreateQuiz = () => {
             ))}
           </div>
         </div>
-        {filterQuestions.length > 0 && (
-          <div className="w-full float-end flex-col pt-2">
-            <button
-              onClick={() => {
-                if (createdQuestionSet.length === 0) {
-                  return showToast(
-                    "Warning",
-                    "Warning",
-                    "Please select Questions first.!"
-                  );
-                }
-                setIsPopUPOpen(true);
-              }}
-              className="w-fit p-2 bg-color-btn text-color-text-dark float-right hover:bg-color-btn-hover hover:text-color-text font-semibold rounded-4xl text-sm px-5 py-2.5 text-center hover:cursor-pointer"
-            >
-              Save
-            </button>
-          </div>
-        )}
         {isPopUpopen && (
           <SavePopUp
             onClose={() => setIsPopUPOpen(!isPopUpopen)}
