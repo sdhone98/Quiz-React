@@ -29,21 +29,23 @@ const ResultTable = ({ tableData, isSearchOn = false }) => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div className={`${!isSearchOn && "hidden"} flex justify-end`}>
-        <div className="relative mb-6 w-1/3 max-w-sm">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-            {searchIcon}
+      {tableData.length !== 0 && (
+        <div className={`${!isSearchOn && "hidden"} flex justify-end`}>
+          <div className="relative mb-6 w-1/3 max-w-sm">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+              {searchIcon}
+            </div>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              id="input-group-1"
+              className="bg-color-bg-2 text-sm rounded-lg block w-full ps-10 p-2.5 text-color-text placeholder:text-color-text"
+              placeholder="Search for items"
+            />
           </div>
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            id="input-group-1"
-            className="bg-color-bg-2 text-sm rounded-lg block w-full ps-10 p-2.5 text-color-text placeholder:text-color-text"
-            placeholder="Search for items"
-          />
         </div>
-      </div>
+      )}
 
       <div className="overflow-hidden shadow-md rounded-lg w-full h-full">
         {/* Table header */}
