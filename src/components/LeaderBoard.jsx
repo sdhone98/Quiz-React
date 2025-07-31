@@ -70,6 +70,14 @@ function SearchTable() {
     }
   };
 
+  const handelOnSearch = () => {
+    if (selectedTabOption === "Top") {
+      loadTopUsersData();
+    } else {
+      loadTblData();
+    }
+  };
+
   const handelTopicSelection = (ele) => {
     setFilterData((prev) => ({
       ...prev,
@@ -122,7 +130,7 @@ function SearchTable() {
               optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
               isDisable={false}
             />
-            <CustomBtn label={"Search"} onBtnClick={loadTblData} />
+            <CustomBtn label={"Search"} onBtnClick={handelOnSearch} />
           </div>
         </div>
         {selectedTabOption === "Result" ? (
@@ -217,11 +225,15 @@ function LeaderBoardTopUsers({ usersData }) {
             className="absolute bottom-0 w-48 h-48 bg-color-bg-1 rounded-tl-2xl rounded-bl-2xl flex flex-col justify-end items-center pb-6 select-none"
           >
             <p className="text-2xl font-normal">
-              {thirdRankUser.percentage}
+              {thirdRankUser.percentage || "N/A"}
               <span className="text-sm">%</span>
             </p>
-            <p className="text-xl font-semibold">{thirdRankUser.name}</p>
-            <p className="text-sm font-light">{thirdRankUser.username}</p>
+            <p className="text-xl font-semibold">
+              {thirdRankUser.name || "N/A"}
+            </p>
+            <p className="text-sm font-light">
+              {thirdRankUser.username || "N/A"}
+            </p>
           </div>
         </div>
 
@@ -253,11 +265,13 @@ function LeaderBoardTopUsers({ usersData }) {
             className="absolute bottom-0 w-64 h-64 bg-color-bg-2 rounded-t-2xl flex flex-col justify-end items-center pb-8 z-2 select-none"
           >
             <p className="text-3xl font-semibold">
-              {firstRankUser.percentage}
+              {firstRankUser.percentage || "N/A"}
               <span className="text-sm">%</span>
             </p>
-            <p className="text-xl font-semibold">{firstRankUser.name}</p>
-            <p className="text-lg">{firstRankUser.username}</p>
+            <p className="text-xl font-semibold">
+              {firstRankUser.name || "N/A"}
+            </p>
+            <p className="text-lg">{firstRankUser.username || "N/A"}</p>
           </div>
         </div>
 
@@ -289,11 +303,15 @@ function LeaderBoardTopUsers({ usersData }) {
             className="absolute bottom-0 w-48 h-48 bg-color-bg-1 rounded-tr-2xl rounded-br-2xl flex flex-col justify-end items-center pb-6 select-none"
           >
             <p className="text-2xl font-semibold">
-              {secondRankUser.percentage}
+              {secondRankUser.percentage || "N/A"}
               <span className="text-sm">%</span>
             </p>
-            <span className="text-lg font-normal">{secondRankUser.name}</span>
-            <p className="text-md font-light">{secondRankUser.username}</p>
+            <span className="text-lg font-normal">
+              {secondRankUser.name || "N/A"}
+            </span>
+            <p className="text-md font-light">
+              {secondRankUser.username || "N/A"}
+            </p>
           </div>
         </div>
       </div>
