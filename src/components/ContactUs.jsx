@@ -33,8 +33,7 @@ function ContactUs() {
           Contact Us
         </h2>
         <p className="mb-8 lg:mb-16 text-center text-color-text text-sm font-normal">
-          Got a technical issue? Want to send feedback about a beta feature?
-          Need details about our Business plan? Let us know.
+          Got a technical issue? Let us know.
         </p>
         <form
           onSubmit={sendEmail}

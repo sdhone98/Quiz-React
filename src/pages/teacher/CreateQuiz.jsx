@@ -243,48 +243,57 @@ const CreateQuiz = () => {
           </div>
         </div>
         <div className="flex justify-between items-center my-4">
-          <div className="w-1/2 flex flex-col mb-2 select-none">
-            <div className="flex justify-between px-2 text-color-text-light mb-1">
-              <span className="text-sm font-semibold">
-                Used Questions:{" "}
-                {filterQuestionsCounterDetails
-                  ? filterQuestionsCounterDetails.usedQuestions
-                  : 0}
-              </span>
-              <span className="text-sm font-semibold">
-                Remaining Questions:{" "}
-                {filterQuestionsCounterDetails
-                  ? filterQuestionsCounterDetails.remainingQuestions
-                  : 0}
-              </span>
-            </div>
-            <div className="w-full h-1 bg-color-bg-2 rounded-full p-1 flex items-center">
-              <div
-                className="h-1 bg-color-btn rounded-full transition-all duration-300"
-                style={{
-                  width: `${
-                    ((filterQuestionsCounterDetails
-                      ? filterQuestionsCounterDetails.usedQuestions
-                      : 0) /
-                      (filterQuestionsCounterDetails
-                        ? filterQuestionsCounterDetails.totalQuestions
-                        : 0)) *
-                    100
-                  }%`,
-                }}
-                role="progressbar"
-                aria-valuenow={10}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              ></div>
-            </div>
-            <div className="text-xs text-color-text-light mt-1 px-2">
+          <div className="w-1/2 flex items-center justify-center">
+            <div className="w-2/3 flex flex-col mb-2 select-none justify-center">
+              <div className="flex justify-between px-2 text-color-text-light mb-1">
+                <span className="text-sm font-semibold">
+                  Used :{" "}
+                  {filterQuestionsCounterDetails
+                    ? filterQuestionsCounterDetails.usedQuestions
+                    : 0}
+                </span>
+                <span className="text-sm font-semibold">
+                  Total :{" "}
+                  {filterQuestionsCounterDetails
+                ? filterQuestionsCounterDetails.totalQuestions
+                : 0}
+                </span>
+                <span className="text-sm font-semibold">
+                  Remaining :{" "}
+                  {filterQuestionsCounterDetails
+                    ? filterQuestionsCounterDetails.remainingQuestions
+                    : 0}
+                </span>
+              </div>
+              <div className="w-full h-1 bg-color-bg-2 rounded-full p-1 flex items-center">
+                <div
+                  className="h-1 bg-color-btn rounded-full transition-all duration-300"
+                  style={{
+                    width: `${
+                      ((filterQuestionsCounterDetails
+                        ? filterQuestionsCounterDetails.usedQuestions
+                        : 0) /
+                        (filterQuestionsCounterDetails
+                          ? filterQuestionsCounterDetails.totalQuestions
+                          : 0)) *
+                      100
+                    }%`,
+                  }}
+                  role="progressbar"
+                  aria-valuenow={10}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                ></div>
+              </div>
+              {/* <div className="text-xs text-color-text-light mt-1 px-2">
               Total questions:{" "}
               {filterQuestionsCounterDetails
                 ? filterQuestionsCounterDetails.totalQuestions
                 : 0}
+            </div> */}
             </div>
           </div>
+
           {filterQuestions.length > 0 && (
             <button
               onClick={() => {

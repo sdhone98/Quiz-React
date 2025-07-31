@@ -13,7 +13,8 @@ export const API_END_POINTS = {
     START_QUIZ: "/exam/attempt/",
     ADD_QUIZ_RESPONSE: "/exam/attempt/submit",
     GET_RESULT: "/exam/result",
-    GET_LEADER_BOARD_DATA: "/exam/leaderboard",
+    GET_LEADER_BOARD_TABLE_DATA: "/exam/leaderboard/result",
+    GET_LEADER_BOARD_TOP_USERS_DATA: "/exam/leaderboard/top",
     GET_QUIZ_RESULT_REPORT: "/exam/attempt/result",
     GET_TEACHERS_DASHBOARD: "/quiz-set-details",
 }

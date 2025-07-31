@@ -241,11 +241,17 @@ const AddQuestions = () => {
               </form>
             </div>
           </div>
-          <div className="w-[60%] bg-color-bg-1 rounded-xl h-[75vh] p-2">
-            <QuestionCard
-              questionsData={questionList}
-              removeQuestion={handleQuestionRemove}
-            />
+          <div className="w-[60%] bg-color-bg-1 rounded-xl h-75vh p-2">
+            {questionList.length <= 0 ? (
+              <div className="h-full flex justify-center items-center text-3xl font-semibold opacity-25">
+                Empty
+              </div>
+            ) : (
+              <QuestionCard
+                questionsData={questionList}
+                removeQuestion={handleQuestionRemove}
+              />
+            )}
           </div>
         </div>
       </div>

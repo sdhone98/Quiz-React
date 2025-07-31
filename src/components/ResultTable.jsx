@@ -30,8 +30,8 @@ const ResultTable = ({ tableData, isSearchOn = false }) => {
   return (
     <div className="w-full h-full flex flex-col">
       <div className={`${!isSearchOn && "hidden"} flex justify-end`}>
-        <div class="relative mb-6 w-1/3 max-w-sm">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+        <div className="relative mb-6 w-1/3 max-w-sm">
+          <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
             {searchIcon}
           </div>
           <input
@@ -39,17 +39,17 @@ const ResultTable = ({ tableData, isSearchOn = false }) => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             id="input-group-1"
-            class="bg-color-bg-2 text-sm rounded-lg block w-full ps-10 p-2.5 text-color-text placeholder:text-color-text"
+            className="bg-color-bg-2 text-sm rounded-lg block w-full ps-10 p-2.5 text-color-text placeholder:text-color-text"
             placeholder="Search for items"
           />
         </div>
       </div>
 
-      <div className="overflow-x-auto shadow-md rounded-lg w-full h-full scrollbar-hide">
-        <table className="w-full text-sm text-left rtl:text-right text-color-bg-2">
+      <div className="overflow-hidden shadow-md rounded-lg w-full h-full">
+        {/* Table header */}
+        <table className="w-full text-sm text-left rtl:text-right text-color-bg-2 table-fixed">
           <thead className="text-sm bg-color-bg-1 text-color-text">
             <tr>
-              <th scope="col" className="p-4"></th>
               {tableHeader.map((key) => (
                 <th
                   key={key}
@@ -57,39 +57,45 @@ const ResultTable = ({ tableData, isSearchOn = false }) => {
                   className="px-6 py-3 text-center text-color-text"
                 >
                   {key
+                    .replace(/([a-z])([A-Z])/g, "$1 $2")
                     .replace(/_/g, " ")
                     .replace(/\b\w/g, (l) => l.toUpperCase())}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody>
-            {filteredData.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={tableHeader.length + 1}
-                  className="text-color-text text-center py-4"
-                >
-                  No results found.
-                </td>
-              </tr>
-            ) : (
-              filteredData.map((item, index) => (
-                <tr
-                  key={index}
-                  className="bg-color-bg-2 hover:bg-color-bg text-color-text-light"
-                >
-                  <td className="w-4 p-4"></td>
-                  {tableHeader.map((key) => (
-                    <td key={key} className="px-6 py-4 text-center">
-                      {item[key]}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
-          </tbody>
         </table>
+
+        {/* Scrollable table body */}
+        <div className="overflow-y-auto h-full scrollbar-hide">
+          <table className="w-full text-sm text-left rtl:text-right text-color-bg-2 table-fixed">
+            <tbody>
+              {filteredData.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={tableHeader.length + 1}
+                    className="text-color-text text-center py-4"
+                  >
+                    No results found.
+                  </td>
+                </tr>
+              ) : (
+                filteredData.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="bg-color-bg-2 hover:bg-color-bg text-color-text-light"
+                  >
+                    {tableHeader.map((key) => (
+                      <td key={key} className="px-6 py-4 text-center">
+                        {item[key]}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
