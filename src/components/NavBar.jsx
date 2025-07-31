@@ -66,13 +66,7 @@ const NavBar = () => {
             </span>
           </div>
           <ul className="py-2" aria-labelledby="user-menu-button">
-            <li
-              className={`${
-                selectedOption === "Leader Board"
-                  ? "border-b border-color-btn"
-                  : ""
-              }`}
-            >
+            <li>
               <a
                 onClick={handleLogout}
                 className="block px-4 py-2 text-sm text-color-text hover:bg-gray-100 dark:hover:bg-color-bg-1 cursor-pointer"
@@ -111,9 +105,7 @@ const NavBar = () => {
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border bg-color-bg-1 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
             <li
               className={`${
-                selectedOption === "Home"
-                  ? "border-b border-color-btn"
-                  : ""
+                selectedOption === "Home" ? "border-b border-color-btn" : ""
               }`}
             >
               <a
@@ -127,9 +119,7 @@ const NavBar = () => {
             </li>
             <li
               className={`${
-                selectedOption === "Result"
-                  ? "border-b border-color-btn"
-                  : ""
+                selectedOption === "Result" ? "border-b border-color-btn" : ""
               }`}
             >
               <a
@@ -160,9 +150,7 @@ const NavBar = () => {
             {user && user.role === CONSTANTS.TEACHER && (
               <li
                 className={`${
-                  selectedOption === "Quizze"
-                    ? "border-b border-color-btn"
-                    : ""
+                  selectedOption === "Quizze" ? "border-b border-color-btn" : ""
                 }`}
               >
                 <a
@@ -215,9 +203,7 @@ const NavBar = () => {
             )}
             <li
               className={`${
-                selectedOption === "Contact"
-                  ? "border-b border-color-btn"
-                  : ""
+                selectedOption === "Contact" ? "border-b border-color-btn" : ""
               }`}
             >
               <a
