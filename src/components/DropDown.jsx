@@ -54,13 +54,12 @@ const DropDown = ({ label, onSelect, optionsList, isDisable }) => {
           {optionsList.map(({ id, name }) => (
             <li key={id}>
               <a
-                href="#"
                 onClick={() => (
                   onSelect({ id: id, name: name }),
                   setOpen(false),
                   setUserSelection(name)
                 )}
-                className="block px-4 py-2 hover:bg-color-bg-1"
+                className="block px-4 py-2 text-center hover:bg-color-bg-1 transition-colors duration-300 ease-in-out cursor-pointer"
               >
                 {name}
               </a>

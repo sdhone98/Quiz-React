@@ -17,7 +17,7 @@ const dashBoardData = [
     value: "totalQuizzes",
   },
   {
-    key: "Total Quizzes",
+    key: "Active Quizzes",
     value: "activeQuizzes",
   },
   {

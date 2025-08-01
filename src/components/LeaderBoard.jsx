@@ -205,7 +205,7 @@ function LeaderBoardTopUsers({ usersData }) {
             onMouseEnter={() => setHoveredDivID(1)}
             onMouseLeave={() => setHoveredDivID(null)}
             className={`${
-              hoveredDivID === 1 && "shadow-xl"
+              hoveredDivID === 1 && "shadow-2xl"
             } absolute top-0 w-36 h-36 bg-transperant rounded-full z-1 border-2 border-color-accent-blue bg-color-bg shadow-color-accent-blue transition-shadow duration-300 ease-in-out`}
           >
             <StudentIcon size="small" />
@@ -222,7 +222,7 @@ function LeaderBoardTopUsers({ usersData }) {
           <div
             onMouseEnter={() => setHoveredDivID(1)}
             onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute bottom-0 w-48 h-48 bg-color-bg-1 rounded-tl-2xl rounded-bl-2xl flex flex-col justify-end items-center pb-6 select-none"
+            className="absolute bottom-0 w-48 h-48 bg-color-bg-1 rounded-l-2xl flex flex-col justify-end items-center pb-6 select-none"
           >
             <p className="text-2xl font-normal">
               {thirdRankUser.percentage || "N/A"}
@@ -245,15 +245,15 @@ function LeaderBoardTopUsers({ usersData }) {
             onMouseEnter={() => setHoveredDivID(2)}
             onMouseLeave={() => setHoveredDivID(null)}
             className={`${
-              hoveredDivID === 2 && "shadow-xl"
-            } absolute -top-14 w-40 h-40 bg-transperant rounded-full z-3 border-4 border-[#EFBF04] bg-color-bg flex justify-center items-center pb-4 shadow-[#EFBF04] transition-shadow duration-300 ease-in-out`}
+              hoveredDivID === 2 && "shadow-2xl"
+            } absolute -top-14 w-40 h-40 bg-transperant rounded-full z-3 border-4 border-color-accent-gold bg-color-bg flex justify-center items-center pb-4 shadow-color-accent-gold transition-shadow duration-300 ease-in-out`}
           >
             <StudentIcon size="large" />
           </div>
           <div
             onMouseEnter={() => setHoveredDivID(2)}
             onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute top-20 w-10 h-10 bg-[#EFBF04] rounded-lg z-3 rotate-45 flex justify-center items-center"
+            className="absolute top-20 w-10 h-10 bg-color-accent-gold rounded-lg z-3 rotate-45 flex justify-center items-center"
           >
             <span className="block -rotate-45 font-bold text-color-text-dark text-xl select-none">
               {1}
@@ -283,7 +283,7 @@ function LeaderBoardTopUsers({ usersData }) {
             onMouseEnter={() => setHoveredDivID(3)}
             onMouseLeave={() => setHoveredDivID(null)}
             className={`${
-              hoveredDivID === 3 && "shadow-xl"
+              hoveredDivID === 3 && "shadow-2xl"
             } absolute top-0 w-36 h-36 bg-transperant rounded-full z-1 border-2 border-color-accent-green bg-color-bg shadow-color-accent-green transition-shadow duration-300 ease-in-out`}
           >
             <StudentIcon size="small" />
@@ -300,7 +300,7 @@ function LeaderBoardTopUsers({ usersData }) {
           <div
             onMouseEnter={() => setHoveredDivID(3)}
             onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute bottom-0 w-48 h-48 bg-color-bg-1 rounded-tr-2xl rounded-br-2xl flex flex-col justify-end items-center pb-6 select-none"
+            className="absolute bottom-0 w-48 h-48 bg-color-bg-1 rounded-r-2xl flex flex-col justify-end items-center pb-6 select-none"
           >
             <p className="text-2xl font-semibold">
               {secondRankUser.percentage || "N/A"}

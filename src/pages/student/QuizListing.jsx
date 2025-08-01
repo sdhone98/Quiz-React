@@ -64,41 +64,8 @@ function QuizListing() {
     }
   };
 
-  const getColorClass = (difficulty_type) => {
-    if (difficulty_type === "Hard")
-      return "bg-red-400 text-color-text dark:text-color-text-dark";
-    if (difficulty_type === "Medium")
-      return "bg-yellow-400 text-color-text dark:text-color-text-dark";
-    if (difficulty_type === "Easy")
-      return "bg-green-400 text-color-text dark:text-color-text-dark";
-    return "bg-green-400 text-color-text dark:text-color-text-dark";
-  };
-
-  const checkUserAllowedOrNot = async (ele) => {
-    const { success, data, error } = await apiRequest({
-      url: BASE_URL + API_END_POINTS.START_QUIZ,
-      method: "POST",
-      data: {
-        user: userData.userId,
-        quiz_set: ele.quiz_set_id,
-        start_at: now.toUTCString(),
-      },
-    });
-
-    if (success) {
-      ele["quiz_attempt_id"] = data.id;
-      navigate(ROUTES.STUDENT_START_QUIZ, {
-        state: {
-          data: ele,
-        },
-      });
-    } else {
-      showToast("Warning", "Warning", JSON.stringify(error.data));
-    }
-  };
-
   return (
-    <section className="max-w-screen h-full flex-col bg-color-bg py-8 px-20 ">
+    <section className="max-w-screen h-full flex-col bg-color-bg py-8 px-20">
       <div className="flex justify-between items-center">
         <h1 className="mb-4 text-5xl font-extrabold tracking-tight leading-none text-color-text">
           Start Quiz
@@ -116,46 +83,115 @@ function QuizListing() {
             optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
             isDisable={false}
           />
-          <CustomBtn
-          label={"Search"}
-          onBtnClick={() => getQuizSetsData()}
-          />
+          <CustomBtn label={"Search"} onBtnClick={() => getQuizSetsData()} />
         </div>
       </div>
-      <div className="flex gap-2 w-full flex-wrap f-full">
+      <div className="flex gap-8 w-full max-h-[95%] flex-wrap overflow-hidden overflow-y-auto">
         {quizList.length == 0 ? (
           <NoDataFoundComponet />
         ) : (
           quizList.map((ele) => (
-            <div
-              key={ele.quiz_set_id}
-              className="relative w-90 h-60 bg-[#1E1E1E] rounded-xl shadow-lg overflow-hidden"
-            >
-              <div className="w-full h-[40%] absolute top-5 text-color-text text-center text-8xl font-bold flex items-center justify-center select-none pointer-events-none opacity-5">
-                {ele.topic_name}
+            <QuizCard
+              quizSetId={ele.quiz_set_id}
+              topicName={ele.topic_name}
+              setType={ele.set_type}
+              difficultyLevel={ele.difficulty_level}
+              TotalTime={ele.total_time}
+              questionsCount={ele.questions_count}
+              isCompleted={ele.is_completed}
+              quizObj={ele}
+            />
+          ))
+        )}
+      </div>
+    </section>
+  );
+}
+
+const QuizCompletedCard = () => {
+  return (
+    <div className="absolute w-full h-full text-5xl flex justify-center items-center select-none pointer-events-none">
+      <h1 className="font-bold text-color-text opacity-25">Completed</h1>
+    </div>
+  );
+};
+
+const QuizCard = ({
+  quizSetId,
+  topicName,
+  setType,
+  difficultyLevel,
+  TotalTime,
+  questionsCount,
+  isCompleted = false,
+  quizObj,
+}) => {
+  const userData = useSelector((state) => state.user.user);
+  const { showToast } = useToast();
+
+  const getColorClass = (difficulty_type) => {
+    if (difficulty_type === "Hard")
+      return "bg-red-400 text-color-text dark:text-color-text-dark";
+    if (difficulty_type === "Medium")
+      return "bg-yellow-400 text-color-text dark:text-color-text-dark";
+    if (difficulty_type === "Easy")
+      return "bg-green-400 text-color-text dark:text-color-text-dark";
+    return "bg-green-400 text-color-text dark:text-color-text-dark";
+  };
+  const checkUserAllowedOrNot = async (ele) => {
+    const { success, data, error } = await apiRequest({
+      url: BASE_URL + API_END_POINTS.START_QUIZ,
+      method: "POST",
+      data: {
+        user: userData.userId,
+        quiz_set: quizSetId,
+        start_at: now.toUTCString(),
+      },
+    });
+
+    if (success) {
+      ele["quiz_attempt_id"] = data.id;
+      navigate(ROUTES.STUDENT_START_QUIZ, {
+        state: {
+          data: ele,
+        },
+      });
+    } else {
+      showToast("Warning", "Warning", JSON.stringify(error.data));
+    }
+  };
+  return (
+    <div
+      key={quizSetId}
+      className="relative w-90 h-50 bg-color-bg-1 rounded-xl shadow-lg"
+    >
+      {!isCompleted ? (
+        <div>
+          <div className="w-full h-[40%] absolute top-3 text-color-text text-center text-8xl font-bold flex items-center justify-center select-none pointer-events-none opacity-5">
+            {topicName}
+          </div>
+          <div className="h-[60%] w-full absolute bottom-0 bg-color-bg-2 px-4 py-2 flex justify-center rounded-b-xl">
+            <div className="grid grid-cols-2 w-full h-fit">
+              <h5 className="col-span-1 text-3xl font-semibold text-color-text select-none pointer-events-none mb-2">
+                {topicName}
+              </h5>
+              <div className="flex gap-1 col-span-1 justify-end items-center h-full">
+                <label
+                  className={
+                    "bg-color-bg-2 px-3 h-fit w-fit rounded text-center font-semibold select-none pointer-events-none"
+                  }
+                >
+                  {setType}
+                </label>
+                <label
+                  className={`${getColorClass(
+                    difficultyLevel
+                  )} px-3 h-fit w-fit rounded text-center select-none pointer-events-none`}
+                >
+                  {difficultyLevel}
+                </label>
               </div>
-              <div className="h-[60%] w-full absolute bottom-0 bg-[#2B2B2B] px-4 py-2 flex-col">
-                <div className="flex justify-between items-center">
-                  <h5 className="text-3xl font-semibold text-color-text select-none pointer-events-none mb-2">
-                    {ele.topic_name}
-                  </h5>
-                  <div className="flex gap-1">
-                    <label
-                      className={
-                        "bg-color-bg-2 px-3 h-fit w-fit rounded text-center font-semibold select-none pointer-events-none"
-                      }
-                    >
-                      {ele.set_type}
-                    </label>
-                    <label
-                      className={`${getColorClass(
-                        ele.difficulty_level
-                      )} px-3 h-fit w-fit rounded text-center select-none pointer-events-none`}
-                    >
-                      {ele.difficulty_level}
-                    </label>
-                  </div>
-                </div>
+              <div className="col-span-1">
                 <div className="flex items-center">
                   <svg
                     className="w-4 h-4 text-gray-800 dark:text-white"
@@ -175,30 +211,28 @@ function QuizListing() {
                     />
                   </svg>
                   <p className="text-sm text-color-text select-none pointer-events-none">
-                    {ele.total_time + " "}Mins.
+                    {TotalTime + " "}Mins.
                   </p>
                 </div>
                 <p className="text-sm text-color-text select-none pointer-events-none mb-2">
                   Questions Count :{" "}
-                  <span className="font-semibold">{ele.questions_count}</span>
+                  <span className="font-semibold">{questionsCount}</span>
                 </p>
+              </div>
+              <div className="col-span-1 flex justify-end w-full self-end">
                 <CustomBtn
-                label={"Start"}
-                 onBtnClick={() => checkUserAllowedOrNot(ele)}
-
+                  label={"Start"}
+                  onBtnClick={() => checkUserAllowedOrNot(quizObj)}
                 />
               </div>
-              {ele.is_completed && (
-                <div className="absolute w-full h-full text-6xl flex justify-center items-center pb-8 font-semibold text-color-text backdrop-blur-xl select-none pointer-events-none">
-                  Completed
-                </div>
-              )}
             </div>
-          ))
-        )}
-      </div>
-    </section>
+          </div>
+        </div>
+      ) : (
+        <QuizCompletedCard />
+      )}
+    </div>
   );
-}
+};
 
 export default QuizListing;
