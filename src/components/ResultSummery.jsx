@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CustomBtn from "./CustomBtn";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../constants/routes";
 
 function ResultSummery({
   totalQuestions,
@@ -13,7 +14,7 @@ function ResultSummery({
 
   useEffect(() => {
     if (secondsLeft <= 0) {
-      navigate("/student/dashboard");
+      navigate(ROUTES.STUDENT_DASHBOARD);
       return;
     }
 

@@ -14,6 +14,7 @@ import DropDown from "../../components/DropDown";
 import CustomBtn from "../../components/CustomBtn";
 import { useLoading } from "../../context/LoadingContext";
 import ResultSummery from "../../components/ResultSummery";
+import { ROUTES } from "../../constants/routes";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
@@ -107,7 +108,7 @@ const StartQuiz = () => {
         btn2Msg={null}
         showCancel={false}
         onCancel={closePopUpFn}
-        onConfirm={() => navigate("/student/dashboard")}
+        onConfirm={() => navigate(ROUTES.STUDENT_DASHBOARD)}
       />
     );
   };
@@ -125,7 +126,7 @@ const StartQuiz = () => {
         onCancel={closePopUpFn}
         onConfirm={() => {
           saveQuizDetails();
-          navigate("/student/dashboard");
+          navigate(ROUTES.STUDENT_DASHBOARD);
         }}
       />
     );

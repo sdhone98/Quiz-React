@@ -19,12 +19,12 @@ import AllQuizzes from "../pages/teacher/AllQuizzes";
 import QuizListing from "../pages/student/QuizListing";
 import ContactUs from "../components/ContactUs";
 import LeaderBoard from "../components/LeaderBoard";
+import { ROUTES } from "../constants/routes";
 
 
 const AttemptQuiz = () => <div className="p-6">Attempt Quiz Page</div>;
 
 // General Pages
-// const Contact = () => <div className="w-full h-full bg-color-bg text-color-text text-8xl flex justify-center items-center font-bold">Contact</div>;
 const NotFound = () => (
   <div className="p-6 text-center">404 - Page Not Found</div>
 );
@@ -33,15 +33,14 @@ const AppLayout = ({ children }) => {
   const navigate = useNavigate(null);
 
   useEffect(() => {
-    navigate("/login");
+    navigate(ROUTES.LOGIN);
   }, []);
 
   const location = useLocation();
   const hideNavbar = [
-    "/login",
-    "/register",
-    "/student/quiz/start",
-    // "/"
+    ROUTES.LOGIN,
+    ROUTES.REGISTER,
+    ROUTES.STUDENT_START_QUIZ
   ].includes(location.pathname.toLowerCase());
 
   return (

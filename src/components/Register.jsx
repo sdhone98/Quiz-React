@@ -6,6 +6,7 @@ import { setUser } from "../redux/userSlice";
 import { useLoading } from "../context/LoadingContext";
 import CustomBtn from "./CustomBtn";
 import { BASE_URL_END_POINT, API_END_POINTS } from "../constants/apiEndPoints";
+import { ROUTES } from "../constants/routes";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
@@ -46,7 +47,7 @@ const Register = () => {
     if (success) {
       showToast("Success", "Info", "User Register Sucessfully.!");
       setUser(defaultUserRole);
-      navigate("/login");
+      navigate(ROUTES.LOGIN);
     } else {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
@@ -162,7 +163,7 @@ const Register = () => {
               <p className="text-sm font-light text-color-text text-center">
                 Already have an account?{" "}
                 <a
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate(ROUTES.LOGIN)}
                   className="font-medium text-color-btn hover:underline hover:cursor-pointer"
                 >
                   Login here

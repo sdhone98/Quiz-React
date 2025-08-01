@@ -10,6 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { apiRequest } from "../../utils/api";
 import CustomBtn from "../../components/CustomBtn";
+import { ROUTES } from "../../constants/routes";
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
 const now = new Date();
@@ -86,7 +87,7 @@ function QuizListing() {
 
     if (success) {
       ele["quiz_attempt_id"] = data.id;
-      navigate("/student/quiz/start", {
+      navigate(ROUTES.STUDENT_START_QUIZ, {
         state: {
           data: ele,
         },

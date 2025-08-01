@@ -8,7 +8,7 @@ const TEMPLATE_ID = import.meta.env.VITE_EMAIL_JS_TEMPLATE_ID;
 const PUBLIC_KEY = import.meta.env.VITE_EMAIL_JS_PUBLIC_KEY;
 
 function ContactUs() {
-  const {showToast} = useToast();
+  const { showToast } = useToast();
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ function ContactUs() {
           e.target.reset();
         },
         (error) => {
-            showToast("Error", "Error", JSON.stringify(error));
+          showToast("Error", "Error", JSON.stringify(error));
         }
       );
   };
@@ -39,57 +39,66 @@ function ContactUs() {
           onSubmit={sendEmail}
           className="space-y-8 bg-color-bg-1 p-8 rounded-lg"
         >
-          <div>
-            <label htmlFor="name" className="block mb-2 text-sm font-medium">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="shadow-sm bg-color-bg-2 text-sm rounded-lg block w-full p-2.5"
-              placeholder="Dev Leo"
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-1">
+              <label htmlFor="name" className="block mb-2 text-sm font-medium">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="shadow-sm bg-color-bg-2 text-sm rounded-lg block w-full p-2.5"
+                placeholder="Dev Leo"
+                required
+              />
+            </div>
+            <div className="col-span-1">
+              <label htmlFor="email" className="block mb-2 text-sm font-medium">
+                Your email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="shadow-sm bg-color-bg-2 text-sm rounded-lg block w-full p-2.5"
+                placeholder="name@flowbite.com"
+                required
+              />
+            </div>
+            <div className="col-span-2">
+              <label
+                htmlFor="subject"
+                className="block mb-2 text-sm font-medium"
+              >
+                Subject
+              </label>
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                className="block p-3 w-full text-sm bg-color-bg-2 rounded-lg shadow-sm"
+                placeholder="Let us know what the was issue."
+                required
+              />
+            </div>
+            <div className="col-span-2">
+              <label
+                htmlFor="message"
+                className="block mb-2 text-sm font-medium"
+              >
+                Your message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="6"
+                className="block p-2.5 w-full text-sm bg-color-bg-2 rounded-lg shadow-sm"
+                placeholder="Detail description..."
+              ></textarea>
+            </div>
           </div>
-          <div>
-            <label htmlFor="email" className="block mb-2 text-sm font-medium">
-              Your email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="shadow-sm bg-color-bg-2 text-sm rounded-lg block w-full p-2.5"
-              placeholder="name@flowbite.com"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="subject" className="block mb-2 text-sm font-medium">
-              Subject
-            </label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              className="block p-3 w-full text-sm bg-color-bg-2 rounded-lg shadow-sm"
-              placeholder="Let us know how we can help you"
-              required
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label htmlFor="message" className="block mb-2 text-sm font-medium">
-              Your message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows="6"
-              className="block p-2.5 w-full text-sm bg-color-bg-2 rounded-lg shadow-sm"
-              placeholder="Leave a comment..."
-            ></textarea>
-          </div>
+
           <CustomBtn label={"Send message"} btnType={"submit"} />
         </form>
       </div>

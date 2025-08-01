@@ -74,7 +74,7 @@ const AllQuizzes = () => {
       <div className="flex flex-col mx-48 h-full">
         <div className="flex justify-between items-center mt-12 mb-8">
           <h1 className="text-3xl font-extrabold text-color-text block select-none pointer-events-none mb-8">
-            All Quizzes Set
+            Quizzes Listing
           </h1>
           <div className="flex gap-2 h-fit">
             <DropDown

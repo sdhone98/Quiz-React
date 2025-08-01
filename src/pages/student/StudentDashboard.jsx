@@ -6,6 +6,7 @@ import {
 } from "../../constants/apiEndPoints";
 import CustomBtn from "../../components/CustomBtn";
 import TopicHeroSection from "../../components/TopicHeroSection";
+import { ROUTES } from "../../constants/routes";
 
 const today = new Date();
 
@@ -54,7 +55,7 @@ const StudentDashboard = () => {
             </p>
             <CustomBtn
               label={"Start Quiz"}
-              onBtnClick={() => navigate("/student/quiz/listing")}
+              onBtnClick={() => navigate(ROUTES.STUDENT_QUIZ_SETS_LISTING)}
               icon={arrowIcon}
             />
           </div>

@@ -116,6 +116,7 @@ const Login = () => {
 
       showToast("Success", "Info", "Login sccessfully.!");
     } else {
+      setIsLoading(false);
       showToast("Error", "Error", JSON.stringify(error.data));
     }
   };

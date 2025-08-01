@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,11 +13,12 @@ const NavBar = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
   const [isUserPopUpOpen, setIsUserPopUpOpen] = useState(false);
+  const [isOptionsMenuON, setIsOptionsMenuON] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleLogout = () => {
     showToast("Success", "Info", "Logout sccessfully.!");
-    navigate("/login");
+    navigate(ROUTES.LOGIN);
     dispatch(resetToken());
     dispatch(logout());
   };
@@ -80,17 +81,26 @@ const NavBar = () => {
     </div>
   );
 
+  function redirectUserOnHome() {
+    if (user && user.role === CONSTANTS.TEACHER) {
+      navigate(ROUTES.TEACHER_DASHBOARD);
+    } else {
+      navigate(ROUTES.STUDENT_DASHBOARD);
+    }
+  }
+
   return (
     <nav className="bg-color-bg-1 border-gray-20">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <span
-          onClick={() =>
-            navigate(
-              user.role === CONSTANTS.TEACHER
-                ? ROUTES.TEACHER_DASHBOARD
-                : ROUTES.STUDENT_DASHBOARD
-            )
-          }
+          onClick={() => {
+            setSelectedOption("Home"),
+              navigate(
+                user.role === CONSTANTS.TEACHER
+                  ? ROUTES.TEACHER_DASHBOARD
+                  : ROUTES.STUDENT_DASHBOARD
+              );
+          }}
           className="self-center text-2xl font-semibold whitespace-nowrap text-color-btn hover:cursor-pointer"
         >
           Quiz
@@ -110,7 +120,7 @@ const NavBar = () => {
             >
               <a
                 onClick={() => {
-                  setSelectedOption("Home"), navigate("student/dashboard");
+                  setSelectedOption("Home"), redirectUserOnHome();
                 }}
                 className={`${navOptionClassCss}`}
               >
@@ -124,7 +134,7 @@ const NavBar = () => {
             >
               <a
                 onClick={() => {
-                  setSelectedOption("Result"), navigate("/student/result");
+                  setSelectedOption("Result"), navigate(ROUTES.STUDENT_RESULT);
                 }}
                 className={`${navOptionClassCss}`}
               >
@@ -140,7 +150,7 @@ const NavBar = () => {
             >
               <a
                 onClick={() => {
-                  setSelectedOption("Leader Board"), navigate("/leaderboard");
+                  setSelectedOption("Leader Board"), navigate(ROUTES.LEADERBOARD);
                 }}
                 className={`${navOptionClassCss}`}
               >
@@ -148,57 +158,85 @@ const NavBar = () => {
               </a>
             </li>
             {user && user.role === CONSTANTS.TEACHER && (
-              <li
-                className={`${
-                  selectedOption === "Quizze" ? "border-b border-color-btn" : ""
-                }`}
-              >
-                <a
-                  onClick={() => {
-                    setSelectedOption("Quizze"), navigate("/teacher/quiz");
-                  }}
-                  className={`${navOptionClassCss}`}
-                >
-                  Quizze
-                </a>
-              </li>
-            )}
-            {user && user.role === CONSTANTS.TEACHER && (
-              <li
-                className={`${
-                  selectedOption === "Question"
-                    ? "border-b border-color-btn"
-                    : ""
-                }`}
-              >
-                <a
-                  onClick={() => {
-                    setSelectedOption("Question"),
-                      navigate("/teacher/quiz/questions-add");
-                  }}
-                  className={`${navOptionClassCss}`}
-                >
-                  Question
-                </a>
-              </li>
-            )}
-            {user && user.role === CONSTANTS.TEACHER && (
-              <li
-                className={`${
-                  selectedOption === "Create Quiz"
-                    ? "border-b border-color-btn"
-                    : ""
-                }`}
-              >
-                <a
-                  onClick={() => {
-                    setSelectedOption("Create Quiz"),
-                      navigate("/teacher/quiz/create/");
-                  }}
-                  className={`${navOptionClassCss}`}
-                >
-                  Create Quiz
-                </a>
+              <li>
+                <div>
+                  <button
+                    onClick={() => setIsOptionsMenuON(!isOptionsMenuON)}
+                    className="flex items-center justify-between w-full py-2 px-3 md:p-0 text-color-text cursor-pointer hover:text-color-btn transition-colors duration-300 ease-in-out"
+                  >
+                    Options{" "}
+                    <svg
+                      className="w-2.5 h-2.5 ms-2.5"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 10 6"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m1 1 4 4 4-4"
+                      />
+                    </svg>
+                  </button>
+                  <div
+                    className={`${
+                      isOptionsMenuON ? "" : "hidden"
+                    } absolute z-10 font-normal divide-y divide-gray-100 rounded-lg shadow-sm w-fit bg-color-bg-2 mt-2`}
+                  >
+                    <ul
+                      className="py-2 text-sm text-color-text"
+                      aria-labelledby="dropdownLargeButton"
+                    >
+                      <li>
+                        <a
+                          onClick={() => {
+                            setIsOptionsMenuON(false),
+                              navigate(ROUTES.STUDENT_DASHBOARD);
+                          }}
+                          className="block px-4 py-2 text-sm hover:bg-color-bg-1 hover:cursor-pointer"
+                        >
+                          Start Quiz
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          onClick={() => {
+                            setIsOptionsMenuON(false),
+                              navigate(ROUTES.TEACHER_ALL_QUIZSETS);
+                          }}
+                          className="block px-4 py-2 text-sm hover:bg-color-bg-1 hover:cursor-pointer"
+                        >
+                          Quizze
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          onClick={() => {
+                            setIsOptionsMenuON(false),
+                              navigate(ROUTES.TEACHER_QUESTIONS_ADD);
+                          }}
+                          className="block px-4 py-2 text-sm hover:bg-color-bg-1 hover:cursor-pointer"
+                        >
+                          Question
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          onClick={() => {
+                            setIsOptionsMenuON(false),
+                              navigate(ROUTES.TEACHER_QUIZ_CREATE);
+                          }}
+                          className="block px-4 py-2 text-sm hover:bg-color-bg-1 hover:cursor-pointer"
+                        >
+                          Create Quiz
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </li>
             )}
             <li
@@ -208,7 +246,7 @@ const NavBar = () => {
             >
               <a
                 onClick={() => {
-                  setSelectedOption("Contact"), navigate("/contact");
+                  setSelectedOption("Contact"), navigate(ROUTES.CONTACT);
                 }}
                 className={`${navOptionClassCss}`}
               >
