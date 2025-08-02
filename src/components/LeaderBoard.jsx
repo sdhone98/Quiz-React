@@ -7,10 +7,11 @@ import { useSelector } from "react-redux";
 import { ALL_PERPOSE } from "../constants/allPurpose";
 import CustomBtn from "./CustomBtn";
 import { useToast } from "../context/ToastContext";
+import CountUp from "react-countup";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
-function SearchTable() {
+function LeaderBoard() {
   const { showToast } = useToast();
   const topicDetails = useSelector((state) => state.topic.topics.data);
   const [resultTblData, setResultTblData] = useState([]);
@@ -90,6 +91,7 @@ function SearchTable() {
       difficulty: ele.id,
     }));
   };
+
   return (
     <section className="max-w-screen w-screen h-full bg-color-bg items-center text-color-text">
       <div className="flex flex-col mx-48 h-full">
@@ -147,173 +149,139 @@ function SearchTable() {
   );
 }
 
-export default SearchTable;
+export default LeaderBoard;
 
 function LeaderBoardTopUsers({ usersData }) {
-  const [hoveredDivID, setHoveredDivID] = useState(null);
-  const firstRankUser = usersData.find((user) => user.position === 1) || {
-    name: null,
-    percentage: null,
-    username: null,
-  };
-  const secondRankUser = usersData.find((user) => user.position === 2) || {
-    name: null,
-    percentage: null,
-    username: null,
-  };
-  const thirdRankUser = usersData.find((user) => user.position === 3) || {
-    name: null,
-    percentage: null,
-    username: null,
-  };
+  const sortedUsers = usersData.slice().sort((a, b) => {
+    const aIndex = podiumOrder.indexOf(a.position);
+    const bIndex = podiumOrder.indexOf(b.position);
 
-  const StudentIcon = ({ size = "small" }) => {
-    const commonProps = {
-      className:
-        size === "small"
-          ? "w-full h-full text-color-text-light p-8"
-          : "w-full h-full text-color-text-light p-2",
-      xmlns: "http://www.w3.org/2000/svg",
-      fill: "none",
-      viewBox: "0 0 24 24",
-      "aria-hidden": "true",
-    };
-
-    return (
-      <svg
-        {...commonProps}
-        width={size === "small" ? 16 : 24}
-        height={size === "small" ? 16 : 24}
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={size === "small" ? 1.2 : 1.5}
-      >
-        <path d="M14.6144 7.19994c.3479.48981.5999 1.15357.5999 1.80006 0 1.6569-1.3432 3-3 3-1.6569 0-3.00004-1.3431-3.00004-3 0-.67539.22319-1.29865.59983-1.80006M6.21426 6v4m0-4 6.00004-3 6 3-6 2-2.40021-.80006M6.21426 6l3.59983 1.19994M6.21426 19.8013v-2.1525c0-1.6825 1.27251-3.3075 2.95093-3.6488l3.04911 2.9345 3-2.9441c1.7026.3193 3 1.9596 3 3.6584v2.1525c0 .6312-.5373 1.1429-1.2 1.1429H7.41426c-.66274 0-1.2-.5117-1.2-1.1429Z" />
-      </svg>
-    );
-  };
+    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1;
+    return a.rank - b.rank;
+  });
 
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="flex justify-center items-center scale-130">
-        <div
-          id="top-3"
-          className="relative w-48 h-68 flex items-end justify-center"
-        >
-          <div
-            onMouseEnter={() => setHoveredDivID(1)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className={`${
-              hoveredDivID === 1 && "shadow-2xl"
-            } absolute top-0 w-36 h-36 bg-transperant rounded-full z-1 border-2 border-color-accent-blue bg-color-bg shadow-color-accent-blue transition-shadow duration-300 ease-in-out`}
-          >
-            <StudentIcon size="small" />
-          </div>
-          <div
-            onMouseEnter={() => setHoveredDivID(1)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute top-31 w-8 h-8 bg-color-accent-blue rounded-lg z-2 rotate-45 flex justify-center items-center"
-          >
-            <span className="block -rotate-45 font-bold text-color-text-dark text-xl select-none">
-              {2}
-            </span>
-          </div>
-          <div
-            onMouseEnter={() => setHoveredDivID(1)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute bottom-0 w-48 h-48 bg-color-bg-1 rounded-l-2xl flex flex-col justify-end items-center pb-6 select-none"
-          >
-            <p className="text-2xl font-normal">
-              {thirdRankUser.percentage || "N/A"}
-              <span className="text-sm">%</span>
-            </p>
-            <p className="text-xl font-semibold">
-              {thirdRankUser.name || "N/A"}
-            </p>
-            <p className="text-sm font-light">
-              {thirdRankUser.username || "N/A"}
-            </p>
-          </div>
-        </div>
+        {sortedUsers.map((user) => (
+          <PodiumUser
+            key={user.position}
+            rank={user.position}
+            percentage={user.percentage}
+            name={user.name}
+            userName={user.username}
+            cssDetails={classDetails(user.position)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-        <div
-          id="top-1"
-          className="relative  w-64 h-68 flex items-end justify-center"
-        >
-          <div
-            onMouseEnter={() => setHoveredDivID(2)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className={`${
-              hoveredDivID === 2 && "shadow-2xl"
-            } absolute -top-14 w-40 h-40 bg-transperant rounded-full z-3 border-4 border-color-accent-gold bg-color-bg flex justify-center items-center pb-4 shadow-color-accent-gold transition-shadow duration-300 ease-in-out`}
-          >
-            <StudentIcon size="large" />
-          </div>
-          <div
-            onMouseEnter={() => setHoveredDivID(2)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute top-20 w-10 h-10 bg-color-accent-gold rounded-lg z-3 rotate-45 flex justify-center items-center"
-          >
-            <span className="block -rotate-45 font-bold text-color-text-dark text-xl select-none">
-              {1}
-            </span>
-          </div>
-          <div
-            onMouseEnter={() => setHoveredDivID(2)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute bottom-0 w-64 h-64 bg-color-bg-2 rounded-t-2xl flex flex-col justify-end items-center pb-8 z-2 select-none"
-          >
-            <p className="text-3xl font-semibold">
-              {firstRankUser.percentage || "N/A"}
-              <span className="text-sm">%</span>
-            </p>
-            <p className="text-xl font-semibold">
-              {firstRankUser.name || "N/A"}
-            </p>
-            <p className="text-lg">{firstRankUser.username || "N/A"}</p>
-          </div>
-        </div>
+const podiumOrder = [3, 1, 2];
 
-        <div
-          id="top-2"
-          className="relative  w-48 h-68 flex items-end justify-center"
-        >
-          <div
-            onMouseEnter={() => setHoveredDivID(3)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className={`${
-              hoveredDivID === 3 && "shadow-2xl"
-            } absolute top-0 w-36 h-36 bg-transperant rounded-full z-1 border-2 border-color-accent-green bg-color-bg shadow-color-accent-green transition-shadow duration-300 ease-in-out`}
-          >
-            <StudentIcon size="small" />
-          </div>
-          <div
-            onMouseEnter={() => setHoveredDivID(3)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute top-31 w-8 h-8 bg-color-accent-green rounded-lg z-2 rotate-45 flex justify-center items-center"
-          >
-            <span className="block -rotate-45 font-bold text-color-text-dark text-xl select-none">
-              {3}
-            </span>
-          </div>
-          <div
-            onMouseEnter={() => setHoveredDivID(3)}
-            onMouseLeave={() => setHoveredDivID(null)}
-            className="absolute bottom-0 w-48 h-48 bg-color-bg-1 rounded-r-2xl flex flex-col justify-end items-center pb-6 select-none"
-          >
-            <p className="text-2xl font-semibold">
-              {secondRankUser.percentage || "N/A"}
-              <span className="text-sm">%</span>
-            </p>
-            <span className="text-lg font-normal">
-              {secondRankUser.name || "N/A"}
-            </span>
-            <p className="text-md font-light">
-              {secondRankUser.username || "N/A"}
-            </p>
-          </div>
-        </div>
+const ACCENT_COLOR_CLASSES = {
+  1: "color-accent-gold",
+  2: "color-accent-green",
+  3: "color-accent-blue",
+};
+
+const DIV_ROUNDED_CLASSES = {
+  1: "rounded-t-2xl",
+  2: "rounded-r-2xl",
+  3: "rounded-l-2xl",
+};
+
+const StudentIcon = ({ iconSize = "small", userRank }) => {
+  const isSmall = iconSize === "small";
+  console.log("StudentIcon ==========>", isSmall)
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={isSmall ? 1.5 : 1.2}
+      className={`w-full h-full text-${ACCENT_COLOR_CLASSES[userRank]} ${isSmall ? "p-8" : "p-6"}`}
+    >
+      <path d="M14.6144 7.19994c.3479.48981.5999 1.15357.5999 1.80006 0 1.6569-1.3432 3-3 3-1.6569 0-3.00004-1.3431-3.00004-3 0-.67539.22319-1.29865.59983-1.80006M6.21426 6v4m0-4 6.00004-3 6 3-6 2-2.40021-.80006M6.21426 6l3.59983 1.19994M6.21426 19.8013v-2.1525c0-1.6825 1.27251-3.3075 2.95093-3.6488l3.04911 2.9345 3-2.9441c1.7026.3193 3 1.9596 3 3.6584v2.1525c0 .6312-.5373 1.1429-1.2 1.1429H7.41426c-.66274 0-1.2-.5117-1.2-1.1429Z" />
+    </svg>
+  );
+};
+
+function classDetails(rank) {
+  const divSize = rank === 1 ? "large" : "small";
+
+  return {
+    mainClass: `relative flex items-end justify-center ${
+      divSize === "small" ? "w-48 h-68" : "w-64 h-68"
+    }`,
+    topCircleClass: `absolute rounded-full bg-color-bg transition-shadow duration-300 ease-in-out z-1 border-2 ${
+      divSize === "small" ? "top-0 w-36 h-36" : "-top-14 w-40 h-40"
+    } border-${ACCENT_COLOR_CLASSES[rank]} shadow-${ACCENT_COLOR_CLASSES[rank]}`,
+    studentIcon: <StudentIcon iconSize={divSize} userRank={rank}/>,
+    midSqureClass: `absolute rounded-lg rotate-45 flex justify-center items-center z-2 ${
+      divSize === "small" ? "top-31 w-8 h-8" : "top-20 w-10 h-10"
+    } bg-${ACCENT_COLOR_CLASSES[rank]}`,
+    rankNumberClass:
+      "block -rotate-45 font-bold text-color-text-dark text-xl select-none",
+    userDetailsClass: `absolute bottom-0 flex flex-col justify-end items-center select-none ${
+      divSize === "small"
+        ? "w-48 h-48 bg-color-bg-1 pb-6"
+        : "w-64 h-64 bg-color-bg-2 pb-8"
+    } ${DIV_ROUNDED_CLASSES[rank]}`,
+    userPercentageClass: `font-mono font-bold text-black ${
+      divSize === "small" ? "text-3xl" : "text-4xl"
+    } text-${ACCENT_COLOR_CLASSES[rank]}`,
+    userFullNameClass:
+      "text-xl font-semibold transition-all duration-300 ease-in-out text-color-text-light",
+    userNameClass:
+      divSize === "small" ? "text-color-text-light text-sm font-light" : "text-color-text-light text-lg",
+  };
+}
+
+function PodiumUser({
+  rank,
+  percentage = 0,
+  name = "N/A",
+  userName = "N/A",
+  cssDetails,
+}) {
+  const [hoverdDiv, setHoverdDiv] = useState(null);
+  const isHoverd = hoverdDiv === rank;
+
+  return (
+    <div id={rank} className={`${cssDetails.mainClass}`}>
+      <div
+        onMouseEnter={() => setHoverdDiv(rank)}
+        onMouseLeave={() => setHoverdDiv(null)}
+        className={`${cssDetails.topCircleClass} ${isHoverd ? "shadow-2xl" : "shadow-lg"}`}
+      >
+        {cssDetails.studentIcon}
+      </div>
+      <div
+        onMouseEnter={() => setHoverdDiv(rank)}
+        onMouseLeave={() => setHoverdDiv(null)}
+        className={`${cssDetails.midSqureClass}`}
+      >
+        <span className={cssDetails.rankNumberClass}>{<CountUp end={rank} />}</span>
+      </div>
+      <div
+        onMouseEnter={() => setHoverdDiv(rank)}
+        onMouseLeave={() => setHoverdDiv(null)}
+        className={cssDetails.userDetailsClass}
+      >
+        <p className={`${cssDetails.userPercentageClass}`}>
+          <CountUp end={percentage} />
+          <span className="text-sm ml-1">%</span>
+        </p>
+        <p className={cssDetails.userFullNameClass}>{name}</p>
+        <p className={cssDetails.userNameClass}>{userName}</p>
       </div>
     </div>
   );

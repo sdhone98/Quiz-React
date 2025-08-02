@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
   --color-color-text: hsl(0, 0%, 95%);
   --color-color-text-sub: hsl(0, 0%, 90%);

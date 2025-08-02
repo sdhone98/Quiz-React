@@ -8,6 +8,7 @@ import {
   API_END_POINTS,
 } from "../../constants/apiEndPoints";
 import TopicHeroSection from "../../components/TopicHeroSection";
+import CountUp from "react-countup";
 
 const BASE_URL = BASE_URL_END_POINT.BASE_URL;
 
@@ -101,7 +102,7 @@ const TeacherDashboard = () => {
                   }
                 >
                   <dt className="mb-2 text-3xl font-extrabold">
-                    {dashboardData[ele.value]}
+                    {<CountUp end={dashboardData[ele.value]}/>}
                   </dt>
                   <dd className="text-center text-sm">{ele.key}</dd>
                 </div>
