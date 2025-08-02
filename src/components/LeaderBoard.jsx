@@ -99,12 +99,12 @@ function LeaderBoard() {
           <h1 className="mb-2 text-3xl font-extrabold text-color-text block">
             Leader Board
           </h1>
-          <div className="flex text-sm font-bold bg-color-bg-1 gap-8 px-8 h-full rounded-lg items-center">
+          <div className="flex text-sm font-bold gap-4 px-8 h-full rounded-lg items-center">
             <span
               onClick={() => setSelectedTabOption("Top")}
               className={`${
                 selectedTabOption === "Top" && "border-b border-color-btn"
-              } px-6 pb-2 cursor-pointer`}
+              } px-4 pb-2 cursor-pointer`}
             >
               Top 3
             </span>
@@ -196,7 +196,7 @@ const DIV_ROUNDED_CLASSES = {
 
 const StudentIcon = ({ iconSize = "small", userRank }) => {
   const isSmall = iconSize === "small";
-  console.log("StudentIcon ==========>", isSmall)
+  console.log("StudentIcon ==========>", isSmall);
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +207,9 @@ const StudentIcon = ({ iconSize = "small", userRank }) => {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={isSmall ? 1.5 : 1.2}
-      className={`w-full h-full text-${ACCENT_COLOR_CLASSES[userRank]} ${isSmall ? "p-8" : "p-6"}`}
+      className={`w-full h-full text-${ACCENT_COLOR_CLASSES[userRank]} ${
+        isSmall ? "p-8" : "p-6"
+      }`}
     >
       <path d="M14.6144 7.19994c.3479.48981.5999 1.15357.5999 1.80006 0 1.6569-1.3432 3-3 3-1.6569 0-3.00004-1.3431-3.00004-3 0-.67539.22319-1.29865.59983-1.80006M6.21426 6v4m0-4 6.00004-3 6 3-6 2-2.40021-.80006M6.21426 6l3.59983 1.19994M6.21426 19.8013v-2.1525c0-1.6825 1.27251-3.3075 2.95093-3.6488l3.04911 2.9345 3-2.9441c1.7026.3193 3 1.9596 3 3.6584v2.1525c0 .6312-.5373 1.1429-1.2 1.1429H7.41426c-.66274 0-1.2-.5117-1.2-1.1429Z" />
     </svg>
@@ -223,8 +225,10 @@ function classDetails(rank) {
     }`,
     topCircleClass: `absolute rounded-full bg-color-bg transition-shadow duration-300 ease-in-out z-1 border-2 ${
       divSize === "small" ? "top-0 w-36 h-36" : "-top-14 w-40 h-40"
-    } border-${ACCENT_COLOR_CLASSES[rank]} shadow-${ACCENT_COLOR_CLASSES[rank]}`,
-    studentIcon: <StudentIcon iconSize={divSize} userRank={rank}/>,
+    } border-${ACCENT_COLOR_CLASSES[rank]} shadow-${
+      ACCENT_COLOR_CLASSES[rank]
+    }`,
+    studentIcon: <StudentIcon iconSize={divSize} userRank={rank} />,
     midSqureClass: `absolute rounded-lg rotate-45 flex justify-center items-center z-2 ${
       divSize === "small" ? "top-31 w-8 h-8" : "top-20 w-10 h-10"
     } bg-${ACCENT_COLOR_CLASSES[rank]}`,
@@ -241,7 +245,9 @@ function classDetails(rank) {
     userFullNameClass:
       "text-xl font-semibold transition-all duration-300 ease-in-out text-color-text-light",
     userNameClass:
-      divSize === "small" ? "text-color-text-light text-sm font-light" : "text-color-text-light text-lg",
+      divSize === "small"
+        ? "text-color-text-light text-sm font-light"
+        : "text-color-text-light text-lg",
   };
 }
 
@@ -260,7 +266,9 @@ function PodiumUser({
       <div
         onMouseEnter={() => setHoverdDiv(rank)}
         onMouseLeave={() => setHoverdDiv(null)}
-        className={`${cssDetails.topCircleClass} ${isHoverd ? "shadow-2xl" : "shadow-lg"}`}
+        className={`${cssDetails.topCircleClass} ${
+          isHoverd ? "shadow-2xl" : "shadow-lg"
+        }`}
       >
         {cssDetails.studentIcon}
       </div>
@@ -269,7 +277,9 @@ function PodiumUser({
         onMouseLeave={() => setHoverdDiv(null)}
         className={`${cssDetails.midSqureClass}`}
       >
-        <span className={cssDetails.rankNumberClass}>{<CountUp end={rank} />}</span>
+        <span className={cssDetails.rankNumberClass}>
+          {<CountUp end={rank} />}
+        </span>
       </div>
       <div
         onMouseEnter={() => setHoverdDiv(rank)}
