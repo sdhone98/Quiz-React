@@ -84,27 +84,27 @@ const TeacherDashboard = () => {
           <h1 className="mb-4 text-3xl font-extrabold tracking-tight leading-none">
             QuickQuiz - Teacher Dashboard
           </h1>
-          <p className="max-w-2xl text-color-text-light text-lg font-normal">
-            Logged in as: <span className="font-semibold">Sagar Dhone</span>
+          <p className="max-w-2xl text-color-text-light text-lg font-thin">
+            Welcome,{" "}Sagar Dhone
           </p>
         </div>
         <div className="w-full h-2/3 flex items-center justify-start gap-4">
           <div className="w-1/2 h-3/4 pt-10 p-8">
             <div className="h-full rounded-lg bg-color-bg-1 grid grid-cols-3 grid-rows-2 gap-2 w-full p-2">
               {dashBoardData.map((ele, idx) => (
+                
                 <div
                   key={ele.key}
+                  onMouseEnter={() => setHoverdDivId(idx)}
+                  onMouseLeave={() => setHoverdDivId(null)}
                   className={
-                    "bg-color-bg p-5 text-center flex flex-col justify-center items-center rounded-lg select-none hover:text-color-btn hover:cursor-pointer" +
-                    (idx === idx
-                      ? " transition-all duration-300 ease-in-out hover:scale-90"
-                      : "")
+                    "bg-color-bg p-5 text-center flex flex-col justify-center items-center rounded-lg select-none transition-all duration-300 ease-in-out hover:text-color-btn hover:cursor-pointer hover:scale-90"
                   }
                 >
-                  <dt className="mb-2 text-3xl font-extrabold">
+                  <dt className={"mb-2 font-extrabold text-4xl font-googlesanscode"}>
                     {<CountUp end={dashboardData[ele.value]}/>}
                   </dt>
-                  <dd className="text-center text-sm">{ele.key}</dd>
+                  <dd className={"text-center text-sm font-thin"}>{ele.key}</dd>
                 </div>
               ))}
             </div>

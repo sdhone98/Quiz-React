@@ -14,7 +14,7 @@ const NavBar = () => {
   const user = useSelector((state) => state.user.user);
   const [isUserPopUpOpen, setIsUserPopUpOpen] = useState(false);
   const [isOptionsMenuON, setIsOptionsMenuON] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("Home");
 
   const handleLogout = () => {
     showToast("Success", "Info", "Logout sccessfully.!");

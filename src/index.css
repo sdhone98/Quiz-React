@@ -1,3 +1,52 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/assets/fonts/Inter/Inter_24pt-Light.ttf');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/assets/fonts/Inter/Inter_24pt-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/assets/fonts/Inter/Inter_24pt-Medium.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/assets/fonts/Inter/Inter_24pt-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/assets/fonts/Inter/Inter_24pt-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../src/assets/fonts/Inter/Inter_24pt-ExtraBold.ttf');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GoogleSansCode';
+  src: url('../src/assets/fonts/GoogleOneSansCode/GoogleSansCode-Bold.ttf');
+  font-weight: 800;
+  font-style: normal;
+}
+
+
 @import "tailwindcss";
 
 @theme {
@@ -15,11 +64,18 @@
   --color-color-accent-yellow: hsl(43, 76%, 75%);
   --color-color-accent-gold: hsl(49, 97%, 48%);
   --color-color-accent-red: hsl(0, 76%, 75%);
+  
+    --color-color-bg: hsl(0, 0%, 10%);
+    --color-color-bg-1: hsl(0, 0%, 15%);
+    --color-color-bg-2: hsl(0, 0%, 20%);
+  
+    --font-inter: Inter, sans-serif;
+    --font-googlesanscode: GoogleSansCode, sans-serif;
+  }
 
-  --color-color-bg: hsl(0, 0%, 10%);
-  --color-color-bg-1: hsl(0, 0%, 15%);
-  --color-color-bg-2: hsl(0, 0%, 20%);
-}
+body {
+    font-family: "Inter", sans-serif;
+  }
 
 .scrollbar-hide {
   scrollbar-width: none;

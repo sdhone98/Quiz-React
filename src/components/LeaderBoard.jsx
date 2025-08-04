@@ -182,6 +182,12 @@ function LeaderBoardTopUsers({ usersData }) {
 
 const podiumOrder = [3, 1, 2];
 
+const RANK_ACCENT_COLOR_CLASSES = {
+  1: "bg-color-accent-gold border-color-accent-gold shadow-color-accent-gold",
+  2: "bg-color-accent-green border-color-accent-green shadow-color-accent-green",
+  3: "bg-color-accent-blue border-color-accent-blue shadow-color-accent-blue",
+};
+
 const ACCENT_COLOR_CLASSES = {
   1: "color-accent-gold",
   2: "color-accent-green",
@@ -196,7 +202,6 @@ const DIV_ROUNDED_CLASSES = {
 
 const StudentIcon = ({ iconSize = "small", userRank }) => {
   const isSmall = iconSize === "small";
-  console.log("StudentIcon ==========>", isSmall);
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -225,29 +230,28 @@ function classDetails(rank) {
     }`,
     topCircleClass: `absolute rounded-full bg-color-bg transition-shadow duration-300 ease-in-out z-1 border-2 ${
       divSize === "small" ? "top-0 w-36 h-36" : "-top-14 w-40 h-40"
-    } border-${ACCENT_COLOR_CLASSES[rank]} shadow-${
-      ACCENT_COLOR_CLASSES[rank]
+    } ${RANK_ACCENT_COLOR_CLASSES[rank]} bg-color-bg
     }`,
     studentIcon: <StudentIcon iconSize={divSize} userRank={rank} />,
-    midSqureClass: `absolute rounded-lg rotate-45 flex justify-center items-center z-2 ${
+    midSqureClass: `${
       divSize === "small" ? "top-31 w-8 h-8" : "top-20 w-10 h-10"
-    } bg-${ACCENT_COLOR_CLASSES[rank]}`,
-    rankNumberClass:
-      "block -rotate-45 font-bold text-color-text-dark text-xl select-none",
+    } bg-${
+      ACCENT_COLOR_CLASSES[rank]
+    } absolute rounded-lg rotate-45 flex justify-center items-center z-2`,
+    rankNumberClass: `block -rotate-45 font-bold text-color-text-dark select-none font-googlesanscode ${
+      divSize === "small" ? "text-xl" : "text-2xl"
+    }`,
     userDetailsClass: `absolute bottom-0 flex flex-col justify-end items-center select-none ${
       divSize === "small"
         ? "w-48 h-48 bg-color-bg-1 pb-6"
         : "w-64 h-64 bg-color-bg-2 pb-8"
     } ${DIV_ROUNDED_CLASSES[rank]}`,
-    userPercentageClass: `font-mono font-bold text-black ${
+    userPercentageClass: `font-googlesanscode font-bold ${
       divSize === "small" ? "text-3xl" : "text-4xl"
     } text-${ACCENT_COLOR_CLASSES[rank]}`,
     userFullNameClass:
-      "text-xl font-semibold transition-all duration-300 ease-in-out text-color-text-light",
-    userNameClass:
-      divSize === "small"
-        ? "text-color-text-light text-sm font-light"
-        : "text-color-text-light text-lg",
+      "text-xl font-normal transition-all duration-300 ease-in-out text-color-text-light",
+    userNameClass: "text-color-text-light text-sm font-thin",
   };
 }
 
@@ -288,7 +292,7 @@ function PodiumUser({
       >
         <p className={`${cssDetails.userPercentageClass}`}>
           <CountUp end={percentage} />
-          <span className="text-sm ml-1">%</span>
+          <span className="text-sm font-inter font-thin">%</span>
         </p>
         <p className={cssDetails.userFullNameClass}>{name}</p>
         <p className={cssDetails.userNameClass}>{userName}</p>

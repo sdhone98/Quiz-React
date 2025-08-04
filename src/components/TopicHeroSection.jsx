@@ -11,7 +11,7 @@ function TopicHeroSection() {
   const infiniteList = [...topicList, ...topicList];
 
   return (
-    <div className="relative w-full h-full p-2 overflow-hidden">
+    <div className="relative w-full h-full p-2 overflow-hidden font-googlesanscode">
       <div
         className="infinite-scroll select-none"
         style={{

@@ -10,7 +10,6 @@ function AddQuestionCard({ onSave }) {
   const [qDetails, setQDetails] = useState(null);
 
   const saveQuestionDetails = (e) => {
-    console.log("selectedOption -> ", e.target.correctAnswer.value);
     e.preventDefault();
     // VALIDATION FOR PREV OPTIONS VALUS AVAILABE OR NOT
     optionsLits

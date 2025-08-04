@@ -123,7 +123,7 @@ const Login = () => {
   return (
     <div className="w-screen h-full px-12 py-8 flex flex-col items-center bg-color-bg lg:pt-40">
       <div className="text-color-text flex-row justify-center text-center mb-10">
-        <h1 className="w-full text-5xl mb-2 font-extrabold text-color-btn">
+        <h1 className="w-full text-5xl mb-2 font-extrabold text-color-btn font-inter">
           <small className="ms-2 font-semibold text-color-text">
             Welcome Back to{" "}
           </small>
