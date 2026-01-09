@@ -158,7 +158,7 @@ const CreateQuiz = () => {
 
   const saveQuestionSetData = async (quizSetType, quizTime) => {
     const questionsIds = createdQuestionSet.map((item) => item.id);
-    if (selectedTopic === null && selectedTopic.id === null) {
+    if (selectedTopic === null) {
       return showToast("Warning", "Warning", "Topic details required.!");
     }
 
@@ -168,8 +168,6 @@ const CreateQuiz = () => {
     if (createdQuestionSet.length === 0) {
       return showToast("Warning", "Warning", "Please select Questions first.!");
     }
-
-    console.log("selectedTopic DETAILS =========> ", selectedTopic.id, selectedTopic)
 
     const { success, data, error } = await apiRequest({
       url: BASE_URL + API_END_POINTS.ADD_QUIZSETS,
@@ -257,8 +255,8 @@ const CreateQuiz = () => {
                 <span className="text-sm font-semibold">
                   Total :{" "}
                   {filterQuestionsCounterDetails
-                ? filterQuestionsCounterDetails.totalQuestions
-                : 0}
+                    ? filterQuestionsCounterDetails.totalQuestions
+                    : 0}
                 </span>
                 <span className="text-sm font-semibold">
                   Remaining :{" "}
