@@ -169,6 +169,8 @@ const CreateQuiz = () => {
       return showToast("Warning", "Warning", "Please select Questions first.!");
     }
 
+    console.log("selectedTopic DETAILS =========> ", selectedTopic.id, selectedTopic)
+
     const { success, data, error } = await apiRequest({
       url: BASE_URL + API_END_POINTS.ADD_QUIZSETS,
       method: "POST",
