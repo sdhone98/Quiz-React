@@ -128,6 +128,7 @@ const QuizCard = ({
 }) => {
   const userData = useSelector((state) => state.user.user);
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   const getColorClass = (difficulty_type) => {
     if (difficulty_type === "Hard")

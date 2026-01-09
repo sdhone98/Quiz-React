@@ -95,8 +95,6 @@ const TeacherDashboard = () => {
                 
                 <div
                   key={ele.key}
-                  onMouseEnter={() => setHoverdDivId(idx)}
-                  onMouseLeave={() => setHoverdDivId(null)}
                   className={
                     "bg-color-bg p-5 text-center flex flex-col justify-center items-center rounded-lg select-none transition-all duration-300 ease-in-out hover:text-color-btn hover:cursor-pointer hover:scale-90"
                   }
