@@ -158,7 +158,7 @@ const CreateQuiz = () => {
 
   const saveQuestionSetData = async (quizSetType, quizTime) => {
     const questionsIds = createdQuestionSet.map((item) => item.id);
-    if (selectedTopic === null) {
+    if (selectedTopic === null && selectedTopic.id === null) {
       return showToast("Warning", "Warning", "Topic details required.!");
     }
 
