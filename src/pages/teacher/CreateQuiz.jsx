@@ -102,7 +102,7 @@ const CreateQuiz = () => {
   const { showToast } = useToast();
 
   const topicsList = useSelector((state) => state.topic.topics.data);
-  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState(topicsList[0].id);
   const [selectedDifficulty, setSelectedDifficulty] = useState(
     ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES[0]
   );
