@@ -102,8 +102,7 @@ const CreateQuiz = () => {
   const { showToast } = useToast();
 
   const topicsList = useSelector((state) => state.topic.topics.data);
-  console.log("TOPICS LIST DATA ======> ", topicsList)
-  const [selectedTopic, setSelectedTopic] = useState(topicsList[0]);
+  const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState(
     ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES[0]
   );
@@ -120,7 +119,7 @@ const CreateQuiz = () => {
   }, []);
 
   useEffect(() => {
-    if (topicsList.length > 0) {
+    if (topicsList?.length > 0) {
       setSelectedTopic(topicsList[0].id);
     }
   }, [topicsList]);
