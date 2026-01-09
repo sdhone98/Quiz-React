@@ -118,11 +118,11 @@ const CreateQuiz = () => {
     getQuestionsData();
   }, []);
 
-useEffect(() => {
-  if (topicsList?.length > 0) {
-    setSelectedTopic(topicsList[0].id);
-  }
-}, [topicsList]);
+  useEffect(() => {
+    if (topicsList?.length > 0) {
+      setSelectedTopic(topicsList[0].id);
+    }
+  }, [topicsList]);
 
   const getQuestionsData = async () => {
     setCreatedQuestionSet([]);
