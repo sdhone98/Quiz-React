@@ -102,7 +102,7 @@ const CreateQuiz = () => {
   const { showToast } = useToast();
 
   const topicsList = useSelector((state) => state.topic.topics.data);
-  const [selectedTopic, setSelectedTopic] = useState(topicsList[0].id);
+  const [selectedTopic, setSelectedTopic] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState(
     ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES[0]
   );
@@ -115,14 +115,16 @@ const CreateQuiz = () => {
   const [isPopUpopen, setIsPopUPOpen] = useState(false);
 
   useEffect(() => {
-    getQuestionsData();
-  }, []);
+    if (!selectedTopic && topicsList?.length > 0) {
+      setSelectedTopic(topicsList[0]);
+    }
+  }, [topicsList, selectedTopic]);
 
   useEffect(() => {
-    if (topicsList?.length > 0) {
-      setSelectedTopic(topicsList[0].id);
+    if (selectedTopic) {
+      getQuestionsData();
     }
-  }, [topicsList]);
+  }, [selectedTopic]);
 
   const getQuestionsData = async () => {
     setCreatedQuestionSet([]);
@@ -222,24 +224,26 @@ const CreateQuiz = () => {
             Create QuizSet
           </h1>
           <div className="flex h-fit">
-            <div className="flex gap-2">
-              <DropDown
-                label={selectedTopic.name}
-                onSelect={setSelectedTopic}
-                optionsList={topicsList}
-                isDisable={false}
-              />
-              <DropDown
-                label={selectedDifficulty.name}
-                onSelect={setSelectedDifficulty}
-                optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
-                isDisable={false}
-              />
-              <CustomBtn
-                label={"Search"}
-                onBtnClick={() => getQuestionsData()}
-              />
-            </div>
+            {selectedTopic && (
+              <div className="flex gap-2">
+                <DropDown
+                  label={selectedTopic.name}
+                  onSelect={setSelectedTopic}
+                  optionsList={topicsList}
+                  isDisable={false}
+                />
+                <DropDown
+                  label={selectedDifficulty.name}
+                  onSelect={setSelectedDifficulty}
+                  optionsList={ALL_PERPOSE.DIFFICULTY_OBJ_FORMAT_TYPES}
+                  isDisable={false}
+                />
+                <CustomBtn
+                  label={"Search"}
+                  onBtnClick={() => getQuestionsData()}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="flex justify-between items-center my-4">
@@ -324,6 +328,7 @@ const CreateQuiz = () => {
                   }
                 >
                   <div
+                    key={index}
                     className={`${
                       !selectedIdsList.includes(ele.id) && "hidden"
                     } absolute bg-color-bg-2 w-full h-full flex justify-center items-center rounded-xl`}
