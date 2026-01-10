@@ -35,15 +35,13 @@ function StudentResult() {
     if (user?.userId) loadResultData();
   }, [user]);
   return (
-    <section className="max-w-screen w-screen h-full bg-color-bg items-center text-color-text">
-      <div className="flex flex-col mx-48 h-full">
+    <section className="max-w-screen w-full bg-color-bg items-center text-color-text h-full max-h-full">
+      <div className="flex h-full flex-col mx-48">
         <h3 className="w-full mt-12 mb-8 text-3xl font-extrabold tracking-tight select-none pointer-events-none">
           Your Quiz Result
         </h3>
-        <div className="flex w-full">
-          <div className="w-full">
-            <ResultTable tableData={resultData} isSearchOn={true} />
-          </div>
+        <div className="flex flex-col w-full flex-1 overflow-hidden mb-2">
+          <ResultTable tableData={resultData} isSearchOn={true} />
         </div>
       </div>
     </section>
