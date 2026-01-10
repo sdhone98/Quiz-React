@@ -23,9 +23,12 @@ const Login = () => {
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
   const { showToast } = useToast();
+  const [emailReVerify, setEmailReVerify] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [verifyUsername, setVerifyUsername] = useState("");
+  const [verifyEmail, setVerifyEmail] = useState("");
 
   const getQuizRelatedInfo = () => {
     const loadLanguages = async () => {
@@ -120,24 +123,37 @@ const Login = () => {
       showToast("Error", "Error", JSON.stringify(error.data));
     }
   };
-  return (
-    <div className="w-screen h-full px-12 py-8 flex flex-col items-center bg-color-bg lg:pt-40">
-      <div className="text-color-text flex-row justify-center text-center mb-10">
-        <h1 className="w-full text-5xl mb-2 font-extrabold text-color-btn font-inter">
-          <small className="ms-2 font-semibold text-color-text">
-            Welcome Back to{" "}
-          </small>
-          QuickQuiz
-        </h1>
-        <p className="text-lg font-normal text-color-text">
-          Please login to your account
-        </p>
-      </div>
+
+  const EmailReverifyPopUp = () => {
+    const handleReVerify = async (e) => {
+      e.preventDefault();
+      setIsLoading(true);
+
+      const { success, data, error } = await apiRequest({
+        url: BASE_URL + API_END_POINTS.RE_VERIFY_EMAIL,
+        method: "POST",
+        data: {
+          username: verifyUsername,
+          email: verifyEmail,
+        },
+      });
+      if (success) {
+        setIsLoading(false);
+        showToast("Success", "Info", data);
+        setEmailReVerify(false);
+        setVerifyEmail("");
+        setVerifyUsername("");
+      } else {
+        setIsLoading(false);
+        showToast("Error", "Error", JSON.stringify(error.data));
+      }
+    };
+    return (
       <div className="w-2/8 rounded-xl p-6 bg-color-bg-1">
-        <form className="w-full mx-auto" onSubmit={handleLogin}>
+        <form className="w-full mx-auto" onSubmit={handleReVerify}>
           <div className="mb-5">
             <label
-              htmlFor="username"
+              htmlFor="verifyUsername"
               className="block mb-2 text-sm font-medium text-color-text"
             >
               Username
@@ -145,8 +161,8 @@ const Login = () => {
             <input
               type="username"
               id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={verifyUsername}
+              onChange={(e) => setVerifyUsername(e.target.value)}
               className="text-sm rounded-lg block w-full p-2.5 bg-color-bg-2 placeholder-color-text-light text-color-text"
               placeholder="Quiz100"
               required
@@ -154,34 +170,103 @@ const Login = () => {
           </div>
           <div className="mb-5">
             <label
-              htmlFor="password"
+              htmlFor="verifyEmail"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Your password
+              Email
             </label>
             <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="email"
+              id="email"
+              value={verifyEmail}
+              onChange={(e) => setVerifyEmail(e.target.value)}
               className="text-sm rounded-lg block w-full p-2.5 bg-color-bg-2 placeholder-color-text-light text-color-text"
-              placeholder="password"
+              placeholder="devidp@hotmail.com"
               required
             />
           </div>
-          <CustomBtn label={"Submit"} />
+          <CustomBtn label={"Send Email"} />
         </form>
-        <p className="text-sm font-light text-color-text pt-4 text-center">
-          Don't have an account yet?{" "}
-          <a
-            onClick={() => navigate(ROUTES.REGISTER)}
-            className="font-medium text-color-btn hover:underline hover:cursor-pointer"
-          >
-            Sign up
-          </a>
-        </p>
       </div>
-    </div>
+    );
+  };
+  return (
+    <>
+      <div className="w-screen h-full px-12 py-8 flex flex-col items-center bg-color-bg lg:pt-40">
+        <div className="text-color-text flex-row justify-center text-center mb-10">
+          <h1 className="w-full text-5xl mb-2 font-extrabold text-color-btn font-inter">
+            <small className="ms-2 font-semibold text-color-text">
+              Welcome Back to{" "}
+            </small>
+            QuickQuiz
+          </h1>
+          <p className="text-lg font-normal text-color-text">
+            Please login to your account
+          </p>
+        </div>
+        {emailReVerify ? (
+          EmailReverifyPopUp()
+        ) : (
+          <div className="w-2/8 rounded-xl p-6 bg-color-bg-1">
+            <form className="w-full mx-auto" onSubmit={handleLogin}>
+              <div className="mb-5">
+                <label
+                  htmlFor="username"
+                  className="block mb-2 text-sm font-medium text-color-text"
+                >
+                  Username
+                </label>
+                <input
+                  type="username"
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="text-sm rounded-lg block w-full p-2.5 bg-color-bg-2 placeholder-color-text-light text-color-text"
+                  placeholder="Quiz100"
+                  required
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Your password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="text-sm rounded-lg block w-full p-2.5 bg-color-bg-2 placeholder-color-text-light text-color-text"
+                  placeholder="password"
+                  required
+                />
+              </div>
+              <CustomBtn label={"Submit"} />
+            </form>
+            <p className="text-sm font-light text-color-text pt-4 text-center">
+              Don't have an account yet?{" "}
+              <a
+                onClick={() => navigate(ROUTES.REGISTER)}
+                className="font-medium text-color-btn hover:underline hover:cursor-pointer"
+              >
+                Sign up
+              </a>
+            </p>
+
+            <p className="text-sm font-light text-color-text pt-2 text-center">
+              <a
+                onClick={() => setEmailReVerify(true)}
+                className="font-medium  hover:underline hover:cursor-pointer"
+              >
+                verify email click here
+              </a>
+            </p>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
